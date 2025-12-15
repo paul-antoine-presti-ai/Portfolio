@@ -63,8 +63,8 @@ export const projects: Project[] = [
       "☁️ Déployable Streamlit Cloud : accès 24/7 avec URL publique",
     ],
     links: {
-      demo: "http://localhost:8501",
-      github: "https://github.com/yourusername/meteo-trader",
+      demo: "https://meteo-trader-btjtstc9gy72eupdtzsgzj.streamlit.app",
+      github: "https://github.com/paul-antoine-presti-ai/meteo-trader",
     },
     icon: "⚡",
   },
