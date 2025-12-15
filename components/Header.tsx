@@ -38,6 +38,12 @@ export default function Header() {
             À propos
           </a>
           <a
+            href="#demo"
+            className="text-foreground/80 hover:text-accent transition-colors"
+          >
+            Démo
+          </a>
+          <a
             href="#projects"
             className="text-foreground/80 hover:text-accent transition-colors"
           >

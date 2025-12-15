@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Section from "@/components/Section";
 import ProjectCard from "@/components/ProjectCard";
 import Badge from "@/components/Badge";
+import ChatDemo from "@/components/ChatDemo";
 import { projects } from "@/data/projects";
 
 export default function Home() {
@@ -31,16 +32,16 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap gap-4">
               <a
-                href="#projects"
+                href="#demo"
                 className="px-8 py-4 bg-accent hover:bg-accent-hover text-white rounded-xl font-medium transition-all transform hover:scale-105 orange-glow-strong shadow-lg"
               >
-                Découvrir mes cas d'usage
+                Tester la démo interactive
               </a>
               <a
-                href="#contact"
+                href="#projects"
                 className="px-8 py-4 glass border hover:border-accent text-foreground rounded-xl font-medium transition-all hover:orange-glow"
               >
-                Discuter d'un projet
+                Voir les cas d'usage
               </a>
             </div>
           </div>
@@ -125,12 +126,21 @@ export default function Home() {
         </div>
       </Section>
 
+      {/* Demo Section */}
+      <Section
+        id="demo"
+        title="🤖 Démo Interactive"
+        subtitle="Testez le Sales Agent en action - Analyse IA de vos appels de vente"
+        className="bg-background/50"
+      >
+        <ChatDemo />
+      </Section>
+
       {/* Projects Section */}
       <Section
         id="projects"
         title="Mes Cas d'Usage IA"
         subtitle="Projets concrets pour maîtriser l'IA et créer de la valeur pour des entreprises réelles"
-        className="bg-background/50"
       >
         <div className="grid md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
