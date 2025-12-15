@@ -35,6 +35,40 @@ export const projects: Project[] = [
     icon: "📞",
   },
   {
+    title: "MétéoTrader - Prédiction Prix Électricité France",
+    description:
+      "Dashboard ML temps réel qui prédit les prix de l'électricité en France via Machine Learning, en analysant données météo (Open-Meteo) et production énergétique (RTE). Performance validée : R² de 0.81 avec 7.3% d'erreur moyenne sur 744h de données réelles.",
+    longDescription:
+      "MétéoTrader est né d'une question business concrète : comment anticiper les prix de l'électricité pour optimiser les coûts industriels ? J'ai construit un pipeline ML complet intégrant 4 APIs (RTE + Open-Meteo) pour récupérer données météo, production par filière (nucléaire, éolien, solaire) et consommation France en temps réel. Le modèle Random Forest prédit les prix avec 81% de précision (R²=0.81) sur 744h de données réelles. Cas d'usage business : trading électricité, optimisation production industrielle, planification énergétique. Le dashboard Streamlit permet d'explorer les corrélations météo-prix, visualiser l'impact des renouvelables, et identifier les patterns de volatilité. ROI potentiel : 10-15% d'économies sur la facture électrique industrielle.",
+    technologies: [
+      "Python 3.13",
+      "Machine Learning (Scikit-learn)",
+      "Streamlit Dashboard",
+      "Plotly (Visualisation)",
+      "RTE API (OAuth2)",
+      "Open-Meteo API",
+      "Pandas & NumPy",
+      "Random Forest",
+    ],
+    features: [
+      "🎯 Performance : R² de 0.81 (81% variance expliquée) et erreur de seulement 7.3%",
+      "📊 744 heures de données réelles (météo + production + consommation France)",
+      "⚡ Intégration OAuth2 avec 4 APIs RTE (Prix, Production, Consommation, Forecast)",
+      "🌡️ Analyse impact météo : température, vitesse vent, radiation solaire sur les prix",
+      "🔋 Visualisation production par filière : nucléaire, éolien, solaire, hydro, gaz",
+      "💰 Génération prix réalistes basée sur loi offre/demande économique",
+      "📈 Dashboard interactif : graphiques temps réel, feature importance, insights business",
+      "🎨 Interface moderne : dark mode élégant avec touches orange (Mistral-inspired)",
+      "🤖 16 features engineering : heures pointe, production renouvelable, gap offre-demande",
+      "☁️ Déployable Streamlit Cloud : accès 24/7 avec URL publique",
+    ],
+    links: {
+      demo: "http://localhost:8501",
+      github: "https://github.com/yourusername/meteo-trader",
+    },
+    icon: "⚡",
+  },
+  {
     title: "Prochain cas d'usage en développement",
     description:
       "Pipeline automation, lead scoring avec IA, ou analyse prédictive ? Le prochain projet sera encore plus ambitieux pour continuer à maîtriser l'IA dans un contexte business réel.",
