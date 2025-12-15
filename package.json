@@ -1,7 +1,9 @@
 {
   "name": "portfolio",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "description": "Portfolio moderne de Paul-Antoine Sage avec Next.js, TypeScript et Tailwind CSS",
+  "author": "Paul-Antoine Sage <paul-antoine@presti.ai>",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -22,5 +24,9 @@
     "eslint-config-next": "16.0.10",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }

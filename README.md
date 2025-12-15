@@ -1,36 +1,190 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio - Paul-Antoine Sage
 
-## Getting Started
+Portfolio personnel moderne et minimaliste avec dark mode élégant, construit avec Next.js 16, TypeScript et Tailwind CSS.
 
-First, run the development server:
+## 🚀 Fonctionnalités
 
+- ✨ Design minimaliste et élégant en dark mode
+- 📱 Entièrement responsive
+- ⚡ Performance optimale avec Next.js 16
+- 🎨 Animations fluides et élégantes
+- 🔍 SEO optimisé
+- 📦 Cartes de projet extensibles avec détails complets
+- 🎯 Navigation smooth scroll
+- ⚙️ TypeScript pour une meilleure maintenabilité
+
+## 🛠️ Technologies
+
+- **Framework:** Next.js 16 (App Router)
+- **Langage:** TypeScript
+- **Styling:** Tailwind CSS v4
+- **Font:** Geist (Sans & Mono)
+- **Déploiement:** Alpic / Railway / Vercel
+
+## 📦 Installation
+
+1. Cloner le repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd portfolio
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Installer les dépendances:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Lancer le serveur de développement:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Ouvrir [http://localhost:3000](http://localhost:3000) dans votre navigateur
 
-## Learn More
+## 🏗️ Structure du projet
 
-To learn more about Next.js, take a look at the following resources:
+```
+portfolio/
+├── app/                    # App Router de Next.js
+│   ├── layout.tsx         # Layout principal
+│   ├── page.tsx           # Page d'accueil
+│   └── globals.css        # Styles globaux
+├── components/            # Composants réutilisables
+│   ├── Header.tsx         # Navigation
+│   ├── Footer.tsx         # Pied de page
+│   ├── Section.tsx        # Wrapper de section
+│   ├── ProjectCard.tsx    # Carte de projet
+│   └── Badge.tsx          # Badge de technologie
+├── data/                  # Données
+│   └── projects.ts        # Liste des projets
+└── public/                # Fichiers statiques
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ✨ Personnalisation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Ajouter un nouveau projet
 
-## Deploy on Vercel
+Éditez le fichier `data/projects.ts` et ajoutez votre projet:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```typescript
+{
+  title: "Nom du projet",
+  description: "Description courte",
+  longDescription: "Description détaillée",
+  technologies: ["Tech1", "Tech2"],
+  features: [
+    "Fonctionnalité 1",
+    "Fonctionnalité 2",
+  ],
+  links: {
+    github: "https://github.com/...",
+    demo: "https://...",
+    alpic: "https://alpic.ai/...",
+  },
+  icon: "🚀",
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Modifier les couleurs
+
+Éditez le fichier `app/globals.css` pour personnaliser le thème:
+
+```css
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --accent: #3b82f6;
+  /* ... */
+}
+```
+
+### Modifier les informations personnelles
+
+Éditez `app/page.tsx` pour mettre à jour:
+- Votre nom
+- Votre description
+- Vos liens (GitHub, LinkedIn, Email)
+- Les sections "À propos"
+
+## 🚀 Déploiement
+
+### Sur Alpic (Gratuit)
+
+1. Créer un compte sur [Alpic](https://alpic.ai)
+2. Créer un nouveau projet
+3. Connecter votre repository Git
+4. Alpic détectera automatiquement Next.js et le déploiera
+
+### Sur Railway
+
+```bash
+# Installer Railway CLI
+npm install -g @railway/cli
+
+# Se connecter
+railway login
+
+# Initialiser le projet
+railway init
+
+# Déployer
+railway up
+```
+
+### Sur Vercel
+
+```bash
+# Installer Vercel CLI
+npm install -g vercel
+
+# Déployer
+vercel
+```
+
+## 📝 Scripts disponibles
+
+- `npm run dev` - Démarre le serveur de développement
+- `npm run build` - Construit l'application pour la production
+- `npm start` - Démarre le serveur de production
+- `npm run lint` - Vérifie le code avec ESLint
+
+## 🎨 Thème Dark Mode
+
+Le portfolio utilise un thème dark mode élégant par défaut avec:
+- Fond noir profond (#0a0a0a)
+- Texte clair (#ededed)
+- Accent bleu moderne (#3b82f6)
+- Bordures subtiles (#27272a)
+- Cartes avec fond légèrement plus clair (#18181b)
+
+## 📱 Responsive
+
+Le portfolio est entièrement responsive et s'adapte à toutes les tailles d'écran:
+- Mobile (< 768px)
+- Tablette (768px - 1024px)
+- Desktop (> 1024px)
+
+## 🔧 Configuration
+
+### Variables d'environnement
+
+Créez un fichier `.env` à la racine:
+
+```env
+PORT=3000
+NODE_ENV=production
+```
+
+## 📄 License
+
+MIT © Paul-Antoine Sage
+
+## 🤝 Contact
+
+- Email: paul-antoine@presti.ai
+- GitHub: [github.com/yourusername](https://github.com/yourusername)
+- LinkedIn: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
+
+---
+
+Créé avec ❤️ par Paul-Antoine Sage
