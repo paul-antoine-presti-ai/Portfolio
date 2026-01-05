@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const { t, language, setLanguage } = useTranslation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,6 +15,10 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const toggleLanguage = () => {
+    setLanguage(language === "fr" ? "en" : "fr");
+  };
 
   return (
     <header
@@ -30,31 +36,40 @@ export default function Header() {
           PA Sage
         </a>
 
-        <div className="flex gap-8">
+        <div className="flex gap-8 items-center">
           <a
             href="#about"
             className="text-foreground/80 hover:text-accent transition-colors"
           >
-            À propos
+            {t("nav.about")}
           </a>
           <a
             href="#demo"
             className="text-foreground/80 hover:text-accent transition-colors"
           >
-            Démo
+            {t("nav.demo")}
           </a>
           <a
             href="#projects"
             className="text-foreground/80 hover:text-accent transition-colors"
           >
-            Projets
+            {t("nav.projects")}
           </a>
           <a
             href="#contact"
             className="text-foreground/80 hover:text-accent transition-colors"
           >
-            Contact
+            {t("nav.contact")}
           </a>
+          
+          {/* Language Toggle */}
+          <button
+            onClick={toggleLanguage}
+            className="px-3 py-1.5 glass border hover:border-accent rounded-lg text-sm font-medium text-foreground/80 hover:text-accent transition-all hover:orange-glow"
+            aria-label="Toggle language"
+          >
+            {language === "fr" ? "🇬🇧 EN" : "🇫🇷 FR"}
+          </button>
         </div>
       </nav>
     </header>

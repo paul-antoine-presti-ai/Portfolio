@@ -6,9 +6,13 @@ import Section from "@/components/Section";
 import ProjectCard from "@/components/ProjectCard";
 import Badge from "@/components/Badge";
 import ChatDemo from "@/components/ChatDemo";
-import { projects } from "@/data/projects";
+import { projectsData } from "@/data/projects";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function Home() {
+  const { t, language } = useTranslation();
+  const projects = projectsData[language];
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -18,30 +22,28 @@ export default function Home() {
         <div className="w-full">
           <div className="animate-fade-in">
             <div className="inline-block mb-4 animate-pulse">
-              <Badge variant="accent">Account Executive • AI Enthusiast</Badge>
+              <Badge variant="accent">{t("hero.badge")}</Badge>
             </div>
             <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight">
-              Bonjour, je suis
+              {t("hero.greeting")}
               <br />
-              <span className="text-accent">Paul-Antoine Sage</span>
+              <span className="text-accent">{t("hero.name")}</span>
             </h1>
             <p className="text-xl md:text-2xl text-foreground/70 mb-8 max-w-3xl leading-relaxed">
-              Account Executive passionné par l'IA. Je construis des cas d'usage concrets 
-              pour maîtriser l'intelligence artificielle dans un cadre professionnel et 
-              apporter de la valeur mesurable aux entreprises réelles.
+              {t("hero.description")}
             </p>
             <div className="flex flex-wrap gap-4">
               <a
                 href="#demo"
                 className="px-8 py-4 bg-accent hover:bg-accent-hover text-white rounded-xl font-medium transition-all transform hover:scale-105 orange-glow-strong shadow-lg"
               >
-                Tester la démo interactive
+                {t("hero.cta.demo")}
               </a>
               <a
                 href="#projects"
                 className="px-8 py-4 glass border hover:border-accent text-foreground rounded-xl font-medium transition-all hover:orange-glow"
               >
-                Voir les cas d'usage
+                {t("hero.cta.projects")}
               </a>
             </div>
           </div>
@@ -51,32 +53,26 @@ export default function Home() {
       {/* About Section */}
       <Section
         id="about"
-        title="À propos"
-        subtitle="De l'Account Executive à l'AI Enthusiast - Créer de la valeur concrète avec l'IA"
+        title={t("about.title")}
+        subtitle={t("about.subtitle")}
       >
         <div className="grid md:grid-cols-2 gap-12 animate-slide-up">
           <div className="space-y-6">
             <div className="p-6 glass-card rounded-2xl">
               <h3 className="text-xl font-semibold text-accent mb-3">
-                🎯 Ma Mission
+                {t("about.mission.title")}
               </h3>
               <p className="text-foreground/80 leading-relaxed">
-                En tant qu'Account Executive, j'ai découvert le potentiel immense de l'IA 
-                pour transformer les processus métier. Ma mission est d'apprendre à maîtriser 
-                l'IA en créant des cas d'usage concrets qui apportent une valeur mesurable 
-                aux entreprises réelles.
+                {t("about.mission.text")}
               </p>
             </div>
 
             <div className="p-6 glass-card rounded-2xl">
               <h3 className="text-xl font-semibold text-accent mb-3">
-                💼 Mon Approche
+                {t("about.approach.title")}
               </h3>
               <p className="text-foreground/80 leading-relaxed">
-                Plutôt que d'apprendre l'IA en théorie, je construis des projets professionnels 
-                qui résolvent de vrais problèmes business. Chaque projet est un laboratoire 
-                d'apprentissage où je teste, itère et mesure l'impact concret de l'IA sur 
-                l'efficacité opérationnelle.
+                {t("about.approach.text")}
               </p>
             </div>
           </div>
@@ -84,7 +80,7 @@ export default function Home() {
           <div className="space-y-6">
             <div className="p-6 glass-card rounded-2xl">
               <h3 className="text-xl font-semibold text-accent mb-4">
-                🛠️ Stack IA & Tech
+                {t("about.stack.title")}
               </h3>
               <div className="flex flex-wrap gap-2">
                 <Badge>Claude AI</Badge>
@@ -101,24 +97,24 @@ export default function Home() {
 
             <div className="p-6 glass-card rounded-2xl">
               <h3 className="text-xl font-semibold text-accent mb-3">
-                🌟 Focus Métier
+                {t("about.focus.title")}
               </h3>
               <ul className="space-y-2 text-foreground/80">
                 <li className="flex items-start gap-2">
                   <span className="text-accent">•</span>
-                  <span>Automatisation des processus de vente</span>
+                  <span>{t("about.focus.1")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-accent">•</span>
-                  <span>Analyse intelligente de conversations</span>
+                  <span>{t("about.focus.2")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-accent">•</span>
-                  <span>Optimisation du cycle de vente avec l'IA</span>
+                  <span>{t("about.focus.3")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-accent">•</span>
-                  <span>ROI mesurable et KPIs concrets</span>
+                  <span>{t("about.focus.4")}</span>
                 </li>
               </ul>
             </div>
@@ -129,8 +125,8 @@ export default function Home() {
       {/* Demo Section */}
       <Section
         id="demo"
-        title="🤖 Démo Interactive"
-        subtitle="Testez le Sales Agent en action - Analyse IA de vos appels de vente"
+        title={t("demo.title")}
+        subtitle={t("demo.subtitle")}
         className="bg-background/50"
       >
         <ChatDemo />
@@ -139,8 +135,8 @@ export default function Home() {
       {/* Projects Section */}
       <Section
         id="projects"
-        title="Mes Cas d'Usage IA"
-        subtitle="Projets concrets pour maîtriser l'IA et créer de la valeur pour des entreprises réelles"
+        title={t("projects.title")}
+        subtitle={t("projects.subtitle")}
       >
         <div className="grid md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
@@ -158,26 +154,24 @@ export default function Home() {
       {/* Contact Section */}
       <Section
         id="contact"
-        title="Contact"
-        subtitle="Discutons de vos défis business et de l'impact que l'IA peut avoir"
+        title={t("contact.title")}
+        subtitle={t("contact.subtitle")}
       >
         <div className="max-w-2xl mx-auto">
           <div className="p-8 glass-card rounded-2xl text-center space-y-6 animate-fade-in">
             <div className="text-6xl mb-4">💼</div>
             <h3 className="text-2xl font-semibold text-foreground">
-              Échangeons sur vos projets IA
+              {t("contact.heading")}
             </h3>
             <p className="text-foreground/70 leading-relaxed">
-              Vous avez un défi business qui pourrait bénéficier de l'IA ? 
-              Vous voulez automatiser vos processus de vente ? 
-              Parlons-en et trouvons ensemble des cas d'usage concrets !
+              {t("contact.text")}
             </p>
             <div className="space-y-4">
               <a
                 href="mailto:paul-antoine@presti.ai"
                 className="block px-8 py-4 bg-accent hover:bg-accent-hover text-white rounded-xl font-medium transition-all transform hover:scale-105 orange-glow-strong shadow-lg"
               >
-                Envoyer un email
+                {t("contact.cta")}
               </a>
               <div className="flex justify-center gap-6 pt-4">
                 <a

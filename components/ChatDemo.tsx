@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { suggestedQuestions, demoScenarios } from "@/data/demoData";
+import { demoDataFr, demoDataEn } from "@/data/demoData";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface Message {
   role: "user" | "assistant";
@@ -9,6 +10,8 @@ interface Message {
 }
 
 export default function ChatDemo() {
+  const { t, language } = useTranslation();
+  const demoData = language === "fr" ? demoDataFr : demoDataEn;
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -41,22 +44,11 @@ export default function ChatDemo() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Trouver la réponse correspondante
-    const scenario = demoScenarios.find((s) =>
+    const scenario = demoData.scenarios.find((s) =>
       question.toLowerCase().includes(s.question.toLowerCase().slice(0, 15))
     );
 
-    const response = scenario?.response || `Je suis une démo interactive du Sales Agent MCP. 
-
-Pour voir des exemples concrets, essayez l'une des questions suggérées ci-dessous!
-
-Cette démo simule l'analyse d'appels Fathom. L'agent réel a accès à toutes vos transcriptions et peut:
-• Analyser vos appels en temps réel
-• Identifier les patterns de succès
-• Extraire les pain points clients
-• Générer des follow-ups personnalisés
-• Comparer vos performances
-
-**Cas d'usage professionnel concret** pour améliorer vos performances commerciales! 🎯`;
+    const response = scenario?.response || demoData.defaultResponse;
 
     // Ajouter la réponse de l'assistant avec effet de typing
     const assistantMessage: Message = { role: "assistant", content: response };
@@ -78,10 +70,10 @@ Cette démo simule l'analyse d'appels Fathom. L'agent réel a accès à toutes v
             <div className="text-3xl">🤖</div>
             <div>
               <h3 className="text-xl font-semibold text-foreground">
-                Sales Agent Assistant - Démo Interactive
+                {t("chat.title")}
               </h3>
               <p className="text-foreground-muted text-sm">
-                Testez l'analyse IA de vos appels de vente
+                {t("chat.subtitle")}
               </p>
             </div>
           </div>
@@ -90,7 +82,7 @@ Cette démo simule l'analyse d'appels Fathom. L'agent réel a accès à toutes v
               onClick={handleReset}
               className="px-4 py-2 text-sm text-foreground-muted hover:text-accent transition-colors"
             >
-              Réinitialiser
+              {language === "fr" ? "Réinitialiser" : "Reset"}
             </button>
           )}
         </div>
@@ -98,9 +90,7 @@ Cette démo simule l'analyse d'appels Fathom. L'agent réel a accès à toutes v
         {/* Note démo */}
         <div className="p-3 bg-accent/10 border border-accent/30 rounded-xl">
           <p className="text-sm text-foreground/80">
-            💡 <span className="font-medium text-accent">Démo simulée</span> - 
-            Données basées sur de vrais cas d'usage. L'agent réel est connecté 
-            à l'API Fathom via le Model Context Protocol (MCP).
+            💡 {t("chat.disclaimer")}
           </p>
         </div>
       </div>
@@ -114,8 +104,7 @@ Cette démo simule l'analyse d'appels Fathom. L'agent réel a accès à toutes v
               <div className="text-center space-y-4">
                 <div className="text-6xl mb-4">💬</div>
                 <p className="text-foreground-muted max-w-md">
-                  Posez une question sur l'analyse d'appels de vente ou 
-                  cliquez sur une question suggérée ci-dessous
+                  {t("chat.placeholder")}
                 </p>
               </div>
             </div>
@@ -195,10 +184,10 @@ Cette démo simule l'analyse d'appels Fathom. L'agent réel a accès à toutes v
         {messages.length === 0 && (
           <div className="px-6 pb-4">
             <p className="text-sm font-medium text-foreground-muted mb-3">
-              📌 Questions suggérées:
+              📌 {t("chat.suggestions")}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {suggestedQuestions.map((question, index) => (
+              {demoData.suggestedQuestions.map((question, index) => (
                 <button
                   key={index}
                   onClick={() => handleSuggestedQuestion(question)}
@@ -224,7 +213,11 @@ Cette démo simule l'analyse d'appels Fathom. L'agent réel a accès à toutes v
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Posez votre question sur l'analyse d'appels..."
+              placeholder={
+                language === "fr"
+                  ? "Posez votre question sur l'analyse d'appels..."
+                  : "Ask your question about call analysis..."
+              }
               className="flex-1 px-4 py-3 bg-background-secondary/60 backdrop-blur-sm border border-glass-border rounded-xl text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-accent transition-colors"
               disabled={isTyping}
             />
@@ -233,7 +226,7 @@ Cette démo simule l'analyse d'appels Fathom. L'agent réel a accès à toutes v
               disabled={!input.trim() || isTyping}
               className="px-6 py-3 bg-accent hover:bg-accent-hover disabled:bg-accent/50 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-all orange-glow"
             >
-              Envoyer
+              {t("chat.send")}
             </button>
           </form>
         </div>
