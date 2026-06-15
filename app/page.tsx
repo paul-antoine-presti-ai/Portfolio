@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Section from "@/components/Section";
@@ -11,6 +12,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 export default function Home() {
   const { t, language } = useTranslation();
   const projects = projectsData[language];
+  const [photoError, setPhotoError] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
@@ -24,10 +26,20 @@ export default function Home() {
             <div className="relative">
               <div className="absolute inset-0 rounded-full bg-accent/25 blur-3xl" aria-hidden="true" />
               <div className="relative w-44 h-44 md:w-72 md:h-72 rounded-full p-[3px] bg-gradient-to-br from-accent-light via-accent to-accent-hover orange-glow-strong">
-                <div className="w-full h-full rounded-full bg-background-secondary flex items-center justify-center">
-                  <span className="text-6xl md:text-8xl font-bold bg-gradient-to-br from-accent-light to-accent bg-clip-text text-transparent select-none">
-                    PA
-                  </span>
+                <div className="w-full h-full rounded-full bg-background-secondary overflow-hidden flex items-center justify-center">
+                  {!photoError ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src="/paul-antoine.jpg"
+                      alt="Paul-Antoine Sage"
+                      onError={() => setPhotoError(true)}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-6xl md:text-8xl font-bold bg-gradient-to-br from-accent-light to-accent bg-clip-text text-transparent select-none">
+                      PA
+                    </span>
+                  )}
                 </div>
               </div>
               {/* Status badge */}
@@ -75,6 +87,33 @@ export default function Home() {
         title={t("about.title")}
         subtitle={t("about.subtitle")}
       >
+        {/* Bio + infos rapides */}
+        <div className="mb-12 animate-fade-in">
+          <div className="p-8 glass-card rounded-2xl">
+            <h3 className="text-xl font-semibold text-accent mb-4">
+              {t("about.bio.title")}
+            </h3>
+            <p className="text-foreground/85 leading-relaxed text-lg mb-6">
+              {t("about.bio.text")}
+            </p>
+            <div className="flex flex-wrap gap-3">
+              {[
+                `🚀 ${t("about.fact.role")}`,
+                `📈 ${t("about.fact.arr")}`,
+                `📍 ${t("about.fact.location")}`,
+                `🤖 ${t("about.fact.explore")}`,
+              ].map((fact, i) => (
+                <span
+                  key={i}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-background-secondary/60 border border-glass-border text-sm text-foreground/90"
+                >
+                  {fact}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
         <div className="grid md:grid-cols-2 gap-12 animate-slide-up">
           <div className="space-y-6">
             <div className="p-6 glass-card rounded-2xl">

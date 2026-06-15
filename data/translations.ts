@@ -19,6 +19,13 @@ export const translations = {
     "about.title": "À propos",
     "about.subtitle":
       "De l'Account Executive à l'AI Enthusiast - Créer de la valeur concrète avec l'IA",
+    "about.bio.title": "👋 Qui je suis",
+    "about.bio.text":
+      "Je suis Founding Account Executive chez Presti.AI, une startup qui met l'IA générative au service de la création visuelle produit. Dès ma première année, j'ai généré 635 k€ d'ARR en partant de zéro : construction du discours commercial, du pipeline et des relations clients. Basé à Paris, je suis convaincu qu'on comprend vraiment l'IA en construisant avec elle — alors j'explore en continu l'IA et son écosystème à travers des projets concrets, comme ceux réunis ici.",
+    "about.fact.role": "Founding AE @ Presti.AI",
+    "about.fact.arr": "635 k€ d'ARR en 1ʳᵉ année",
+    "about.fact.location": "Basé à Paris",
+    "about.fact.explore": "Explore l'IA & son écosystème",
     "about.mission.title": "🎯 Ma Mission",
     "about.mission.text":
       "En tant qu'Account Executive, j'ai découvert le potentiel immense de l'IA pour transformer les processus métier. Ma mission est d'apprendre à maîtriser l'IA en créant des cas d'usage concrets qui apportent une valeur mesurable aux entreprises réelles.",
@@ -78,6 +85,13 @@ export const translations = {
     "about.title": "About",
     "about.subtitle":
       "From Account Executive to AI Enthusiast - Creating concrete value with AI",
+    "about.bio.title": "👋 Who I am",
+    "about.bio.text":
+      "I'm a Founding Account Executive at Presti.AI, a startup bringing generative AI to product visual creation. In my very first year, I generated €635k in ARR from scratch: building the sales narrative, the pipeline and client relationships. Based in Paris, I'm convinced you truly understand AI by building with it — so I continuously explore AI and its ecosystem through concrete projects, like the ones gathered here.",
+    "about.fact.role": "Founding AE @ Presti.AI",
+    "about.fact.arr": "€635k ARR in year one",
+    "about.fact.location": "Based in Paris",
+    "about.fact.explore": "Exploring AI & its ecosystem",
     "about.mission.title": "🎯 My Mission",
     "about.mission.text":
       "As an Account Executive, I discovered the immense potential of AI to transform business processes. My mission is to learn to master AI by creating concrete use cases that bring measurable value to real businesses.",
