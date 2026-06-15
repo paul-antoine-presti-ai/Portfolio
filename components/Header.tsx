@@ -36,32 +36,34 @@ export default function Header() {
           PA Sage
         </a>
 
-        <div className="flex gap-8 items-center">
-          <a
-            href="#about"
-            className="text-foreground/80 hover:text-accent transition-colors"
-          >
-            {t("nav.about")}
-          </a>
-          <a
-            href="#demo"
-            className="text-foreground/80 hover:text-accent transition-colors"
-          >
-            {t("nav.demo")}
-          </a>
-          <a
-            href="#projects"
-            className="text-foreground/80 hover:text-accent transition-colors"
-          >
-            {t("nav.projects")}
-          </a>
-          <a
-            href="#contact"
-            className="text-foreground/80 hover:text-accent transition-colors"
-          >
-            {t("nav.contact")}
-          </a>
-          
+        <div className="flex gap-4 md:gap-8 items-center">
+          <div className="hidden md:flex gap-8 items-center">
+            <a
+              href="#about"
+              className="text-foreground/80 hover:text-accent transition-colors"
+            >
+              {t("nav.about")}
+            </a>
+            <a
+              href="#demo"
+              className="text-foreground/80 hover:text-accent transition-colors"
+            >
+              {t("nav.demo")}
+            </a>
+            <a
+              href="#projects"
+              className="text-foreground/80 hover:text-accent transition-colors"
+            >
+              {t("nav.projects")}
+            </a>
+            <a
+              href="#contact"
+              className="text-foreground/80 hover:text-accent transition-colors"
+            >
+              {t("nav.contact")}
+            </a>
+          </div>
+
           {/* Language Toggle */}
           <button
             onClick={toggleLanguage}

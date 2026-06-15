@@ -16,7 +16,7 @@ export default function Footer() {
 
           <div className="flex gap-6">
             <a
-              href="https://github.com"
+              href="https://github.com/paul-antoine-presti-ai"
               target="_blank"
               rel="noopener noreferrer"
               className="text-foreground-muted hover:text-accent transition-colors text-sm"

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Badge from "./Badge";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export interface Project {
   title: string;
@@ -24,6 +25,7 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <div className="group relative glass-card rounded-2xl overflow-hidden">
@@ -61,7 +63,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           {/* Long Description */}
           <div className="mb-4 p-4 bg-background-secondary/40 backdrop-blur-sm rounded-xl border border-glass-border">
             <h4 className="text-sm font-semibold text-accent mb-2">
-              📋 Description détaillée
+              📋 {t("projects.detailed")}
             </h4>
             <p className="text-foreground/80 text-sm leading-relaxed">
               {project.longDescription}
@@ -71,7 +73,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           {/* Features */}
           <div className="mb-4 p-4 bg-background-secondary/40 backdrop-blur-sm rounded-xl border border-glass-border">
             <h4 className="text-sm font-semibold text-accent mb-2">
-              ✨ Fonctionnalités principales
+              ✨ {t("projects.features")}
             </h4>
             <ul className="space-y-2">
               {project.features.map((feature, index) => (
@@ -129,7 +131,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full px-6 py-3 text-sm font-medium text-accent hover:bg-accent/5 transition-all border-t border-glass-border"
       >
-        {isExpanded ? "Réduire ↑" : "Voir plus ↓"}
+        {isExpanded ? `${t("projects.less")} ↑` : `${t("projects.more")} ↓`}
       </button>
     </div>
   );

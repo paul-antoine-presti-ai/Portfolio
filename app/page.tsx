@@ -175,7 +175,7 @@ export default function Home() {
               </a>
               <div className="flex justify-center gap-6 pt-4">
                 <a
-                  href="https://github.com"
+                  href="https://github.com/paul-antoine-presti-ai"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-foreground-muted hover:text-accent transition-colors"

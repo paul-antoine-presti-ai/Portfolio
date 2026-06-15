@@ -102,6 +102,37 @@ export const projectsData = {
       icon: "🎧",
     },
     {
+      title: "Alpha Arena — Arène de 2 agents de trading IA",
+      description:
+        "Deux agents autonomes propulsés par Claude, au tempérament opposé (agressif vs équilibré), s'affrontent sur des comptes Alpaca simulés. Chaque agent fait sa veille, décide d'acheter/vendre/garder, puis une couche de garde-fous déterministes revérifie chaque décision avant exécution. 100 % simulation.",
+      longDescription:
+        "Alpha Arena explore une question d'ingénierie : peut-on faire trader des agents IA de façon autonome mais sûre ? J'ai construit deux traders Claude aux personnalités opposées — l'un agressif (chasse le momentum, concentre jusqu'à 40 % sur une conviction, coupe vite les pertes), l'autre équilibré (garde du cash, plafonne les positions, n'entre qu'avec une forte confiance). À chaque cycle : veille (prix récents + actualité sur une watchlist d'actions US), puis Claude produit un plan d'action structuré (sortie validée par Pydantic), et enfin une couche de validation déterministe a le dernier mot — cash suffisant ? quantité détenue ? position sous le plafond ? On ne fait jamais confiance aveuglément au LLM avant de toucher, même fictivement, à de l'argent. L'enseignement le plus précieux est assumé dans le projet : un agent LLM ne prédit pas les cours et ne bat pas un simple ETF sur la durée. La vraie valeur est ailleurs : maîtriser l'architecture multi-agents, les sorties structurées, le prompt caching et surtout l'évaluation honnête face à un buy-and-hold.",
+      technologies: [
+        "Claude AI",
+        "Anthropic API",
+        "Python",
+        "Alpaca API",
+        "Pydantic",
+        "Architecture multi-agents",
+        "Prompt Caching",
+        "Sorties structurées",
+      ],
+      features: [
+        "🤖 Architecture multi-agents : 2 traders Claude au tempérament opposé, chacun son portefeuille",
+        "🛡️ Garde-fous déterministes : chaque décision du LLM revérifiée (cash, quantité, plafond) avant exécution",
+        "🧠 Sorties structurées via Pydantic : Claude renvoie un plan validable, jamais du texte libre exécuté à l'aveugle",
+        "📊 Veille automatique : prix récents et actualité sur une watchlist d'actions US",
+        "💸 Exécution sur Alpaca Paper Trading — 100 % simulation, aucun argent réel",
+        "⚡ Prompt caching : ~90 % d'économie de tokens sur le system prompt dès le 2ᵉ cycle",
+        "📈 Journalisation par cycle + script d'analyse comparant les agents à un buy-and-hold",
+        "🎓 Démarche d'évaluation honnête : le projet assume qu'un LLM ne bat pas un ETF — focus sur l'ingénierie",
+      ],
+      links: {
+        github: "https://github.com/paul-antoine-presti-ai/alpha-arena",
+      },
+      icon: "📈",
+    },
+    {
       title: "Prochain cas d'usage en développement",
       description:
         "Pipeline automation, lead scoring avec IA, ou analyse prédictive ? Le prochain projet sera encore plus ambitieux pour continuer à maîtriser l'IA dans un contexte business réel.",
@@ -216,6 +247,37 @@ export const projectsData = {
         demo: "https://audiolearn-seven.vercel.app/",
       },
       icon: "🎧",
+    },
+    {
+      title: "Alpha Arena — Arena of 2 AI Trading Agents",
+      description:
+        "Two autonomous agents powered by Claude, with opposite temperaments (aggressive vs balanced), compete on simulated Alpaca accounts. Each agent does its research, decides to buy/sell/hold, then a deterministic guardrail layer re-checks every decision before execution. 100% simulation.",
+      longDescription:
+        "Alpha Arena explores an engineering question: can AI agents trade autonomously yet safely? I built two Claude traders with opposite personalities — one aggressive (chases momentum, concentrates up to 40% on a conviction, cuts losses fast), the other balanced (keeps cash, caps positions, only enters with high confidence). Each cycle: research (recent prices + news on a US stock watchlist), then Claude produces a structured action plan (validated by Pydantic), and finally a deterministic validation layer has the final say — enough cash? quantity held? position under the cap? You never blindly trust the LLM before touching money, even fictional. The most valuable lesson is owned by the project: an LLM agent does not predict prices and won't beat a simple ETF over time. The real value lies elsewhere: mastering multi-agent architecture, structured outputs, prompt caching, and above all honest evaluation against a buy-and-hold benchmark.",
+      technologies: [
+        "Claude AI",
+        "Anthropic API",
+        "Python",
+        "Alpaca API",
+        "Pydantic",
+        "Multi-agent architecture",
+        "Prompt Caching",
+        "Structured Outputs",
+      ],
+      features: [
+        "🤖 Multi-agent architecture: 2 Claude traders with opposite temperaments, each its own portfolio",
+        "🛡️ Deterministic guardrails: every LLM decision re-checked (cash, quantity, cap) before execution",
+        "🧠 Structured outputs via Pydantic: Claude returns a validatable plan, never free text executed blindly",
+        "📊 Automatic research: recent prices and news on a US stock watchlist",
+        "💸 Execution on Alpaca Paper Trading — 100% simulation, no real money",
+        "⚡ Prompt caching: ~90% token savings on the system prompt from the 2nd cycle",
+        "📈 Per-cycle journaling + analysis script comparing agents to a buy-and-hold",
+        "🎓 Honest evaluation mindset: the project owns that an LLM won't beat an ETF — focus on engineering",
+      ],
+      links: {
+        github: "https://github.com/paul-antoine-presti-ai/alpha-arena",
+      },
+      icon: "📈",
     },
     {
       title: "Next use case in development",
