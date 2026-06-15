@@ -2,7 +2,6 @@ export const translations = {
   fr: {
     // Header
     "nav.about": "À propos",
-    "nav.demo": "Démo",
     "nav.projects": "Projets",
     "nav.contact": "Contact",
 
@@ -12,8 +11,8 @@ export const translations = {
     "hero.name": "Paul-Antoine Sage",
     "hero.description":
       "Account Executive passionné par l'IA. Je construis des cas d'usage concrets pour maîtriser l'intelligence artificielle dans un cadre professionnel et apporter de la valeur mesurable aux entreprises réelles.",
-    "hero.cta.demo": "Tester la démo interactive",
     "hero.cta.projects": "Voir les cas d'usage",
+    "hero.cta.contact": "Me contacter",
 
     // About Section
     "about.title": "À propos",
@@ -31,11 +30,6 @@ export const translations = {
     "about.focus.2": "Analyse intelligente de conversations",
     "about.focus.3": "Optimisation du cycle de vente avec l'IA",
     "about.focus.4": "ROI mesurable et KPIs concrets",
-
-    // Demo Section
-    "demo.title": "🤖 Démo Interactive",
-    "demo.subtitle":
-      "Testez le Sales Agent en action - Analyse IA de vos appels de vente",
 
     // Projects Section
     "projects.title": "Mes Cas d'Usage IA",
@@ -62,21 +56,10 @@ export const translations = {
 
     // Footer
     "footer.rights": "Tous droits réservés.",
-
-    // ChatDemo
-    "chat.title": "Sales Agent Assistant - Démo Interactive",
-    "chat.subtitle": "Testez l'analyse IA de vos appels de vente",
-    "chat.disclaimer":
-      "Démo simulée - Données basées sur de vrais cas d'usage. L'agent réel est connecté à l'API Fathom via le Model Context Protocol (MCP).",
-    "chat.placeholder":
-      "Posez une question sur l'analyse d'appels de vente ou cliquez sur une question suggérée ci-dessous",
-    "chat.suggestions": "Questions suggérées:",
-    "chat.send": "Envoyer",
   },
   en: {
     // Header
     "nav.about": "About",
-    "nav.demo": "Demo",
     "nav.projects": "Projects",
     "nav.contact": "Contact",
 
@@ -86,8 +69,8 @@ export const translations = {
     "hero.name": "Paul-Antoine Sage",
     "hero.description":
       "Account Executive passionate about AI. I build concrete use cases to master artificial intelligence in a professional setting and deliver measurable value to real businesses.",
-    "hero.cta.demo": "Try the interactive demo",
     "hero.cta.projects": "View use cases",
+    "hero.cta.contact": "Contact me",
 
     // About Section
     "about.title": "About",
@@ -105,11 +88,6 @@ export const translations = {
     "about.focus.2": "Intelligent conversation analysis",
     "about.focus.3": "AI-powered sales cycle optimization",
     "about.focus.4": "Measurable ROI and concrete KPIs",
-
-    // Demo Section
-    "demo.title": "🤖 Interactive Demo",
-    "demo.subtitle":
-      "Test the Sales Agent in action - AI analysis of your sales calls",
 
     // Projects Section
     "projects.title": "My AI Use Cases",
@@ -136,16 +114,6 @@ export const translations = {
 
     // Footer
     "footer.rights": "All rights reserved.",
-
-    // ChatDemo
-    "chat.title": "Sales Agent Assistant - Interactive Demo",
-    "chat.subtitle": "Test AI analysis of your sales calls",
-    "chat.disclaimer":
-      "Simulated demo - Data based on real use cases. The real agent is connected to the Fathom API via Model Context Protocol (MCP).",
-    "chat.placeholder":
-      "Ask a question about sales call analysis or click on a suggested question below",
-    "chat.suggestions": "Suggested questions:",
-    "chat.send": "Send",
   },
 };
 

@@ -5,7 +5,6 @@ import Footer from "@/components/Footer";
 import Section from "@/components/Section";
 import ProjectCard from "@/components/ProjectCard";
 import Badge from "@/components/Badge";
-import ChatDemo from "@/components/ChatDemo";
 import { projectsData } from "@/data/projects";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -34,16 +33,16 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap gap-4">
               <a
-                href="#demo"
+                href="#projects"
                 className="px-8 py-4 bg-accent hover:bg-accent-hover text-white rounded-xl font-medium transition-all transform hover:scale-105 orange-glow-strong shadow-lg"
               >
-                {t("hero.cta.demo")}
+                {t("hero.cta.projects")}
               </a>
               <a
-                href="#projects"
+                href="#contact"
                 className="px-8 py-4 glass border hover:border-accent text-foreground rounded-xl font-medium transition-all hover:orange-glow"
               >
-                {t("hero.cta.projects")}
+                {t("hero.cta.contact")}
               </a>
             </div>
           </div>
@@ -120,16 +119,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </Section>
-
-      {/* Demo Section */}
-      <Section
-        id="demo"
-        title={t("demo.title")}
-        subtitle={t("demo.subtitle")}
-        className="bg-background/50"
-      >
-        <ChatDemo />
       </Section>
 
       {/* Projects Section */}

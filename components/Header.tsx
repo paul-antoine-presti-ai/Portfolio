@@ -45,12 +45,6 @@ export default function Header() {
               {t("nav.about")}
             </a>
             <a
-              href="#demo"
-              className="text-foreground/80 hover:text-accent transition-colors"
-            >
-              {t("nav.demo")}
-            </a>
-            <a
               href="#projects"
               className="text-foreground/80 hover:text-accent transition-colors"
             >
