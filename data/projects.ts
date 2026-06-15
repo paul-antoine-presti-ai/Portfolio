@@ -70,6 +70,38 @@ export const projectsData = {
       icon: "⚡",
     },
     {
+      title: "AudioLearn — Bibliothèque de leçons audio",
+      description:
+        "Application web qui transforme des leçons écrites sur la tech (entreprises, outils, concepts comme Databricks, SQL, le cloud) en audiobooks écoutables en arrière-plan, comme un podcast. Voix de synthèse haute qualité, lecture écran verrouillé sur iPhone.",
+      longDescription:
+        "AudioLearn est née d'un besoin personnel : apprendre en marchant, écouteurs sur les oreilles, téléphone verrouillé. Plutôt qu'une simple synthèse vocale (qui se coupe dès que l'écran d'iPhone se verrouille), j'ai conçu un pipeline qui pré-génère de vrais fichiers MP3 via l'API ElevenLabs, lus dans un lecteur HTML couplé à la Media Session API — ce qui permet une lecture continue en arrière-plan avec les contrôles sur l'écran verrouillé, exactement comme une app de podcast. Le contenu est rédigé sur mesure (niveau débutant → intermédiaire) puis converti en audio en une commande, avec un choix de fournisseur (ElevenLabs pour la qualité, OpenAI pour le coût). Le site est statique, déployé sur Vercel, installable comme une PWA, et tombe automatiquement sur la voix du navigateur tant qu'une leçon n'a pas encore son audio. Première leçon publiée : Databricks expliqué via le cas Netflix.",
+      technologies: [
+        "JavaScript (Vanilla)",
+        "Media Session API",
+        "ElevenLabs API",
+        "OpenAI TTS",
+        "Web Speech API",
+        "Node.js",
+        "PWA",
+        "Vercel",
+      ],
+      features: [
+        "🎧 Lecture en arrière-plan et écran verrouillé sur iPhone via la Media Session API (comme un podcast)",
+        "🗣️ Voix de synthèse haute qualité générées par ElevenLabs, avec repli automatique sur la voix du navigateur",
+        "⚙️ Pipeline text-to-speech multi-fournisseurs (ElevenLabs ou OpenAI) en une seule commande",
+        "📚 Bibliothèques thématiques de leçons-audiobooks, pensées pour l'écoute (niveau débutant → intermédiaire)",
+        "📱 PWA installable sur l'écran d'accueil, expérience plein écran",
+        "💾 Progression sauvegardée, reprise automatique et contrôle de la vitesse de lecture",
+        "🚀 Site statique déployé sur Vercel avec redéploiement automatique, zéro backend",
+        "📝 Première leçon : Databricks via le cas concret Netflix (~14 min d'audio)",
+      ],
+      links: {
+        github: "https://github.com/paul-antoine-presti-ai/audiolearn",
+        demo: "https://audiolearn-seven.vercel.app/",
+      },
+      icon: "🎧",
+    },
+    {
       title: "Prochain cas d'usage en développement",
       description:
         "Pipeline automation, lead scoring avec IA, ou analyse prédictive ? Le prochain projet sera encore plus ambitieux pour continuer à maîtriser l'IA dans un contexte business réel.",
@@ -152,6 +184,38 @@ export const projectsData = {
         github: "https://github.com/paul-antoine-presti-ai/meteo-trader",
       },
       icon: "⚡",
+    },
+    {
+      title: "AudioLearn — Audio Learning Library",
+      description:
+        "Web app that turns written tech lessons (companies, tools, concepts like Databricks, SQL, the cloud) into audiobooks you can listen to in the background, like a podcast. High-quality synthetic voice, locked-screen playback on iPhone.",
+      longDescription:
+        "AudioLearn was born from a personal need: learning while walking, earbuds in, phone locked. Rather than relying on plain speech synthesis (which stops the moment an iPhone screen locks), I designed a pipeline that pre-generates real MP3 files via the ElevenLabs API, played in an HTML audio player wired to the Media Session API — enabling continuous background playback with controls on the lock screen, exactly like a podcast app. Content is hand-written (beginner → intermediate level) then converted to audio in a single command, with a choice of provider (ElevenLabs for quality, OpenAI for cost). The site is static, deployed on Vercel, installable as a PWA, and automatically falls back to the browser voice until a lesson has its audio. First published lesson: Databricks explained through the Netflix use case.",
+      technologies: [
+        "JavaScript (Vanilla)",
+        "Media Session API",
+        "ElevenLabs API",
+        "OpenAI TTS",
+        "Web Speech API",
+        "Node.js",
+        "PWA",
+        "Vercel",
+      ],
+      features: [
+        "🎧 Background and locked-screen playback on iPhone via the Media Session API (like a podcast)",
+        "🗣️ High-quality synthetic voices generated with ElevenLabs, with automatic fallback to the browser voice",
+        "⚙️ Multi-provider text-to-speech pipeline (ElevenLabs or OpenAI) in a single command",
+        "📚 Themed libraries of audiobook lessons, designed for listening (beginner → intermediate level)",
+        "📱 Installable PWA on the home screen, full-screen experience",
+        "💾 Saved progress, automatic resume and playback speed control",
+        "🚀 Static site deployed on Vercel with automatic redeployment, zero backend",
+        "📝 First lesson: Databricks through the real-world Netflix use case (~14 min of audio)",
+      ],
+      links: {
+        github: "https://github.com/paul-antoine-presti-ai/audiolearn",
+        demo: "https://audiolearn-seven.vercel.app/",
+      },
+      icon: "🎧",
     },
     {
       title: "Next use case in development",
