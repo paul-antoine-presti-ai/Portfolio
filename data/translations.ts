@@ -13,6 +13,7 @@ export const translations = {
       "Account Executive passionné par l'IA. Je construis des cas d'usage concrets pour maîtriser l'intelligence artificielle dans un cadre professionnel et apporter de la valeur mesurable aux entreprises réelles.",
     "hero.cta.projects": "Voir les cas d'usage",
     "hero.cta.contact": "Me contacter",
+    "hero.status": "Disponible pour échanger",
 
     // About Section
     "about.title": "À propos",
@@ -71,6 +72,7 @@ export const translations = {
       "Account Executive passionate about AI. I build concrete use cases to master artificial intelligence in a professional setting and deliver measurable value to real businesses.",
     "hero.cta.projects": "View use cases",
     "hero.cta.contact": "Contact me",
+    "hero.status": "Open to a chat",
 
     // About Section
     "about.title": "About",

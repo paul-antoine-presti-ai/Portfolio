@@ -18,8 +18,28 @@ export default function Home() {
 
       {/* Hero Section */}
       <Section id="home" className="min-h-screen flex items-center pt-20">
-        <div className="w-full">
-          <div className="animate-fade-in">
+        <div className="w-full grid md:grid-cols-[1fr_auto] gap-10 md:gap-16 items-center">
+          {/* Avatar */}
+          <div className="order-1 md:order-2 flex justify-center md:justify-end animate-fade-in">
+            <div className="relative">
+              <div className="absolute inset-0 rounded-full bg-accent/25 blur-3xl" aria-hidden="true" />
+              <div className="relative w-44 h-44 md:w-72 md:h-72 rounded-full p-[3px] bg-gradient-to-br from-accent-light via-accent to-accent-hover orange-glow-strong">
+                <div className="w-full h-full rounded-full bg-background-secondary flex items-center justify-center">
+                  <span className="text-6xl md:text-8xl font-bold bg-gradient-to-br from-accent-light to-accent bg-clip-text text-transparent select-none">
+                    PA
+                  </span>
+                </div>
+              </div>
+              {/* Status badge */}
+              <div className="absolute bottom-2 right-2 md:bottom-5 md:right-5 flex items-center gap-2 px-3 py-1.5 glass rounded-full text-xs font-medium text-foreground/90">
+                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                {t("hero.status")}
+              </div>
+            </div>
+          </div>
+
+          {/* Texte */}
+          <div className="order-2 md:order-1 animate-fade-in">
             <div className="inline-block mb-4 animate-pulse">
               <Badge variant="accent">{t("hero.badge")}</Badge>
             </div>
@@ -28,7 +48,7 @@ export default function Home() {
               <br />
               <span className="text-accent">{t("hero.name")}</span>
             </h1>
-            <p className="text-xl md:text-2xl text-foreground/70 mb-8 max-w-3xl leading-relaxed">
+            <p className="text-xl md:text-2xl text-foreground/70 mb-8 max-w-2xl leading-relaxed">
               {t("hero.description")}
             </p>
             <div className="flex flex-wrap gap-4">
