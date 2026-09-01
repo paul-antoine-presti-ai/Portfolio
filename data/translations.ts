@@ -6,11 +6,14 @@ export const translations = {
     "nav.contact": "Contact",
 
     // Hero Section
-    "hero.badge": "Account Executive • AI Enthusiast",
+    "hero.badge": "Founding AE @ Presti AI (YC S24) • AI Enthusiast",
     "hero.greeting": "Bonjour, je suis",
     "hero.name": "Paul-Antoine Sage",
     "hero.description":
-      "Account Executive passionné par l'IA. Je construis des cas d'usage concrets pour maîtriser l'intelligence artificielle dans un cadre professionnel et apporter de la valeur mesurable aux entreprises réelles.",
+      "Founding Account Executive chez Presti AI (YC S24). 1M$+ générés en 20 mois en partant de zéro. Basé à Paris, mobile partout — je construis des cas d'usage IA concrets pour apporter de la valeur mesurable.",
+    "hero.highlight.role": "Founding AE @ Presti AI (YC S24)",
+    "hero.highlight.revenue": "1M$+ générés en 20 mois",
+    "hero.highlight.location": "Paris — mobile partout",
     "hero.cta.projects": "Voir les cas d'usage",
     "hero.cta.contact": "Me contacter",
     "hero.status": "Disponible pour échanger",
@@ -20,6 +23,7 @@ export const translations = {
     "video.subtitle":
       "Une minute pour me présenter, mon parcours et ce que je construis avec l'IA.",
     "video.hint": "Cliquez sur lecture pour découvrir mon parcours",
+    "video.play": "Lancer la vidéo",
     "video.error":
       "Vidéo bientôt disponible — en attendant, découvrez mon profil ci-dessous.",
     "video.unsupported":
@@ -31,10 +35,10 @@ export const translations = {
       "De l'Account Executive à l'AI Enthusiast - Créer de la valeur concrète avec l'IA",
     "about.bio.title": "👋 Qui je suis",
     "about.bio.text":
-      "Je suis Founding Account Executive chez Presti.AI, une startup qui met l'IA générative au service de la création visuelle produit. Dès ma première année, j'ai généré 635 k€ d'ARR en partant de zéro : construction du discours commercial, du pipeline et des relations clients. Basé à Paris, je suis convaincu qu'on comprend vraiment l'IA en construisant avec elle — alors j'explore en continu l'IA et son écosystème à travers des projets concrets, comme ceux réunis ici.",
-    "about.fact.role": "Founding AE @ Presti.AI",
-    "about.fact.arr": "635 k€ d'ARR en 1ʳᵉ année",
-    "about.fact.location": "Basé à Paris",
+      "Je suis Founding Account Executive chez Presti AI (YC S24), une startup qui met l'IA générative au service de la création visuelle produit. En 20 mois, j'ai généré plus d'1M$ en partant de zéro : discours commercial, pipeline et relations clients. Basé à Paris et mobile partout, je suis convaincu qu'on comprend vraiment l'IA en construisant avec elle — j'explore son écosystème à travers des projets concrets, comme ceux réunis ici.",
+    "about.fact.role": "Founding AE @ Presti AI (YC S24)",
+    "about.fact.arr": "1M$+ générés en 20 mois",
+    "about.fact.location": "Basé à Paris, mobile partout",
     "about.fact.explore": "Explore l'IA & son écosystème",
     "about.mission.title": "🎯 Ma Mission",
     "about.mission.text":
@@ -71,6 +75,9 @@ export const translations = {
     "contact.text":
       "Vous avez un défi business qui pourrait bénéficier de l'IA ? Vous voulez automatiser vos processus de vente ? Parlons-en et trouvons ensemble des cas d'usage concrets !",
     "contact.cta": "Envoyer un email",
+    "contact.phone": "Appeler",
+    "contact.emailLabel": "Email",
+    "contact.phoneLabel": "Téléphone",
 
     // Footer
     "footer.rights": "Tous droits réservés.",
@@ -82,11 +89,14 @@ export const translations = {
     "nav.contact": "Contact",
 
     // Hero Section
-    "hero.badge": "Account Executive • AI Enthusiast",
+    "hero.badge": "Founding AE @ Presti AI (YC S24) • AI Enthusiast",
     "hero.greeting": "Hi, I'm",
     "hero.name": "Paul-Antoine Sage",
     "hero.description":
-      "Account Executive passionate about AI. I build concrete use cases to master artificial intelligence in a professional setting and deliver measurable value to real businesses.",
+      "Founding Account Executive at Presti AI (YC S24). $1M+ generated in 20 months from scratch. Based in Paris, able to relocate anywhere — I build concrete AI use cases that deliver measurable value.",
+    "hero.highlight.role": "Founding AE @ Presti AI (YC S24)",
+    "hero.highlight.revenue": "$1M+ generated in 20 months",
+    "hero.highlight.location": "Paris — able to relocate anywhere",
     "hero.cta.projects": "View use cases",
     "hero.cta.contact": "Contact me",
     "hero.status": "Open to a chat",
@@ -96,6 +106,7 @@ export const translations = {
     "video.subtitle":
       "One minute to introduce myself, my background, and what I'm building with AI.",
     "video.hint": "Click play to discover my journey",
+    "video.play": "Play video",
     "video.error":
       "Video coming soon — in the meantime, explore my profile below.",
     "video.unsupported": "Your browser does not support video playback.",
@@ -106,10 +117,10 @@ export const translations = {
       "From Account Executive to AI Enthusiast - Creating concrete value with AI",
     "about.bio.title": "👋 Who I am",
     "about.bio.text":
-      "I'm a Founding Account Executive at Presti.AI, a startup bringing generative AI to product visual creation. In my very first year, I generated €635k in ARR from scratch: building the sales narrative, the pipeline and client relationships. Based in Paris, I'm convinced you truly understand AI by building with it — so I continuously explore AI and its ecosystem through concrete projects, like the ones gathered here.",
-    "about.fact.role": "Founding AE @ Presti.AI",
-    "about.fact.arr": "€635k ARR in year one",
-    "about.fact.location": "Based in Paris",
+      "I'm a Founding Account Executive at Presti AI (YC S24), a startup bringing generative AI to product visual creation. In 20 months, I generated over $1M from scratch: sales narrative, pipeline and client relationships. Based in Paris and able to relocate anywhere, I'm convinced you truly understand AI by building with it — I explore its ecosystem through concrete projects, like the ones gathered here.",
+    "about.fact.role": "Founding AE @ Presti AI (YC S24)",
+    "about.fact.arr": "$1M+ generated in 20 months",
+    "about.fact.location": "Based in Paris, able to relocate anywhere",
     "about.fact.explore": "Exploring AI & its ecosystem",
     "about.mission.title": "🎯 My Mission",
     "about.mission.text":
@@ -146,6 +157,9 @@ export const translations = {
     "contact.text":
       "Do you have a business challenge that could benefit from AI? Want to automate your sales processes? Let's discuss and find concrete use cases together!",
     "contact.cta": "Send an email",
+    "contact.phone": "Call me",
+    "contact.emailLabel": "Email",
+    "contact.phoneLabel": "Phone",
 
     // Footer
     "footer.rights": "All rights reserved.",

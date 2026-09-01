@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/hooks/useTranslation";
+import { profile } from "@/data/profile";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -14,9 +15,9 @@ export default function Footer() {
             © {currentYear} Paul-Antoine Sage. {t("footer.rights")}
           </p>
 
-          <div className="flex gap-6">
+          <div className="flex flex-wrap justify-center gap-6">
             <a
-              href="https://github.com/paul-antoine-presti-ai"
+              href={profile.github}
               target="_blank"
               rel="noopener noreferrer"
               className="text-foreground-muted hover:text-accent transition-colors text-sm"
@@ -24,7 +25,7 @@ export default function Footer() {
               GitHub
             </a>
             <a
-              href="https://linkedin.com"
+              href={profile.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               className="text-foreground-muted hover:text-accent transition-colors text-sm"
@@ -32,10 +33,16 @@ export default function Footer() {
               LinkedIn
             </a>
             <a
-              href="mailto:paul-antoine@presti.ai"
+              href={`mailto:${profile.email}`}
               className="text-foreground-muted hover:text-accent transition-colors text-sm"
             >
-              Email
+              {profile.email}
+            </a>
+            <a
+              href={`tel:${profile.phone}`}
+              className="text-foreground-muted hover:text-accent transition-colors text-sm"
+            >
+              {profile.phoneDisplay}
             </a>
           </div>
         </div>
@@ -43,4 +50,3 @@ export default function Footer() {
     </footer>
   );
 }
-

@@ -14,13 +14,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Paul-Antoine Sage - Account Executive & AI Enthusiast",
-  description: "Account Executive passionné par l'IA. Je crée des cas d'usage concrets avec l'IA pour apporter de la valeur mesurable aux entreprises réelles.",
+  title: "Paul-Antoine Sage - Founding AE @ Presti AI (YC S24)",
+  description: "Founding Account Executive at Presti AI (YC S24). $1M+ generated in 20 months. Based in Paris, able to relocate anywhere.",
   keywords: ["Account Executive", "AI", "Intelligence Artificielle", "Sales", "Business", "MCP", "Automation", "Cas d'usage"],
   authors: [{ name: "Paul-Antoine Sage" }],
   openGraph: {
-    title: "Paul-Antoine Sage - Account Executive & AI Enthusiast",
-    description: "Cas d'usage IA concrets pour entreprises - Sales automation, analyse de données, optimisation business",
+    title: "Paul-Antoine Sage - Founding AE @ Presti AI (YC S24)",
+    description: "Founding AE at Presti AI (YC S24). $1M+ generated in 20 months. Based in Paris, able to relocate anywhere.",
     type: "website",
   },
 };

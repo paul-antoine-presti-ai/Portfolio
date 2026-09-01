@@ -8,6 +8,7 @@ import ProjectCard from "@/components/ProjectCard";
 import Badge from "@/components/Badge";
 import WelcomeVideo from "@/components/WelcomeVideo";
 import { projectsData } from "@/data/projects";
+import { profile } from "@/data/profile";
 import { useTranslation } from "@/hooks/useTranslation";
 
 export default function Home() {
@@ -61,9 +62,24 @@ export default function Home() {
               <br />
               <span className="text-accent">{t("hero.name")}</span>
             </h1>
-            <p className="text-xl md:text-2xl text-foreground/70 mb-8 max-w-2xl leading-relaxed">
+            <p className="text-xl md:text-2xl text-foreground/70 mb-6 max-w-2xl leading-relaxed">
               {t("hero.description")}
             </p>
+            <div className="flex flex-wrap gap-3 mb-8">
+              {[
+                { icon: "🚀", text: t("hero.highlight.role") },
+                { icon: "📈", text: t("hero.highlight.revenue") },
+                { icon: "📍", text: t("hero.highlight.location") },
+              ].map((highlight, i) => (
+                <span
+                  key={i}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/30 text-sm md:text-base font-medium text-foreground"
+                >
+                  <span>{highlight.icon}</span>
+                  {highlight.text}
+                </span>
+              ))}
+            </div>
             <div className="flex flex-wrap gap-4">
               <a
                 href="#projects"
@@ -218,15 +234,29 @@ export default function Home() {
               {t("contact.text")}
             </p>
             <div className="space-y-4">
-              <a
-                href="mailto:paul-antoine@presti.ai"
-                className="block px-8 py-4 bg-accent hover:bg-accent-hover text-white rounded-xl font-medium transition-all transform hover:scale-105 orange-glow-strong shadow-lg"
-              >
-                {t("contact.cta")}
-              </a>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <a
+                  href={`mailto:${profile.email}`}
+                  className="block px-6 py-4 bg-accent hover:bg-accent-hover text-white rounded-xl font-medium transition-all transform hover:scale-105 orange-glow-strong shadow-lg"
+                >
+                  <span className="block text-xs uppercase tracking-wide opacity-80 mb-1">
+                    {t("contact.emailLabel")}
+                  </span>
+                  {profile.email}
+                </a>
+                <a
+                  href={`tel:${profile.phone}`}
+                  className="block px-6 py-4 glass border hover:border-accent text-foreground rounded-xl font-medium transition-all hover:orange-glow"
+                >
+                  <span className="block text-xs uppercase tracking-wide text-foreground/50 mb-1">
+                    {t("contact.phoneLabel")}
+                  </span>
+                  {profile.phoneDisplay}
+                </a>
+              </div>
               <div className="flex justify-center gap-6 pt-4">
                 <a
-                  href="https://github.com/paul-antoine-presti-ai"
+                  href={profile.github}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-foreground-muted hover:text-accent transition-colors"
@@ -234,7 +264,7 @@ export default function Home() {
                   GitHub →
                 </a>
                 <a
-                  href="https://linkedin.com"
+                  href={profile.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-foreground-muted hover:text-accent transition-colors"
