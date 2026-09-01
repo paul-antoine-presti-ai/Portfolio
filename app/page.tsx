@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import Section from "@/components/Section";
 import ProjectCard from "@/components/ProjectCard";
 import Badge from "@/components/Badge";
+import WelcomeVideo from "@/components/WelcomeVideo";
 import { projectsData } from "@/data/projects";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -80,6 +81,8 @@ export default function Home() {
           </div>
         </div>
       </Section>
+
+      <WelcomeVideo />
 
       {/* About Section */}
       <Section

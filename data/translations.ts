@@ -15,6 +15,16 @@ export const translations = {
     "hero.cta.contact": "Me contacter",
     "hero.status": "Disponible pour échanger",
 
+    // Welcome Video
+    "video.title": "Faisons connaissance",
+    "video.subtitle":
+      "Une minute pour me présenter, mon parcours et ce que je construis avec l'IA.",
+    "video.hint": "Cliquez sur lecture pour découvrir mon parcours",
+    "video.error":
+      "Vidéo bientôt disponible — en attendant, découvrez mon profil ci-dessous.",
+    "video.unsupported":
+      "Votre navigateur ne prend pas en charge la lecture vidéo.",
+
     // About Section
     "about.title": "À propos",
     "about.subtitle":
@@ -80,6 +90,15 @@ export const translations = {
     "hero.cta.projects": "View use cases",
     "hero.cta.contact": "Contact me",
     "hero.status": "Open to a chat",
+
+    // Welcome Video
+    "video.title": "Let's get acquainted",
+    "video.subtitle":
+      "One minute to introduce myself, my background, and what I'm building with AI.",
+    "video.hint": "Click play to discover my journey",
+    "video.error":
+      "Video coming soon — in the meantime, explore my profile below.",
+    "video.unsupported": "Your browser does not support video playback.",
 
     // About Section
     "about.title": "About",
