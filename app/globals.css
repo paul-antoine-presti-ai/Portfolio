@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  /* Cursor-like colors - Plus clair, moins noir */
-  --background: #1a1a1a;
-  --background-secondary: #252525;
-  --foreground: #e4e4e7;
-  --foreground-muted: #a1a1aa;
-  
-  /* Mistral Orange touches */
-  --accent: #f97316;
-  --accent-hover: #ea580c;
-  --accent-light: #fb923c;
-  --accent-glow: rgba(249, 115, 22, 0.15);
+  /* Carbon / concrete monochrome */
+  --background: #0a0a0b;
+  --background-secondary: #141518;
+  --foreground: #eceae4;
+  --foreground-muted: #7e838c;
+
+  /* Neutral accent (was Mistral orange) */
+  --accent: #eceae4;
+  --accent-hover: #ffffff;
+  --accent-light: #f7f6f2;
+  --accent-glow: rgba(255, 255, 255, 0.08);
   
   /* Glass effect colors */
   --glass-bg: rgba(37, 37, 37, 0.6);
@@ -172,7 +172,7 @@ html {
   box-shadow: 0 0 30px rgba(249, 115, 22, 0.3);
 }
 
-/* Gradient background subtle */
+/* Subtle carbon depth (no color cast) */
 body::before {
   content: "";
   position: fixed;
@@ -180,9 +180,8 @@ body::before {
   left: 0;
   right: 0;
   height: 100vh;
-  background: 
-    radial-gradient(circle at 20% 20%, var(--accent-glow) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, var(--accent-glow) 0%, transparent 50%);
+  background:
+    radial-gradient(60% 50% at 50% 0%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
 }
