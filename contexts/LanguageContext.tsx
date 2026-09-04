@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 type Language = "fr" | "en";
 
@@ -15,15 +15,13 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
 );
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>("fr");
-
-  // Charger la langue depuis localStorage au démarrage
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem("language") as Language;
-    if (savedLanguage && (savedLanguage === "fr" || savedLanguage === "en")) {
-      setLanguage(savedLanguage);
+  const [language, setLanguage] = useState<Language>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("language") as Language;
+      if (saved === "fr" || saved === "en") return saved;
     }
-  }, []);
+    return "en";
+  });
 
   // Sauvegarder la langue dans localStorage
   const handleSetLanguage = (lang: Language) => {
