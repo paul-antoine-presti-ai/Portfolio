@@ -50,6 +50,15 @@ const cases: UseCase[] = [
     tags: ["Claude AI", "Anthropic API", "Python", "Alpaca", "Pydantic"],
     href: "https://github.com/paul-antoine-presti-ai/alpha-arena",
   },
+  {
+    cat: "Tools · Vanilla JS",
+    title: "Account Mapping",
+    big: "⬡",
+    img: "",
+    desc: "Stakeholder mapping tool for Enterprise accounts — visualise who decides, influences, and blocks. Infinite canvas, draggable cards, directional connections, native dark mode.",
+    tags: ["JavaScript (Vanilla)", "D3.js v7", "localStorage", "Dark Mode"],
+    href: "/doordash/",
+  },
 ];
 
 type Stat = { fig: string; count: number; suffix?: string; unit?: string; label: string };
@@ -196,7 +205,7 @@ export default function Home() {
         <section className="hero">
           <div className="meta-top">
             <span>[ PORTFOLIO / 2026 ]</span>
-            <span>N°001 — 004</span>
+            <span>N°001 — 005</span>
           </div>
           <h1>
             <span className="ln"><span>I build</span></span>
@@ -206,7 +215,7 @@ export default function Home() {
           <div className="sub">
             <p>
               Founding Account Executive at Presti AI (YC S24) by day, builder the
-              rest of the time. Four use cases where AI solves a real business
+              rest of the time. Five use cases where AI solves a real business
               problem — from sales to trading.
             </p>
             <div className="mono">
@@ -315,7 +324,7 @@ export default function Home() {
         <section className="cases" id="work">
           <div className="seclabel">
             03 — Use cases<span className="rule" />
-            <span className="mono">04 PROJECTS</span>
+            <span className="mono">05 PROJECTS</span>
           </div>
           {cases.map((c, i) => {
             const n = String(i + 1).padStart(2, "0");
