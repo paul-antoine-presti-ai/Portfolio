@@ -1,4 +1,9 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
+#map-title:hover { opacity: .75; }
+#map-title.editing { cursor: text; }
+.map-card-rename { background:none; border:none; cursor:pointer; opacity:.45; font-size:13px; padding:2px 4px; line-height:1; color:var(--ink); }
+.map-card-rename:hover { opacity:1; }
+</style></head><body>
 <script>/* snapshot local des donnees enregistrees en ligne */try{if(!localStorage.getItem("ddmap.v1"))localStorage.setItem("ddmap.v1","{\"ads-mgr\": {\"name\": \"\", \"title\": \"Senior Industry Manager, Enterprise Ad Sales\", \"role\": \"in\", \"notes\": \"Chez DoorDash Ads le manager de première ligne s'appelle « Industry Manager », pas « Sales Manager ». L'offre d'Enterprise AE le confirme : les AE reportent à « an Industry Manager within CPG Ad Sales ». Déclinaisons publiées : CPG, Mid Market, Restaurants, Franchise.\\n\\nSponsor opérationnel du POC : c'est lui qui voit le gain de productivité de son équipe avant tout le monde, et qui peut le chiffrer devant le Director.\", \"photo\": \"\", \"conf\": 0, \"collapsed\": 0}}");}catch(e){}</script>
 
 <title>DoorDash Account Map</title>
@@ -562,7 +567,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 
   </button>
   <div class="mark">DD</div>
   <div>
-    <h1>DoorDash</h1>
+    <h1 id="map-title" title="Click to rename" style="cursor:pointer">DoorDash</h1>
     <div class="sub">Account map &middot; People &amp; Revenue</div>
   </div>
   <div id="actions"><button id="add-contact">+ Contact</button><button id="manage-zones">Zones</button></div><div id="tally"></div>
@@ -1678,7 +1683,7 @@ function renderLibrary(){
       <div style="display:flex;align-items:center;gap:12px">
         <div class="map-card-icon">${letter}</div>
         <div>
-          <div class="map-card-name">${entry.name||"Sans titre"}</div>
+          <div class="map-card-name">${entry.name||"Untitled"}</div>
           <div class="map-card-meta">${count} contact${count!==1?"s":""}</div>
         </div>
       </div>
@@ -1703,6 +1708,37 @@ function renderLibrary(){
       renderLibrary();
     };
     card.querySelector(".map-card-footer").prepend(del);
+    // Rename button
+    const ren = document.createElement("button");
+    ren.className = "map-card-rename";
+    ren.title = "Rename";
+    ren.innerHTML = "&#x270F;&#xFE0F;";
+    ren.onclick = e => {
+      e.stopPropagation();
+      const nameEl = card.querySelector(".map-card-name");
+      const currentName = entry.name || "Untitled";
+      const inp = document.createElement("input");
+      inp.type = "text";
+      inp.value = currentName;
+      inp.style.cssText = "font:inherit;font-weight:600;border:none;border-bottom:2px solid var(--accent,#e5352d);background:transparent;color:inherit;width:100%;outline:none;padding:0;min-width:80px";
+      nameEl.textContent = "";
+      nameEl.appendChild(inp);
+      inp.focus(); inp.select();
+      function commitRename(){
+        const newName = inp.value.trim() || currentName;
+        entry.name = newName;
+        nameEl.textContent = newName;
+        renameMap(entry.id, newName);
+        card.onclick = () => promptAuth(entry.id, entry.name);
+      }
+      inp.addEventListener("blur", commitRename);
+      inp.addEventListener("keydown", ev => {
+        if(ev.key === "Enter"){ ev.preventDefault(); inp.blur(); }
+        if(ev.key === "Escape"){ inp.value = currentName; inp.blur(); }
+      });
+      card.onclick = null; // disable open while renaming
+    };
+    card.querySelector(".map-card-footer").append(ren);
     card.onclick = () => promptAuth(entry.id, entry.name);
     grid.appendChild(card);
   });
@@ -1741,8 +1777,50 @@ document.getElementById("auth-form").onsubmit = e => {
   loadAndOpenMap(id);
 };
 
+
+function renameMap(id, newName){
+  const lib = getLibrary();
+  const entry = lib.find(function(e){ return e.id === id; });
+  if(entry){ entry.name = newName; entry.modified = Date.now(); saveLibrary(lib); }
+  // Also update toolbar if this is the open map
+  if(id === currentMapId) setBarTitle(newName);
+}
+
+function setBarTitle(name){
+  const h1 = document.getElementById("map-title");
+  if(h1 && h1.querySelector("input") === null) h1.textContent = name || "Untitled";
+}
+
+// Toolbar title click → inline rename
+document.getElementById("map-title").addEventListener("click", function(){
+  if(!currentMapId) return;
+  const h1 = this;
+  if(h1.querySelector("input")) return; // already editing
+  const currentName = h1.textContent;
+  const inp = document.createElement("input");
+  inp.type = "text";
+  inp.value = currentName;
+  inp.style.cssText = "font:inherit;font-size:inherit;font-weight:inherit;border:none;border-bottom:2px solid var(--accent,#e5352d);background:transparent;color:inherit;outline:none;padding:0;width:"+(Math.max(currentName.length,8))+"ch;max-width:260px";
+  h1.textContent = "";
+  h1.appendChild(inp);
+  inp.focus(); inp.select();
+  function commitTitle(){
+    const newName = inp.value.trim() || currentName;
+    h1.textContent = newName;
+    renameMap(currentMapId, newName);
+  }
+  inp.addEventListener("blur", commitTitle);
+  inp.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){ e.preventDefault(); inp.blur(); }
+    if(e.key === "Escape"){ inp.value = currentName; inp.blur(); }
+  });
+});
+
 function loadAndOpenMap(id){
   currentMapId = id;
+  const _libForTitle = getLibrary();
+  const _entryForTitle = _libForTitle.find(function(e){ return e.id === id; });
+  setBarTitle(_entryForTitle ? _entryForTitle.name : "Untitled");
   const raw = localStorage.getItem("maplib.map."+id);
   if(raw){
     try{
