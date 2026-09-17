@@ -133,11 +133,11 @@ export const projectsData = {
       icon: "📈",
     },
     {
-      title: "DoorDash Account Map — Cartographie Relationnelle",
+      title: "Account Mapping — Cartographie Relationnelle de Compte",
       description:
-        "Outil de stakeholder mapping interactif construit pour un deal Enterprise DoorDash : visualiser qui décide, qui influence, qui bloque. Canvas infini, fiches draggables, connexions visuelles, dark mode natif.",
+        "Outil de stakeholder mapping interactif pour gérer un compte Enterprise : visualiser qui décide, qui influence, qui bloque. Canvas infini, fiches draggables, connexions visuelles, dark mode natif.",
       longDescription:
-        "Avant d'entrer en deal sur un compte Enterprise, il faut cartographier les relations : qui décide, qui influence, qui bloque. J'ai construit cet outil en vanilla JS et D3.js pour gérer ma stratégie de compte DoorDash. Chaque contact devient une fiche draggable avec rôle, niveau de confiance et notes contextuelles. On peut tracer des connexions directionnelles entre stakeholders, créer des zones colorées (POC, Deal en cours...), et naviguer librement sur un canvas infini. Toutes les données sont persistées dans le localStorage — aucun backend, zéro friction, utilisable offline. Un snapshot JSON est embarqué dans le HTML pour pré-remplir la carte au premier chargement.",
+        "Avant d'entrer en deal sur un compte Enterprise, il faut cartographier les relations : qui décide, qui influence, qui bloque. J'ai construit cet outil en vanilla JS et D3.js pour cartographier la stratégie d'un compte Enterprise. Chaque contact devient une fiche draggable avec rôle, niveau de confiance et notes contextuelles. On peut tracer des connexions directionnelles entre stakeholders, créer des zones colorées (POC, Deal en cours...), et naviguer librement sur un canvas infini. Toutes les données sont persistées dans le localStorage — aucun backend, zéro friction, utilisable offline. Un snapshot JSON est embarqué dans le HTML pour pré-remplir la carte au premier chargement.",
       technologies: [
         "JavaScript (Vanilla)",
         "D3.js v7",
@@ -309,11 +309,11 @@ export const projectsData = {
       icon: "📈",
     },
     {
-      title: "DoorDash Account Map — Relationship Mapping Tool",
+      title: "Account Mapping — Stakeholder Relationship Tool",
       description:
-        "Interactive stakeholder mapping tool built for an Enterprise DoorDash deal: visualize who decides, who influences, who blocks. Infinite canvas, draggable cards, visual connections, native dark mode.",
+        "Interactive stakeholder mapping tool to manage an Enterprise account: visualize who decides, who influences, who blocks. Infinite canvas, draggable cards, visual connections, native dark mode.",
       longDescription:
-        "Before entering a deal on an Enterprise account, you need to map the relationships: who decides, who influences, who blocks. I built this tool in vanilla JS and D3.js to manage my DoorDash account strategy. Each contact becomes a draggable card with role, confidence level, and contextual notes. You can draw directional connections between stakeholders, create colored zones (POC, active Deal...), and navigate freely on an infinite canvas. All data is persisted in localStorage — no backend, zero friction, usable offline. A JSON snapshot is embedded in the HTML to pre-fill the map on first load.",
+        "Before entering a deal on an Enterprise account, you need to map the relationships: who decides, who influences, who blocks. I built this tool in vanilla JS and D3.js to map an Enterprise account strategy. Each contact becomes a draggable card with role, confidence level, and contextual notes. You can draw directional connections between stakeholders, create colored zones (POC, active Deal...), and navigate freely on an infinite canvas. All data is persisted in localStorage — no backend, zero friction, usable offline. A JSON snapshot is embedded in the HTML to pre-fill the map on first load.",
       technologies: [
         "JavaScript (Vanilla)",
         "D3.js v7",
