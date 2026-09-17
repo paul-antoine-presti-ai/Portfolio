@@ -133,6 +133,35 @@ export const projectsData = {
       icon: "📈",
     },
     {
+      title: "DoorDash Account Map — Cartographie Relationnelle",
+      description:
+        "Outil de stakeholder mapping interactif construit pour un deal Enterprise DoorDash : visualiser qui décide, qui influence, qui bloque. Canvas infini, fiches draggables, connexions visuelles, dark mode natif.",
+      longDescription:
+        "Avant d'entrer en deal sur un compte Enterprise, il faut cartographier les relations : qui décide, qui influence, qui bloque. J'ai construit cet outil en vanilla JS et D3.js pour gérer ma stratégie de compte DoorDash. Chaque contact devient une fiche draggable avec rôle, niveau de confiance et notes contextuelles. On peut tracer des connexions directionnelles entre stakeholders, créer des zones colorées (POC, Deal en cours...), et naviguer librement sur un canvas infini. Toutes les données sont persistées dans le localStorage — aucun backend, zéro friction, utilisable offline. Un snapshot JSON est embarqué dans le HTML pour pré-remplir la carte au premier chargement.",
+      technologies: [
+        "JavaScript (Vanilla)",
+        "D3.js v7",
+        "localStorage API",
+        "CSS Custom Properties",
+        "Dark Mode natif",
+        "Google Fonts",
+      ],
+      features: [
+        "🗺️ Canvas infini : zoom, pan, repositionnement libre de chaque contact",
+        "🃏 Fiches contact draggables : rôle, niveau de confiance, photo, notes libres",
+        "🔗 Connexions directionnelles entre stakeholders pour visualiser les influences",
+        "🟢 Zones colorées pour marquer les périmètres POC, Deal, Blocage...",
+        "🌙 Dark mode natif avec palette DoorDash-inspired (rouge, vert, violet)",
+        "💾 Persistance automatique via localStorage — aucun backend, offline-ready",
+        "⌨️ Gestures souris : clic fond → contact, Option+glisser → zone, double-clic → zoom",
+        "📋 Snapshot JSON embarqué pour pré-remplir la carte dès le premier chargement",
+      ],
+      links: {
+        demo: "/doordash/",
+      },
+      icon: "🗺️",
+    },
+    {
       title: "Prochain cas d'usage en développement",
       description:
         "Pipeline automation, lead scoring avec IA, ou analyse prédictive ? Le prochain projet sera encore plus ambitieux pour continuer à maîtriser l'IA dans un contexte business réel.",
@@ -278,6 +307,35 @@ export const projectsData = {
         github: "https://github.com/paul-antoine-presti-ai/alpha-arena",
       },
       icon: "📈",
+    },
+    {
+      title: "DoorDash Account Map — Relationship Mapping Tool",
+      description:
+        "Interactive stakeholder mapping tool built for an Enterprise DoorDash deal: visualize who decides, who influences, who blocks. Infinite canvas, draggable cards, visual connections, native dark mode.",
+      longDescription:
+        "Before entering a deal on an Enterprise account, you need to map the relationships: who decides, who influences, who blocks. I built this tool in vanilla JS and D3.js to manage my DoorDash account strategy. Each contact becomes a draggable card with role, confidence level, and contextual notes. You can draw directional connections between stakeholders, create colored zones (POC, active Deal...), and navigate freely on an infinite canvas. All data is persisted in localStorage — no backend, zero friction, usable offline. A JSON snapshot is embedded in the HTML to pre-fill the map on first load.",
+      technologies: [
+        "JavaScript (Vanilla)",
+        "D3.js v7",
+        "localStorage API",
+        "CSS Custom Properties",
+        "Native Dark Mode",
+        "Google Fonts",
+      ],
+      features: [
+        "🗺️ Infinite canvas: zoom, pan, free repositioning of each contact",
+        "🃏 Draggable contact cards: role, confidence level, photo, free notes",
+        "🔗 Directional connections between stakeholders to visualize influences",
+        "🟢 Colored zones to mark POC, active Deal, Blocker perimeters...",
+        "🌙 Native dark mode with DoorDash-inspired palette (red, green, purple)",
+        "💾 Automatic persistence via localStorage — no backend, offline-ready",
+        "⌨️ Mouse gestures: click background → contact, Option+drag → zone, double-click → zoom",
+        "📋 Embedded JSON snapshot to pre-fill the map on first load",
+      ],
+      links: {
+        demo: "/doordash/",
+      },
+      icon: "🗺️",
     },
     {
       title: "Next use case in development",

@@ -1,0 +1,1473 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<script>/* snapshot local des donnees enregistrees en ligne */try{if(!localStorage.getItem("ddmap.v1"))localStorage.setItem("ddmap.v1","{\"ads-mgr\": {\"name\": \"\", \"title\": \"Senior Industry Manager, Enterprise Ad Sales\", \"role\": \"in\", \"notes\": \"Chez DoorDash Ads le manager de première ligne s'appelle « Industry Manager », pas « Sales Manager ». L'offre d'Enterprise AE le confirme : les AE reportent à « an Industry Manager within CPG Ad Sales ». Déclinaisons publiées : CPG, Mid Market, Restaurants, Franchise.\\n\\nSponsor opérationnel du POC : c'est lui qui voit le gain de productivité de son équipe avant tout le monde, et qui peut le chiffrer devant le Director.\", \"photo\": \"\", \"conf\": 0, \"collapsed\": 0}}");}catch(e){}</script>
+
+<title>DoorDash Account Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+
+<style>
+:root{
+  --ground:#EDF0F4;
+  --grid:#DCE1E9;
+  --surface:#FFFFFF;
+  --surface-2:#F5F7FA;
+  --ink:#12161C;
+  --ink-2:#5B6573;
+  --ink-3:#8A94A2;
+  --line:#D3D9E2;
+  --line-2:#E3E8EF;
+  --accent:#E0402A;
+  --accent-soft:#FBE7E3;
+  --poc:#0F7A44;
+  --poc-fill:rgba(15,122,68,.085);
+  --poc-glow:rgba(15,122,68,.19);
+  --poc-line:rgba(15,122,68,.45);
+  --deal:#A81E86;
+  --deal-soft:rgba(168,30,134,.11);
+  --deal-glow:rgba(168,30,134,.21);
+  --deal-line:rgba(168,30,134,.5);
+  --shadow:0 1px 2px rgba(18,22,28,.06), 0 6px 18px rgba(18,22,28,.07);
+  --shadow-lift:0 2px 4px rgba(18,22,28,.08), 0 14px 40px rgba(18,22,28,.14);
+  --r-eb:#B0700F;  --r-eb-bg:#F8EEDC;
+  --r-dm:#3C4BBE;  --r-dm-bg:#E6E9FA;
+  --r-ch:#17805A;  --r-ch-bg:#DFF1EA;
+  --r-co:#6F45AE;  --r-co-bg:#EDE6F8;
+  --r-in:#136F82;  --r-in-bg:#DEEEF2;
+  --r-bl:#96282B;  --r-bl-bg:#F8E4E4;
+  --r-eu:#5C6673;  --r-eu-bg:#E8EBEF;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0C0F14;
+    --grid:#171C24;
+    --surface:#161B23;
+    --surface-2:#1D232C;
+    --ink:#E7EBF1;
+    --ink-2:#939EAE;
+    --ink-3:#6C7787;
+    --line:#2A323D;
+    --line-2:#222932;
+    --accent:#FF5C41;
+    --accent-soft:#331914;
+    --poc:#48D08D;
+    --poc-fill:rgba(72,208,141,.10);
+    --poc-glow:rgba(72,208,141,.22);
+    --poc-line:rgba(72,208,141,.42);
+    --deal:#F17FD3;
+    --deal-soft:rgba(241,127,211,.13);
+    --deal-glow:rgba(241,127,211,.24);
+    --deal-line:rgba(241,127,211,.48);
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.4);
+    --shadow-lift:0 2px 4px rgba(0,0,0,.5), 0 14px 40px rgba(0,0,0,.6);
+    --r-eb:#E0A950;  --r-eb-bg:#31271552;
+    --r-dm:#8D9AEF;  --r-dm-bg:#1E224552;
+    --r-ch:#59C79C;  --r-ch-bg:#12291F52;
+    --r-co:#B392E8;  --r-co-bg:#251C3652;
+    --r-in:#5FBBD1;  --r-in-bg:#12272D52;
+    --r-bl:#E27A7A;  --r-bl-bg:#2E181852;
+    --r-eu:#9AA5B3;  --r-eu-bg:#22272E52;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0C0F14;
+  --grid:#171C24;
+  --surface:#161B23;
+  --surface-2:#1D232C;
+  --ink:#E7EBF1;
+  --ink-2:#939EAE;
+  --ink-3:#6C7787;
+  --line:#2A323D;
+  --line-2:#222932;
+  --accent:#FF5C41;
+  --accent-soft:#331914;
+  --poc:#48D08D;
+  --poc-fill:rgba(72,208,141,.10);
+  --poc-glow:rgba(72,208,141,.22);
+  --poc-line:rgba(72,208,141,.42);
+  --deal:#F17FD3;
+  --deal-soft:rgba(241,127,211,.13);
+  --deal-glow:rgba(241,127,211,.24);
+  --deal-line:rgba(241,127,211,.48);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.4);
+  --shadow-lift:0 2px 4px rgba(0,0,0,.5), 0 14px 40px rgba(0,0,0,.6);
+  --r-eb:#E0A950;  --r-eb-bg:#31271552;
+  --r-dm:#8D9AEF;  --r-dm-bg:#1E224552;
+  --r-ch:#59C79C;  --r-ch-bg:#12291F52;
+  --r-co:#B392E8;  --r-co-bg:#251C3652;
+  --r-in:#5FBBD1;  --r-in-bg:#12272D52;
+  --r-bl:#E27A7A;  --r-bl-bg:#2E181852;
+  --r-eu:#9AA5B3;  --r-eu-bg:#22272E52;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  height:100vh; overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+#actions{display:flex;gap:6px;margin-left:auto;flex:none}
+#actions button,#editor button,.edit-field button,#drawer .dbody>button{border:1px solid var(--line);border-radius:8px;background:var(--surface-2);padding:9px 12px;font-size:12px}
+#actions button:first-child,#editor .primary{background:var(--accent);color:white;border-color:var(--accent)}
+#editor{width:min(600px,calc(100vw - 24px));max-height:88vh;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);padding:22px;box-shadow:var(--shadow-lift)}
+#editor::backdrop{background:#10172288;backdrop-filter:blur(3px)}
+.edit-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.edit-head h2{font-size:20px;margin:0}
+.edit-form{display:grid;gap:14px}.edit-field{display:grid;gap:7px;font-size:12px;font-weight:600}.edit-field select{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);color:var(--ink)}
+.edit-help{font-size:12px;line-height:1.5;color:var(--ink-2);margin:0}.edit-help[role=alert]{color:var(--accent)}
+.member-list{max-height:230px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:8px}.member-list label{display:flex;gap:9px;align-items:flex-start;padding:8px;font-size:12px;line-height:1.4}.member-list input{flex:none}
+.zone-row{display:flex;align-items:center;gap:6px;padding:14px 0;border-bottom:1px solid var(--line);margin-bottom:12px}.zone-row span{flex:1;font-size:12px;overflow-wrap:anywhere}
+@media(max-width:1000px){#tally{display:none}}@media(max-width:640px){#bar{gap:8px;padding-inline:10px}#actions button{padding:8px}#bar .mark{display:none}.zone-row{flex-wrap:wrap}.zone-row span{flex-basis:100%}}
+
+.node{touch-action:none;cursor:grab;min-height:104px;user-select:none}
+.node.dragging{cursor:grabbing;z-index:5;transition:none;box-shadow:var(--shadow-lift)}
+.node.snap-target{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+#snap-ghost{position:absolute;width:214px;height:104px;border:2px dashed var(--accent);border-radius:12px;background:var(--accent-soft);opacity:.65;pointer-events:none;z-index:4}
+#snap-hint,#map-popover,#zone-popover{position:fixed;z-index:35;max-width:320px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);box-shadow:var(--shadow-lift);padding:14px;font-size:13px;line-height:1.4}
+#snap-hint{pointer-events:none;border-color:var(--accent)}
+#map-popover,#zone-popover{width:min(310px,calc(100vw - 24px))}
+.map-popover-title{font-size:13px;font-weight:700;margin:0 0 11px}
+.map-popover-form{display:grid;gap:9px}
+.map-popover-form input{width:100%;font:inherit;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:9px 10px}
+.map-popover-form label{display:grid;gap:5px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.map-popover-actions{display:flex;gap:7px;justify-content:flex-end;margin-top:3px}
+.map-popover-actions button{border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:8px 11px}
+.map-popover-actions .primary{background:var(--accent);border-color:var(--accent);color:#fff}
+#zone-draft{position:absolute;border:2px dashed var(--poc);background:var(--poc-fill);border-radius:16px;pointer-events:none;z-index:3}
+#zone-draft::before{content:'Nouvelle zone';position:absolute;top:8px;left:12px;font:600 10px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--poc)}
+#gesture-help{position:absolute;top:12px;left:50%;transform:translateX(-50%);padding:8px 14px;border-radius:20px;background:var(--surface);color:var(--ink-2);font-size:11px;pointer-events:none;white-space:nowrap}
+#move-status{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);max-width:45vw;padding:8px 12px;background:var(--surface);border-radius:8px;font-size:12px;color:var(--ink-2);pointer-events:none}
+#move-status:empty{display:none}
+@media(max-width:640px){#gesture-help{max-width:95%;white-space:normal;text-align:center;font-size:10px}#actions{gap:3px}#actions button{font-size:10px;padding:7px}#move-status{max-width:75vw;bottom:12px}}
+
+/* ---------- top bar ---------- */
+#bar{
+  position:fixed; inset:0 0 auto 0; z-index:30; height:56px;
+  display:flex; align-items:center; gap:18px;
+  padding-inline:18px;
+  background:color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.mark{
+  width:26px;height:26px;border-radius:7px;background:var(--accent);
+  display:grid;place-items:center;flex:none;
+  color:#fff;font-weight:700;font-size:13px;letter-spacing:-.02em;
+}
+#bar h1{
+  margin:0;font-size:15px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;
+}
+#bar .sub{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);
+  white-space:nowrap;
+}
+#tally{
+  margin-left:auto; display:flex; gap:6px; align-items:center;
+  overflow-x:auto; scrollbar-width:none;
+}
+#tally::-webkit-scrollbar{display:none}
+.tly{
+  display:flex;align-items:center;gap:5px;flex:none;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:10.5px;font-weight:500;letter-spacing:.03em;
+  padding:4px 8px;border-radius:99px;border:1px solid var(--line-2);
+  background:var(--surface-2);color:var(--ink-2);
+}
+.tly i{width:6px;height:6px;border-radius:99px;display:block;flex:none}
+.tly b{color:var(--ink);font-weight:600}
+
+/* ---------- stage ---------- */
+#stage{
+  position:fixed; inset:56px 0 0 0; overflow:hidden; cursor:grab;
+  background-image:radial-gradient(var(--grid) 1px, transparent 1px);
+  background-size:26px 26px;
+}
+#stage.grabbing{cursor:grabbing}
+#viewport{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform}
+#links{position:absolute;top:0;left:0;overflow:visible;pointer-events:none}
+#edges path{fill:none;stroke:var(--line);stroke-width:1.5}
+#edges path.deal{stroke:var(--deal);stroke-width:2.75}
+#edges path.hot{stroke:var(--accent);stroke-width:2}
+#zones rect{
+  stroke-width:1.5;stroke-dasharray:8 6;pointer-events:auto;
+  transition:fill .18s, stroke .18s, stroke-width .18s;
+}
+#zones text{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:15px;font-weight:600;letter-spacing:.13em;
+  transition:fill .18s;
+}
+#zones .poc rect{fill:var(--poc-fill);stroke:var(--poc-line)}
+#zones .poc text{fill:var(--poc-line)}
+#zones .poc:hover rect, #zones .poc.hot rect{
+  fill:var(--poc-glow);stroke:var(--poc);stroke-width:2.5;stroke-dasharray:none;
+}
+#zones .poc:hover text, #zones .poc.hot text{fill:var(--poc)}
+
+#zones .deal rect{fill:var(--deal-soft);stroke:var(--deal-line)}
+#zones .deal text{fill:var(--deal-line)}
+#zones .deal:hover rect, #zones .deal.hot rect{
+  fill:var(--deal-glow);stroke:var(--deal);stroke-width:2.5;stroke-dasharray:none;
+}
+#zones .deal:hover text, #zones .deal.hot text{fill:var(--deal)}
+
+#cross path{
+  fill:none;stroke:var(--deal);stroke-width:2;stroke-dasharray:7 6;
+  transition:stroke-width .18s;
+}
+#cross text{
+  fill:var(--deal);font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:13px;font-weight:600;letter-spacing:.09em;
+}
+#cross .xlink.hot path{stroke-width:3.25;stroke-dasharray:none}
+marker#arw path{fill:var(--deal)}
+
+/* ---------- node ---------- */
+.node{
+  position:absolute; width:214px;
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:12px; box-shadow:var(--shadow);
+  padding:11px 12px 10px;
+  transition:box-shadow .16s, border-color .16s, transform .16s;
+}
+.node:hover{box-shadow:var(--shadow-lift);border-color:var(--ink-3)}
+.node.deal{border-color:var(--deal-line);box-shadow:var(--shadow), 0 0 0 3px var(--deal-soft)}
+.node.deal:hover{border-color:var(--deal);box-shadow:var(--shadow-lift), 0 0 0 3px var(--deal-soft)}
+.node.sel{border-color:var(--accent);box-shadow:var(--shadow-lift), 0 0 0 3px var(--accent-soft)}
+.node.root{border-width:1.5px}
+
+.nhead{display:flex;gap:10px;align-items:flex-start}
+.av{
+  position:relative;width:42px;height:42px;border-radius:99px;flex:none;
+  background:var(--surface-2); border:1.5px solid var(--line);
+  display:grid;place-items:center;overflow:hidden;cursor:pointer;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:12px;font-weight:600;color:var(--ink-3);letter-spacing:.02em;
+  transition:border-color .15s, background .15s;
+}
+.av img{width:100%;height:100%;object-fit:cover;display:block}
+.av.unk{border-style:dashed}
+.av.drop{border-color:var(--accent);background:var(--accent-soft)}
+.av:hover{border-color:var(--ink-3)}
+
+.nmeta{min-width:0;flex:1}
+.nname{
+  font-size:13.5px;font-weight:600;letter-spacing:-.012em;line-height:1.22;
+  overflow-wrap:break-word;
+}
+.nname.todo{color:var(--ink-3);font-style:italic;font-weight:500}
+.ntitle{
+  margin-top:3px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:9.5px;line-height:1.42;letter-spacing:.015em;
+  color:var(--ink-2); overflow-wrap:break-word;
+}
+
+.nfoot{display:flex;align-items:center;gap:6px;margin-top:9px}
+.pill{
+  display:inline-flex;align-items:center;gap:5px;
+  height:21px;padding:0 8px;border-radius:99px;border:1px solid transparent;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:9.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  white-space:nowrap;
+}
+.pill.empty{
+  border:1px dashed var(--line);background:transparent;color:var(--ink-3);
+  font-weight:500;letter-spacing:.06em;
+}
+.pill i{width:6px;height:6px;border-radius:99px;display:block;flex:none}
+.chip{
+  margin-left:auto;display:grid;place-items:center;flex:none;
+  width:21px;height:21px;border-radius:6px;
+  border:1px dashed var(--line);background:transparent;color:var(--ink-3);
+}
+.chip.on{border:1px solid transparent;background:var(--accent-soft);color:var(--accent)}
+.chip svg{width:11px;height:11px;display:block}
+
+.tog{
+  position:absolute;left:50%;bottom:-11px;transform:translateX(-50%);
+  width:22px;height:22px;border-radius:99px;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink-2);
+  display:grid;place-items:center;padding:0;box-shadow:var(--shadow);
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:9px;font-weight:600;
+}
+.tog:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ---------- controls ---------- */
+#ctl{position:fixed;right:16px;bottom:16px;z-index:20;display:flex;flex-direction:column;gap:6px}
+#ctl button{
+  width:34px;height:34px;border-radius:9px;border:1px solid var(--line);
+  background:var(--surface);box-shadow:var(--shadow);display:grid;place-items:center;padding:0;
+  font-size:14px;line-height:1;color:var(--ink-2);
+}
+#ctl button:hover{border-color:var(--ink-3);color:var(--ink)}
+#ctl button.wide{width:34px;font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600}
+#ctl button.poc{color:var(--poc);border-color:var(--poc-line)}
+#ctl button.poc:hover{color:var(--poc);border-color:var(--poc)}
+#ctl button.dealbtn{color:var(--deal);border-color:var(--deal-line)}
+#ctl button.dealbtn:hover{color:var(--deal);border-color:var(--deal)}
+
+#legend{
+  position:fixed;left:16px;bottom:16px;z-index:20;max-width:min(272px,calc(100vw - 32px));
+  background:color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter:blur(12px);
+  border:1px solid var(--line);border-radius:11px;box-shadow:var(--shadow);
+  overflow:hidden;
+}
+#legend > button{
+  width:100%;display:flex;align-items:center;gap:8px;padding:9px 11px;
+  background:none;border:0;text-align:left;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:9.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2);
+}
+#legend > button span{margin-left:auto;color:var(--ink-3);font-size:10px}
+#legend ul{
+  list-style:none;margin:0;padding:0 11px 11px;
+  display:grid;gap:6px;border-top:1px solid var(--line-2);padding-top:10px;
+}
+#legend[data-open="0"] ul{display:none}
+#legend li{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-2)}
+#legend li i{width:7px;height:7px;border-radius:99px;flex:none}
+#legend li b{color:var(--ink);font-weight:600}
+#legend .hint{
+  display:block;grid-column:1/-1;font-size:10.5px;color:var(--ink-3);line-height:1.5;
+  border-top:1px solid var(--line-2);padding-top:8px;
+}
+
+/* ---------- drawer ---------- */
+#scrim{position:fixed;inset:0;z-index:38;background:rgba(10,13,18,.32);opacity:0;pointer-events:none;transition:opacity .2s}
+#scrim.on{opacity:1;pointer-events:auto}
+#drawer{
+  position:fixed;top:0;right:0;bottom:0;z-index:40;width:min(392px,100vw);
+  background:var(--surface);border-left:1px solid var(--line);
+  transform:translateX(101%);transition:transform .26s cubic-bezier(.22,.8,.3,1);
+  display:flex;flex-direction:column;
+}
+#drawer.on{transform:none}
+.dhead{
+  display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line-2);
+}
+.dhead .eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+}
+.dhead button{
+  margin-left:auto;width:30px;height:30px;border-radius:8px;border:1px solid var(--line);
+  background:var(--surface);display:grid;place-items:center;padding:0;font-size:15px;color:var(--ink-2);
+}
+.dhead button:hover{border-color:var(--ink-3);color:var(--ink)}
+.dbody{flex:1;overflow-y:auto;padding:18px 16px 28px;display:grid;gap:18px}
+
+.idrow{display:flex;gap:14px;align-items:center}
+.bigav{
+  width:72px;height:72px;border-radius:99px;flex:none;
+  background:var(--surface-2);border:2px solid var(--line);
+  display:grid;place-items:center;overflow:hidden;cursor:pointer;position:relative;
+  font-family:"IBM Plex Mono",monospace;font-size:19px;font-weight:600;color:var(--ink-3);
+}
+.bigav img{width:100%;height:100%;object-fit:cover;display:block}
+.bigav.unk{border-style:dashed}
+.bigav.drop{border-color:var(--accent);background:var(--accent-soft)}
+.avnote{font-size:10.5px;color:var(--ink-3);line-height:1.5}
+.avnote button{
+  background:none;border:0;padding:0;color:var(--accent);text-decoration:underline;
+  text-underline-offset:2px;font-size:10.5px;
+}
+
+.fld{display:grid;gap:6px}
+.fld > label{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+}
+input[type=text],textarea{
+  width:100%;font:inherit;color:var(--ink);background:var(--surface-2);
+  border:1px solid var(--line);border-radius:9px;padding:9px 10px;
+}
+input[type=text]{font-size:13.5px;font-weight:500}
+textarea{
+  font-family:"Source Serif 4",Georgia,serif;font-size:14px;line-height:1.58;
+  min-height:190px;resize:vertical;
+}
+input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.roles button{
+  display:flex;align-items:center;gap:7px;padding:8px 9px;border-radius:8px;
+  border:1px solid var(--line);background:var(--surface-2);text-align:left;
+  font-size:11.5px;font-weight:500;color:var(--ink-2);
+}
+.roles button i{width:8px;height:8px;border-radius:99px;flex:none}
+.roles button:hover{border-color:var(--ink-3)}
+.roles button[aria-pressed=true]{color:var(--ink);font-weight:600;border-color:currentColor}
+.roles button.none{grid-column:1/-1;justify-content:center;color:var(--ink-3)}
+
+.seg{display:flex;gap:6px}
+.seg button{
+  flex:1;padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--surface-2);
+  font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);
+}
+.seg button[aria-pressed=true]{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+#saved{
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);opacity:0;transition:opacity .2s;
+}
+#saved.on{opacity:1}
+
+@media (max-width:640px){
+  #legend{display:none}
+  #bar .sub{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms !important}
+}
+</style>
+
+<div id="bar">
+  <div class="mark">DD</div>
+  <div>
+    <h1>DoorDash</h1>
+    <div class="sub">Account map &middot; People &amp; Revenue</div>
+  </div>
+  <div id="actions"><button id="add-contact">+ Contact</button><button id="manage-zones">Zones</button></div><div id="tally"></div>
+</div>
+
+<div id="stage">
+  <div id="viewport">
+    <svg id="links">
+      <defs>
+        <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5"
+                markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+          <path d="M0,1 L9.5,5 L0,9 Z"></path>
+        </marker>
+      </defs>
+      <g id="zones"></g><g id="edges"></g><g id="cross"></g>
+    </svg>
+  </div>
+</div>
+
+<div id="ctl">
+  <button id="zin" title="Zoom avant" aria-label="Zoom avant">+</button>
+  <button id="zout" title="Zoom arrière" aria-label="Zoom arrière">&minus;</button>
+  <button id="zfit" class="wide" title="Voir toute la carte" aria-label="Voir toute la carte">FIT</button>
+  <button id="zpoc" class="wide poc" title="Cadrer le périmètre POC" aria-label="Cadrer le périmètre POC">POC</button>
+  <button id="zdeal" class="wide dealbtn" title="Cadrer le circuit de décision" aria-label="Cadrer le circuit de décision">DEAL</button>
+</div>
+
+<div id="legend" data-open="1">
+  <button id="legtog" aria-expanded="true">Rôles d'achat <span>&minus;</span></button>
+  <ul id="leglist"></ul>
+</div>
+
+<div id="scrim"></div>
+
+<aside id="drawer" aria-hidden="true">
+  <div class="dhead">
+    <div>
+      <div class="eyebrow">Fiche contact</div>
+      <div id="saved">Enregistré</div>
+    </div>
+    <button id="dclose" aria-label="Fermer">&times;</button>
+  </div>
+  <div class="dbody">
+    <div class="idrow">
+      <div class="bigav" id="bigav" title="Glissez une photo ici"></div>
+      <div class="avnote">
+        Glissez une photo sur le cercle, <button id="pickpic" type="button">parcourir</button>,
+        ou copiez une image et collez-la ici (<kbd>⌘V</kbd>).<br>
+        Recadrée en carré et stockée avec la carte.
+      </div>
+    </div>
+
+    <div class="fld">
+      <label for="f-name">Nom</label>
+      <input type="text" id="f-name" placeholder="À identifier" autocomplete="off">
+    </div>
+
+    <div class="fld">
+      <label for="f-title">Intitulé de poste</label>
+      <input type="text" id="f-title" autocomplete="off">
+    </div>
+
+    <div class="fld">
+      <label>Fiabilité de la donnée</label>
+      <div class="seg" id="f-conf">
+        <button type="button" data-c="1" aria-pressed="false">Confirmé</button>
+        <button type="button" data-c="0" aria-pressed="false">À confirmer</button>
+      </div>
+    </div>
+
+    <div class="fld">
+      <label>Rôle dans la décision</label>
+      <div class="roles" id="f-role"></div>
+    </div>
+
+    <div class="fld">
+      <label for="f-notes">Contexte</label>
+      <textarea id="f-notes" placeholder="Ce que vous savez : historique, priorités, signaux, points d'entrée, ce qui a été dit en call, liens utiles…"></textarea>
+    </div>
+  </div>
+</aside>
+
+<input type="file" id="filein" accept="image/*" hidden>
+
+<script>
+(function(){
+"use strict";
+
+/* ============== roles ============== */
+const ROLES = [
+  {k:"eb", label:"Economic Buyer", v:"--r-eb"},
+  {k:"dm", label:"Decision Maker", v:"--r-dm"},
+  {k:"ch", label:"Champion",       v:"--r-ch"},
+  {k:"co", label:"Coach",          v:"--r-co"},
+  {k:"in", label:"Influencer",     v:"--r-in"},
+  {k:"bl", label:"Blocker",        v:"--r-bl"},
+  {k:"eu", label:"End User",       v:"--r-eu"}
+];
+const ROLE = Object.fromEntries(ROLES.map(r => [r.k, r]));
+
+/* ============== the account ==============
+   C-level confirmed Sept 2026. Two branches expanded: People and Revenue. */
+const ORG = {
+  id:"tony-xu", name:"Tony Xu", title:"Co-Founder & Chief Executive Officer", conf:1,
+  children:[
+    {id:"prabir-adarkar", name:"Prabir Adarkar", title:"President & Chief Operating Officer", conf:1},
+    {id:"ravi-inukonda", name:"Ravi Inukonda", title:"Chief Financial Officer", conf:1},
+    {id:"stanley-tang", name:"Stanley Tang", title:"Co-Founder & Chief Product Officer", conf:1},
+    {id:"andy-fang", name:"Andy Fang", title:"Co-Founder, Head of LaunchPad", conf:1,
+      notes:"Ex-CTO. DoorDash n'a plus de CTO en poste — Crunchbase, Comparably et Clay le listent encore comme CTO, c'est périmé. Ne pas l'approcher comme le patron tech."},
+
+    {id:"mariana-garavaglia", name:"Mariana Garavaglia",
+      title:"Chief People Officer (People & Enterprise Tech)", conf:1, role:"eb",
+      notes:"Scope élargi : People ET Enterprise Tech (l'IT lui remonte) — donc budget outillage interne.\n\nA fait l'objet d'un cas client OpenAI sur le déploiement de l'IA auprès des employés DoorDash. Angle d'entrée évident si le sujet est l'adoption de l'IA dans les équipes.\n\nAncienne enseignante — parcours atypique, souvent raconté en interview (HR Brew, 2024).\n\nCENTRE DE DÉCISION. C'est ici que se décident le besoin et le budget, pas côté Sales. Son périmètre couvre People ET Enterprise Tech, donc elle tient à la fois la lecture du besoin et la validation de l'outil. Le POC tourne chez les commerciaux parce que c'est là que l'usage a du sens — mais le oui vient d'ici.\n\nLinkedIn : https://www.linkedin.com/in/marianagaravaglia/",
+      children:[
+        {id:"ppl-ta", name:"", title:"VP, Global Talent Acquisition", conf:0,
+          notes:"COMITÉ DE DÉCISION — dernier siège sans nom. Piste non vérifiée : Matt Valentino apparaît comme VP Global Talent Acquisition dans un podcast (Talk Talent To Me) de plusieurs années, et sur des scrapers. Un Matt Valentino figure aussi comme CPO chez Shape Therapeutics sur Crunchbase — peut-être la même personne, peut-être pas.\n\nÀ confirmer sur LinkedIn avant tout contact."},
+        {id:"nevena-m", name:"Nevena M.", title:"VP, Global HR", conf:0, role:"dm",
+          notes:"COMITÉ DE DÉCISION. Titre donné par SignalHire (VP, Global HR at DoorDash). Nom de famille masqué sur LinkedIn — SignalHire l'indexe sous Nevena Milanovic, non recoupé.\n\nC'est le siège VP au-dessus de toute la ligne HR Business Partners : si le besoin remonte du terrain, il passe par elle avant d'arriver chez Mariana.\n\nLinkedIn : https://www.linkedin.com/in/nevena-m-62a07b14/",
+          children:[
+            {id:"liane-hajduch", name:"Liane Hajduch", title:"Head of People — Engineering & New Business Verticals", conf:0, role:"in",
+              notes:"COMITÉ DE DÉCISION. Les sources divergent sur le libellé exact : ZoomInfo dit « Engineering Head of People », RocketReach « Head of HR BPs, New Business Verticals », ContactOut « Tech HR and Employee Experience ». Toutes la placent à la tête du People pour les orgs techniques.\n\nIntervenante à la Women's Leadership Week DoorDash — profil visible en interne, utile comme relais.\n\nElle couvre les populations tech : c'est elle qui saura si un outil IA passe culturellement.\n\nLinkedIn : https://www.linkedin.com/in/lianehajduch/"},
+            {id:"kathleen-barlett", name:"Kathleen Walton Barlett", title:"Senior Director, HR Business Partner", conf:1, role:"dm",
+              notes:"COMITÉ DE DÉCISION. Titre recoupé par theorg et ZoomInfo, qui l'intitule « Senior Director, Human Resources & Business Partner ». Basée à Richmond, Virginie. Certifiée SHRM-SCP.\n\nElle poste régulièrement sur le recrutement ET sur le Total Rewards — signe d'une vue transverse sur les besoins RH, pas seulement sur son périmètre. C'est le profil qui sait dire si un besoin est réel ou si c'est une lubie de comité.\n\nLe rattachement est déduit de la séniorité, pas confirmé.\n\nLinkedIn : https://www.linkedin.com/in/kathleen-walton-barlett-shrm-scp-62635b2/",
+              children:[
+                {id:"casi-shimizu", name:"Casi Shimizu", title:"HR Director, People Business Partners & Employee Relations", conf:1,
+                  notes:"COMITÉ DE DÉCISION. En poste depuis juillet 2025 — elle l'a annoncé elle-même sur LinkedIn. Titre confirmé par theorg.\n\nArrivée récente : c'est souvent la personne la plus ouverte à un nouvel outil, parce qu'elle n'a pas encore d'attachement aux process en place. Candidate la plus crédible au rôle de Coach — à valider en échange avant de lui coller la pastille.\n\nLe rattachement à Kathleen Walton Barlett est déduit de la séniorité (Director sous Senior Director), pas confirmé.\n\nLinkedIn : https://www.linkedin.com/in/casi-shimizu-b275b165/"}
+              ]}
+          ]},
+        {id:"aaron-king", name:"Aaron King", title:"VP, People — Platforms", conf:0,
+          notes:"COMITÉ DE DÉCISION. ZoomInfo l'intitule « Platforms Vice President, People ». Région de Seattle.\n\nLecture la plus probable : VP People rattaché à l'org Platform (ingénierie), donc un pair de Liane Hajduch sur un autre périmètre métier — pas un rôle technique. À confirmer, le libellé ZoomInfo est ambigu.\n\nLinkedIn : https://www.linkedin.com/in/aaronkingprofile/"},
+        {id:"lillian-bleiman", name:"Lillian Bleiman", title:"VP, Talent Management & Global Total Rewards", conf:1, role:"in",
+          notes:"COMITÉ DE DÉCISION. Trois sources concordent sur le périmètre : ZoomInfo « Global VP, Rewards, Operations & Expansion », Wiza « VP, Talent Management and Total Rewards », Comparably « VP of Talent Management ». Basée à Seattle, chez DoorDash depuis 2021.\n\nTalent Management + Total Rewards dans le même périmètre = elle tient le développement des compétences ET la rémunération. Pour un outil de montée en compétences, c'est le budget le plus naturel de tout le comité.\n\nRecrute activement sur son équipe compensation (post LinkedIn) — équipe en croissance, donc en demande d'outillage.\n\nLinkedIn : https://www.linkedin.com/in/lillian-bleiman-7595233/"},
+        {id:"matti-esko-seppa", name:"Matti-Esko Seppä", title:"VP, Global People Insights, Technology & IT", conf:1, role:"dm",
+          notes:"COMITÉ DE DÉCISION — L'ACHETEUR TECHNIQUE. Titre donné par ContactOut. C'est le siège que j'avais identifié comme critique avant d'avoir un nom : il porte People Insights, People Technology ET l'IT, soit exactement la partie « Enterprise Tech » du périmètre élargi de Mariana.\n\nRien ne se déploie à des employés DoorDash sans passer par lui : sécurité, intégration SIRH, conformité. S'il n'est pas embarqué tôt, il devient le frein tard.\n\nEt « People Insights » dans son titre veut dire qu'il tient la donnée RH — donc la mesure du POC passe aussi par lui.\n\nLinkedIn : https://www.linkedin.com/in/meseppa/"}
+      ]},
+
+    {id:"shanna-preve", name:"Shanna Prevé", title:"Chief Revenue Officer", conf:1, role:"eb",
+      notes:"Promue CRO en janvier 2026, en interne, après avoir été VP Enterprise Sales & Business Development. Longue ancienneté chez DoorDash.\n\nElle remplace Lee Brown (ex-Spotify), parti en janvier 2026 après moins de six mois. Beaucoup de sources en ligne sont encore sur Lee Brown — ne pas se tromper de nom dans un email.\n\nProfil interne promu = connaît le produit, sensible aux arguments business plutôt qu'aux promesses marketing.\n\nÀ EMBARQUER, PAS À CONVAINCRE. Elle ne finance pas le POC — elle accepte qu'il tourne dans son org. Se travaille via Espinosa, avec les chiffres du pilote, pas en direct depuis trois utilisateurs.",
+      children:[
+        {id:"toby-espinosa", name:"A. Toby Espinosa", title:"Vice President, DoorDash Ads", conf:1, role:"dm",
+          notes:"Pilote le business publicitaire, qui est le vrai moteur de croissance de la ligne revenue. Ad Age 40 Under 40. Très présent publiquement : interviews AdExchanger, prises de parole CES janvier 2026, The Drum.\n\nThèse qu'il défend : la croissance se joue « au moment de la décision d'achat ». Bon angle pour toute conversation sur le contenu visuel.\n\nÀ EMBARQUER. C'est lui qui autorise le pilote à tourner dans son équipe, sans remonter. Point d'entrée opérationnel le plus rapide — mais l'arbitrage budgétaire ne lui appartient pas.",
+          children:[
+            {id:"ads-srdir", name:"", title:"Senior Director, Enterprise Advertising Sales", conf:0,
+              notes:"Rung confirmé par l'offre publique « Director, Enterprise Restaurant Ads & Promos » : le Director lui reporte en direct. Le poste est rattaché à Enterprise Sales & Business Development.\n\nTitulaire non public — c'est le premier nom à aller chercher sur Sales Navigator.",
+              children:[
+                {id:"priscila-fernandez", name:"Priscila Fernandez", title:"Enterprise Sales Leader — rung à confirmer", conf:0,
+                  notes:"À EMBARQUER. Intitulé LinkedIn auto-déclaré : « Enterprise Sales Leader @ DoorDash ». Aucune source publique ne donne son rung exact, d'où le point d'interrogation sur sa carte.\n\nDeux hypothèses : soit Director, Enterprise Ad Sales — le poste dont l'offre publique dit qu'il encadre des Senior Industry Managers et des IC — soit une Industry Manager paire de Colin Mason. À trancher sur son profil avant de l'approcher : se tromper de niveau se voit immédiatement.\n\nLinkedIn : https://www.linkedin.com/in/priscilagfernandez/",
+                  children:[
+                    {id:"colin-mason", name:"Colin Mason", title:"Senior Industry Manager, Ads & Promos", conf:1, role:"ch",
+                      notes:"SPONSOR DU POC. Titre donné par theorg ; RocketReach l'intitule « Senior Team Lead, Ad Sales ». Les deux le placent au niveau manager dans l'org Ads, et il a publié lui-même une offre « Enterprise Associate - Ad Sales » — ce que fait un hiring manager, pas un IC.\n\nC'est exactement le rung « Industry Manager » que les offres DoorDash décrivent comme le manager de première ligne des Account Executives.\n\nIl voit le gain de productivité de son équipe avant tout le monde, et il peut le chiffrer pour le comité.\n\nLinkedIn : https://www.linkedin.com/in/colin-mason-72203212/",
+                      children:[
+                        {id:"jared-berman", name:"Jared Berman", title:"Enterprise Associate, Ad Sales", conf:1, role:"eu",
+                          notes:"UTILISATEUR PILOTE. Titre recoupé par ZoomInfo et RocketReach. Basé à New York.\n\nNiveau Associate = la charge de préparation de comptes, de propositions et de reporting la plus lourde de l'équipe. C'est le profil sur lequel un gain de temps se mesure le plus vite et le plus proprement — et le plus facile à faire raconter en fin de pilote.\n\nRattachement à Colin Mason déduit du rung, à confirmer.\n\nLinkedIn : https://www.linkedin.com/in/jared-berman-665187180/"},
+                        {id:"ads-am", name:"", title:"Account Manager, Enterprise Ad Sales", conf:0, role:"eu",
+                          notes:"DEUXIÈME SIÈGE PILOTE, à pourvoir. Piste post-vente, en parallèle des AE sous le même manager. Déclinaisons publiées : Account Manager Restaurants, Account Manager CPG.\n\nPrendre un AM plutôt qu'un second AE est délibéré : deux métiers différents sous une seule ligne hiérarchique, donc deux preuves d'usage pour un seul oui à obtenir."}
+                      ]}
+                  ]}
+              ]},
+            {id:"katie-daleo", name:"Katie Daleo", title:"General Manager, CPG Ads", conf:0,
+              notes:"Citée dans la couverture CES de janvier 2026 aux côtés de Toby Espinosa — rattachement implicite, à confirmer.\n\nCPG = les marques de grande conso qui achètent de la pub sur DoorDash. Volume de contenu produit très élevé.",
+              children:[
+                {id:"lindsay-farrell", name:"Lindsay Farrell", title:"Director, CPG Ads & Promos GTM", conf:0,
+                  notes:"Trouvée sur LinkedIn, corroborée par ses propres publications et RocketReach. Le rattachement à Katie Daleo est déduit du périmètre CPG, pas confirmé."},
+                {id:"brandon-lau", name:"Brandon Lau", title:"Head of Mid Market CPG Ads", conf:0,
+                  notes:"Source unique, intitulé LinkedIn auto-déclaré. Correspond probablement au rung formel « Senior Industry Manager, Enterprise Ad Sales – Mid Market ». À revérifier avant tout contact."}
+              ]},
+            {id:"ads-spec", name:"", title:"Offsite Ads Sales Lead / Agency Development Lead", conf:0,
+              notes:"Rôles spécialistes publiés sur le board DoorDash, hors ligne managériale classique. Utiles à connaître : ce sont eux qui parlent aux agences média."}
+          ]},
+        {id:"david-ross", name:"David Ross", title:"Senior Director, DoorDash for Business", conf:0,
+          notes:"Trouvé uniquement via un extrait de recherche LinkedIn, aucune couverture qui corrobore. Titre et présence à revérifier."},
+        {id:"rev-ent", name:"", title:"VP, Enterprise Sales & Business Development", conf:0,
+          notes:"C'est le poste que Shanna Prevé occupait avant sa promotion. Probablement rebouché depuis janvier 2026 — trouver qui l'a repris : c'est l'interlocuteur opérationnel le plus utile de toute la branche."}
+      ]},
+
+    {id:"keith-yandell", name:"Keith Yandell", title:"Chief Business Officer", conf:1},
+    {id:"tim-castree", name:"Tim Castree", title:"Chief Marketing Officer", conf:1,
+      notes:"Arrivé d'Amazon (VP, EU Prime & Marketing). Remplace Kofi Amoo-Gottfried — theorg.com affiche encore l'ancien nom."},
+    {id:"jessica-lachs", name:"Jessica Lachs", title:"Chief Analytics Officer", conf:1},
+    {id:"tia-sherringham", name:"Tia Sherringham", title:"General Counsel & Secretary", conf:1},
+    {id:"elizabeth-js", name:"Elizabeth Jarvis-Shean", title:"Chief Corporate Affairs Officer", conf:1}
+  ]
+};
+
+/* ============== state ============== */
+const NW = 214, NH = 104, PAD = 90;
+const state = {};      // id -> {name,title,role,notes,photo,conf,collapsed}
+let db = null, selected = null, zoomBehavior = null, currentK = 1;
+const stage = document.getElementById("stage");
+const viewport = document.getElementById("viewport");
+const svg = d3.select("#links");
+const edges = d3.select("#edges");
+const zones = d3.select("#zones");
+const cross = d3.select("#cross");
+
+/* the pilot pod: one front-line manager + two of his individual contributors */
+const POC = ["colin-mason", "jared-berman", "ads-am"];
+const POC_LABEL = "PÉRIMÈTRE POC — 3 UTILISATEURS PILOTES";
+
+/* the decision circuit: everyone who has to say yes for the pilot to exist,
+   then to scale. Scattered across two branches on purpose — so it is drawn
+   as a highlighted path through the tree, not as a box. */
+/* The needs-and-budget decision sits with the CPO and her leadership team.
+   The Sales chain is in the circuit too, but for a different reason: they
+   have to agree to host the pilot, not to fund it. */
+const COMMITTEE = ["mariana-garavaglia", "ppl-ta", "nevena-m", "aaron-king",
+                   "lillian-bleiman", "matti-esko-seppa", "liane-hajduch",
+                   "kathleen-barlett", "casi-shimizu"];
+const HOSTS = ["shanna-preve", "toby-espinosa", "ads-srdir", "priscila-fernandez"];
+const DEAL = COMMITTEE.concat(HOSTS);
+const INVOLVED = DEAL.concat(POC);
+
+/* Boxes are only drawn where they tell the truth — see cleanBox().
+   The Sales chain gets no box on purpose: any rectangle enclosing it
+   would also swallow Katie Daleo's branch, David Ross and Ads Spec. */
+const ZONES = [
+  {id:"poc",       k:"poc",  ids:POC,
+   label:"PÉRIMÈTRE POC — 3 UTILISATEURS PILOTES"},
+  {id:"committee", k:"deal", ids:COMMITTEE,
+   label:"COMITÉ DE DÉCISION — DÉFINITION DU BESOIN & BUDGET"}
+];
+
+/* relationships the org chart cannot express: a dotted line across branches */
+const CROSS = [
+  {from:"mariana-garavaglia", to:"toby-espinosa",
+   label:"LE BESOIN SE DÉCIDE ICI → LE POC TOURNE LÀ"}
+];
+
+function seed(n){
+  state[n.id] = {
+    name: n.name || "", title: n.title || "",
+    role: n.role || "", notes: n.notes || "",
+    photo: "", conf: n.conf ? 1 : 0, collapsed: 0
+  };
+  (n.children || []).forEach(seed);
+}
+seed(ORG);
+
+const LOCAL = "ddmap.v1";
+function loadLocal(){
+  try{
+    const full = localStorage.getItem("ddmap.v2");
+    if(full){ const saved=JSON.parse(full); Object.assign(ORG,saved.org); ZONES.splice(0,ZONES.length,...saved.zones); seed(ORG); Object.assign(state,saved.state); return; }
+    const raw = localStorage.getItem(LOCAL);
+    if(!raw) return;
+    const o = JSON.parse(raw);
+    for(const id in o) if(state[id]) Object.assign(state[id], o[id]);
+  }catch(e){}
+}
+function saveLocal(){
+  try{ localStorage.setItem("ddmap.v2", JSON.stringify({org:ORG,zones:ZONES,state})); }catch(e){ alert("Enregistrement impossible : stockage du navigateur plein. Exportez votre carte avant de quitter."); }
+}
+
+const pending = {};
+let flushTimer = null;
+function persist(id){
+  pending[id] = 1;
+  saveLocal();
+  flash();
+  clearTimeout(flushTimer);
+  flushTimer = setTimeout(flush, 550);
+}
+function flush(){
+  const ids = Object.keys(pending);
+  ids.forEach(id => delete pending[id]);
+  if(!db) return;
+  ids.forEach(id => {
+    db.doc("nodes/" + id).set(Object.assign({}, state[id])).catch(()=>{});
+  });
+}
+const savedEl = document.getElementById("saved");
+let flashTimer = null;
+function flash(){
+  savedEl.classList.add("on");
+  clearTimeout(flashTimer);
+  flashTimer = setTimeout(()=> savedEl.classList.remove("on"), 1400);
+}
+
+/* ============== helpers ============== */
+function initials(name){
+  if(!name) return "?";
+  return name.trim().split(/\s+/).filter(w => /[A-Za-zÀ-ÿ]/.test(w[0]))
+    .slice(0,2).map(w => w[0].toUpperCase()).join("") || "?";
+}
+function hasKids(n){ return !!(n.children && n.children.length); }
+
+/* ============== layout + render ============== */
+let root, nodesArr, offX = 0, offY = 0;
+
+function layout(){
+  const full=d3.hierarchy(ORG);d3.tree().nodeSize([NW+34,NH+74])(full);
+  const members=full.descendants().filter(d=>d.data.id!==MAP_ROOT);
+  const minX=Math.min(...members.map(d=>d.x));
+  members.forEach(d=>{const s=state[d.data.id];
+    if(!Number.isFinite(s.x))s.x=d.x-minX+NW/2+PAD;
+    if(!Number.isFinite(s.y))s.y=(d.depth-1)*(NH+74)+PAD;
+  });
+  root=d3.hierarchy(ORG,d=>state[d.id]?.collapsed?null:d.children);
+  nodesArr=root.descendants().filter(d=>d.data.id!==MAP_ROOT);
+  offX=0;offY=0;nodesArr.forEach(d=>{d.x=state[d.data.id].x;d.y=state[d.data.id].y;});
+  const w=Math.max(...nodesArr.map(d=>d.x))+NW/2+PAD;
+  const h=Math.max(...nodesArr.map(d=>d.y))+NH+PAD;
+  viewport.style.width=Math.max(w,1)+'px';viewport.style.height=Math.max(h,1)+'px';
+  svg.attr('width',Math.max(w,1)).attr('height',Math.max(h,1));
+}
+
+function elbow(d){
+  const sx = d.parent.x + offX, sy = d.parent.y + offY + NH;
+  const tx = d.x + offX,        ty = d.y + offY;
+  if(Math.abs(tx - sx) < 1) return `M${sx},${sy}V${ty}`;
+  const my = sy + (ty - sy) / 2;
+  const r = Math.min(12, Math.abs(tx - sx) / 2, Math.abs(ty - sy) / 2);
+  const s = tx > sx ? 1 : -1;
+  return `M${sx},${sy}V${my - r}Q${sx},${my} ${sx + s * r},${my}`
+       + `H${tx - s * r}Q${tx},${my} ${tx},${my + r}V${ty}`;
+}
+
+/* bounding box, in viewport coordinates, of a set of node ids —
+   null if any of them is currently hidden inside a collapsed branch */
+function boxOf(ids){
+  const picked = nodesArr.filter(d => ids.indexOf(d.data.id) > -1);
+  if(picked.length !== ids.length) return null;
+  return {
+    x0: Math.min(...picked.map(d => d.x + offX - NW / 2)),
+    x1: Math.max(...picked.map(d => d.x + offX + NW / 2)),
+    y0: Math.min(...picked.map(d => d.y + offY)),
+    y1: Math.max(...picked.map(d => d.y + offY + NH))
+  };
+}
+
+/* A box is only honest if no one outside the group falls inside it.
+   Returns null when the group is hidden, or when the rectangle would
+   enclose a node that is not a member — the map then falls back to
+   the path treatment rather than drawing a rectangle that lies. */
+const ZPAD = 24, ZCAP = 36;
+function cleanBox(ids){
+  const b = boxOf(ids);
+  if(!b) return null;
+  const intruded = nodesArr.some(d => {
+    if(ids.indexOf(d.data.id) > -1) return false;
+    const x0 = d.x + offX - NW / 2, x1 = d.x + offX + NW / 2;
+    const y0 = d.y + offY,          y1 = d.y + offY + NH;
+    return x0 < b.x1 + ZPAD && x1 > b.x0 - ZPAD
+        && y0 < b.y1 + ZPAD && y1 > b.y0 - ZPAD;
+  });
+  return intruded ? null : b;
+}
+
+function drawZones(){
+  const data = [];
+  ZONES.forEach(z => {
+    if(z.rect){ data.push({...z,b:z.rect}); return; }
+    const visible = z.ids.filter(id => nodesArr.some(n=>n.data.id===id));
+    if(!visible.length) return;
+    const b = cleanBox(visible);
+    if(b) data.push({...z,b});
+    else if(z.color) visible.forEach((id,i)=>data.push({...z,id:z.id+"-"+id,label:i===0?z.label:"",b:boxOf([id])}));
+  });
+
+  const g = zones.selectAll("g.zone").data(data, d => d.id).join(enter => {
+    const gg = enter.append("g");
+    gg.append("rect").attr("rx", 18);
+    gg.append("text");
+    return gg;
+  });
+  g.attr("class", d => "zone " + d.k);
+  g.select("rect").style("fill",d=>d.color?d.color+"18":null).style("stroke",d=>d.color||null);
+  g.select("text").style("fill",d=>d.color||null);
+  g.select("rect")
+    .attr("x", d => d.b.x0 - ZPAD)
+    .attr("y", d => d.b.y0 - ZPAD - ZCAP)
+    .attr("width",  d => d.b.x1 - d.b.x0 + ZPAD * 2)
+    .attr("height", d => d.b.y1 - d.b.y0 + ZPAD * 2 + ZCAP);
+  g.select("text")
+    .attr("x", d => d.b.x0 - ZPAD + 18)
+    .attr("y", d => d.b.y0 - ZPAD - ZCAP + 25)
+    .text(d => d.label);
+}
+
+/* the dotted line that the tree structure cannot draw by itself */
+function drawCross(){
+  const at = {};
+  nodesArr.forEach(d => { at[d.data.id] = d; });
+
+  const data = CROSS.filter(c => at[c.from] && at[c.to]).map(c => {
+    const a = at[c.from], b = at[c.to];
+    const x1 = a.x + offX + NW / 2, y1 = a.y + offY + NH / 2;
+    const x2 = b.x + offX - NW / 2, y2 = b.y + offY + NH / 2;
+    const run = x2 - x1;
+    return {
+      id: c.from + ">" + c.to,
+      label: c.label,
+      d: `M${x1},${y1}C${x1 + run * 0.62},${y1} ${x2 - run * 0.12},${y2} ${x2},${y2}`,
+      lx: x1 + run * 0.06,
+      ly: y1 - 16
+    };
+  });
+
+  const g = cross.selectAll("g.xlink").data(data, d => d.id).join(enter => {
+    const gg = enter.append("g").attr("class", "xlink");
+    gg.append("path").attr("marker-end", "url(#arw)");
+    gg.append("text");
+    return gg;
+  });
+  g.select("path").attr("d", d => d.d);
+  g.select("text").attr("x", d => d.lx).attr("y", d => d.ly).text(d => d.label);
+}
+
+/* open every collapsed ancestor of a node */
+function expandTo(id){
+  let chain = null;
+  (function walk(n, up){
+    if(chain) return;
+    if(n.id === id){ chain = up; return; }
+    (n.children || []).forEach(c => walk(c, up.concat(n)));
+  })(ORG, []);
+  if(chain) chain.forEach(n => {
+    if(state[n.id]?.collapsed){ state[n.id].collapsed = 0; persist(n.id); }
+  });
+}
+
+const ICON_NOTE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M4 10h16M4 15h9"/></svg>';
+
+function render(){
+  layout();
+
+  drawZones();
+  drawCross();
+  const topNodes=nodesArr.filter(d=>d.parent?.data.id===MAP_ROOT);
+  const peerLinks=topNodes.filter(d=>state[d.data.id].peerOf && topNodes.some(n=>n.data.id===state[d.data.id].peerOf));
+  rootPeers.selectAll('path').data(peerLinks,d=>d.data.id).join('path')
+    .attr('d',d=>{const peer=topNodes.find(n=>n.data.id===state[d.data.id].peerOf);const sign=d.x>peer.x?1:-1;return `M${peer.x+sign*NW/2},${peer.y+NH/2}L${d.x-sign*NW/2},${d.y+NH/2}`;})
+    .attr('fill','none').attr('stroke','var(--line)').attr('stroke-width',1.5).attr('stroke-dasharray','5 5');
+
+  edges.selectAll("path")
+    .data(nodesArr.filter(d=>d.parent && d.parent.data.id!==MAP_ROOT), d => d.data.id)
+    .join("path")
+    .attr("d", elbow)
+    .classed("deal", d => {
+      const a = d.data.id, b = d.parent.data.id;
+      return INVOLVED.indexOf(a) > -1 && INVOLVED.indexOf(b) > -1 &&
+             (DEAL.indexOf(a) > -1 || DEAL.indexOf(b) > -1);
+    })
+    .classed("hot", d => selected && (d.data.id === selected || d.parent.data.id === selected));
+
+  const sel = d3.select(viewport).selectAll(".node")
+    .data(nodesArr, d => d.data.id)
+    .join(
+      enter => {
+        const g = enter.append("div").attr("class", "node");
+        g.html(`<div class="nhead"><div class="av"></div>
+          <div class="nmeta"><div class="nname"></div><div class="ntitle"></div></div></div>
+          <div class="nfoot"><span class="pill"></span><button class="chip" type="button"></button></div>`);
+        return g;
+      }
+    );
+
+  sel
+    .style("left", d => (d.x + offX - NW / 2) + "px")
+    .style("top",  d => (d.y + offY) + "px")
+    .classed("root", d => d.parent?.data.id === MAP_ROOT)
+    .classed("dragging", d=>!!dragState?.moved && dragState.id===d.data.id)
+    .classed("deal", d => DEAL.indexOf(d.data.id) > -1)
+    .classed("sel", d => d.data.id === selected)
+    .each(function(d){
+      const s = state[d.data.id], el = this;
+
+      const av = el.querySelector(".av");
+      av.classList.toggle("unk", !s.conf);
+      av.innerHTML = s.photo ? `<img alt="">` : initials(s.name);
+      if(s.photo) av.querySelector("img").src = s.photo;
+      av.title = s.name || "À identifier";
+
+      const nm = el.querySelector(".nname");
+      nm.textContent = s.name || "À identifier";
+      nm.classList.toggle("todo", !s.name);
+      el.querySelector(".ntitle").textContent = s.title;
+
+      const pill = el.querySelector(".pill");
+      const r = ROLE[s.role];
+      if(r){
+        pill.className = "pill";
+        pill.style.color = `var(${r.v})`;
+        pill.style.background = `var(${r.v}-bg)`;
+        pill.innerHTML = `<i style="background:var(${r.v})"></i>${r.label}`;
+      }else{
+        pill.className = "pill empty";
+        pill.style.color = ""; pill.style.background = "";
+        pill.textContent = "Non qualifié";
+      }
+
+      const chip = el.querySelector(".chip");
+      chip.classList.toggle("on", !!s.notes.trim());
+      chip.innerHTML = ICON_NOTE;
+      chip.title = s.notes.trim() ? "Fiche contexte remplie" : "Ajouter du contexte";
+
+      let tog = el.querySelector(".tog");
+      if(hasKids(d.data)){
+        if(!tog){
+          tog = document.createElement("button");
+          tog.className = "tog"; tog.type = "button";
+          el.appendChild(tog);
+        }
+        tog.textContent = s.collapsed ? "+" : "−";
+        tog.title = s.collapsed ? "Déplier" : "Replier";
+      }else if(tog){ tog.remove(); }
+    });
+
+  tally();
+}
+
+/* ============== tally + legend ============== */
+function tally(){
+  const counts = {};
+  let named = 0, total = 0;
+  for(const id in state){
+    total++;
+    if(state[id].name) named++;
+    if(state[id].role) counts[state[id].role] = (counts[state[id].role] || 0) + 1;
+  }
+  const bits = ROLES.filter(r => counts[r.k]).map(r =>
+    `<span class="tly"><i style="background:var(${r.v})"></i>${r.label} <b>${counts[r.k]}</b></span>`);
+  bits.push(`<span class="tly" style="border-color:var(--poc-line)"><i style="background:var(--poc)"></i>POC <b>${POC.length}</b></span>`);
+  bits.push(`<span class="tly" style="border-color:var(--deal-line)"><i style="background:var(--deal)"></i>Comité <b>${COMMITTEE.length}</b></span>`);
+  bits.push(`<span class="tly" style="border-color:var(--deal-line)">À embarquer <b>${HOSTS.length}</b></span>`);
+  bits.push(`<span class="tly">Identifiés <b>${named}/${total}</b></span>`);
+  document.getElementById("tally").innerHTML = bits.join("");
+}
+
+document.getElementById("leglist").innerHTML =
+  ROLES.map(r => `<li><i style="background:var(${r.v})"></i><b>${r.label}</b></li>`).join("") +
+  `<li style="border-top:1px solid var(--line-2);padding-top:9px;margin-top:3px">
+     <i style="background:var(--poc)"></i><b>Périmètre POC</b> <span style="color:var(--ink-3)">— les utilisateurs</span></li>` +
+  `<li><i style="background:var(--deal)"></i><b>Comité de décision</b> <span style="color:var(--ink-3)">— le besoin et le budget</span></li>` +
+  `<li><i style="background:var(--deal-line)"></i><b>À embarquer</b> <span style="color:var(--ink-3)">— hébergent le POC</span></li>` +
+  `<li class="hint">La pastille dit <b style="color:var(--ink-2)">quel rôle</b> joue la personne ; le cadre dit <b style="color:var(--ink-2)">dans quel périmètre</b> elle est. Un cadre n'est tracé que s'il n'englobe personne d'extérieur au groupe — les zones personnalisées sont réparties en plusieurs cadres si nécessaire. Le pointillé traverse les branches : c'est une dépendance que l'organigramme ne montre pas.</li>`;
+
+const legend = document.getElementById("legend");
+document.getElementById("legtog").addEventListener("click", function(){
+  const open = legend.dataset.open === "1";
+  legend.dataset.open = open ? "0" : "1";
+  this.setAttribute("aria-expanded", String(!open));
+  this.querySelector("span").textContent = open ? "+" : "−";
+});
+
+/* ============== zoom / pan ============== */
+zoomBehavior = d3.zoom()
+  .scaleExtent([0.06, 12])
+  .filter(ev=>!ev.target.closest(".node") && (ev.type==="wheel" || ev.button===1 || (ev.button===0 && !ev.altKey) || ev.type.indexOf("touch")===0))
+  .on("start", () => {stage.classList.add("grabbing");closeMapEditors();})
+  .on("end", () => stage.classList.remove("grabbing"))
+  .on("zoom", ev => {
+    currentK = ev.transform.k;
+    viewport.style.transform = `translate(${ev.transform.x}px,${ev.transform.y}px) scale(${ev.transform.k})`;
+  });
+d3.select(stage).call(zoomBehavior).on("dblclick.zoom", null);
+
+function fit(animate){
+  const b=boxOf(nodesArr.map(d=>d.data.id));if(!b)return;
+  const vw=stage.clientWidth,vh=stage.clientHeight,m=60;
+  const k=Math.max(.06,Math.min((vw-m*2)/(b.x1-b.x0),(vh-m*2)/(b.y1-b.y0),1));
+  const t=d3.zoomIdentity.translate(vw/2-(b.x0+b.x1)/2*k,vh/2-(b.y0+b.y1)/2*k).scale(k);
+  const sel=d3.select(stage);(animate?sel.transition().duration(420):sel).call(zoomBehavior.transform,t);
+}
+
+document.getElementById("zin").onclick  = () => d3.select(stage).transition().duration(180).call(zoomBehavior.scaleBy, 1.3);
+document.getElementById("zout").onclick = () => d3.select(stage).transition().duration(180).call(zoomBehavior.scaleBy, 1/1.3);
+document.getElementById("zfit").onclick = () => fit(true);
+
+function frame(box, animate){
+  if(!box) return fit(animate);
+  const vw = stage.clientWidth, vh = stage.clientHeight, m = 72;
+  const k = Math.max(0.2, Math.min(1.15,
+    (vw - m * 2) / (box.x1 - box.x0), (vh - m * 2) / (box.y1 - box.y0)));
+  const t = d3.zoomIdentity
+    .translate(vw / 2 - ((box.x0 + box.x1) / 2) * k, vh / 2 - ((box.y0 + box.y1) / 2) * k)
+    .scale(k);
+  const s = d3.select(stage);
+  (animate ? s.transition().duration(500) : s).call(zoomBehavior.transform, t);
+}
+document.getElementById("zpoc").onclick = () => {
+  POC.forEach(expandTo);
+  render();
+  frame(boxOf(POC), true);
+};
+document.getElementById("zdeal").onclick = () => {
+  INVOLVED.forEach(expandTo);
+  render();
+  frame(boxOf(INVOLVED), true);
+};
+
+/* hovering a card lights up whatever it belongs to — its zone, and any
+   cross-branch link it sits on — so the pieces read as one deal */
+function highlight(id){
+  zones.selectAll("g.zone").classed("hot", z => !!id && z.ids.indexOf(id) > -1);
+  cross.selectAll("g.xlink").classed("hot", c => !!id && c.id.split(">").indexOf(id) > -1);
+}
+viewport.addEventListener("mouseover", e => {
+  const card = e.target.closest(".node");
+  const d = card ? d3.select(card).datum() : null;
+  highlight(d ? d.data.id : null);
+});
+viewport.addEventListener("mouseleave", () => highlight(null));
+
+/* ============== interactions on cards ============== */
+let downPt = null;
+viewport.addEventListener("pointerdown", e => { downPt = [e.clientX, e.clientY]; });
+viewport.addEventListener("click", e => {
+  if(performance.now()-lastDragAt<400)return;
+  if(downPt && Math.hypot(e.clientX - downPt[0], e.clientY - downPt[1]) > 5) return;
+  const card = e.target.closest(".node");
+  if(!card) return;
+  const d = d3.select(card).datum();
+  if(!d) return;
+  const id = d.data.id;
+
+  if(e.target.closest(".tog")){
+    state[id].collapsed = state[id].collapsed ? 0 : 1;
+    persist(id); render();
+    return;
+  }
+  open(id);
+});
+
+/* drag a photo straight onto a card's circle */
+viewport.addEventListener("dragover", e => {
+  const av = e.target.closest(".av");
+  if(!av) return;
+  e.preventDefault();
+  av.classList.add("drop");
+});
+viewport.addEventListener("dragleave", e => {
+  const av = e.target.closest(".av");
+  if(av) av.classList.remove("drop");
+});
+viewport.addEventListener("drop", e => {
+  const av = e.target.closest(".av");
+  if(!av) return;
+  e.preventDefault();
+  av.classList.remove("drop");
+  const card = av.closest(".node");
+  const d = d3.select(card).datum();
+  const file = e.dataTransfer.files && e.dataTransfer.files[0];
+  if(d && file) setPhoto(d.data.id, file);
+});
+
+function setPhoto(id, file){
+  if(!file || !/^image\//.test(file.type)) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const S = 220, c = document.createElement("canvas");
+      c.width = c.height = S;
+      const ctx = c.getContext("2d");
+      const side = Math.min(img.width, img.height);
+      ctx.drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, S, S);
+      state[id].photo = c.toDataURL("image/jpeg", 0.82);
+      persist(id); render();
+      if(selected === id) paintAvatar();
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ============== drawer ============== */
+const drawer = document.getElementById("drawer");
+const scrim = document.getElementById("scrim");
+const fName = document.getElementById("f-name");
+const fTitle = document.getElementById("f-title");
+const fNotes = document.getElementById("f-notes");
+const fRole = document.getElementById("f-role");
+const fConf = document.getElementById("f-conf");
+const bigav = document.getElementById("bigav");
+const filein = document.getElementById("filein");
+
+fRole.innerHTML =
+  ROLES.map(r => `<button type="button" data-r="${r.k}" aria-pressed="false" style="--c:var(${r.v})">
+    <i style="background:var(${r.v})"></i>${r.label}</button>`).join("") +
+  `<button type="button" class="none" data-r="" aria-pressed="false">Retirer le rôle</button>`;
+
+function paintAvatar(){
+  const s = state[selected];
+  bigav.classList.toggle("unk", !s.conf);
+  bigav.innerHTML = s.photo ? `<img alt="">` : initials(s.name);
+  if(s.photo) bigav.querySelector("img").src = s.photo;
+}
+
+function open(id){
+  selected = id;
+  const s = state[id];
+  fName.value = s.name;
+  fTitle.value = s.title;
+  fNotes.value = s.notes;
+  document.getElementById("f-linkedin").value = s.linkedin || ((s.notes||"").match(/https:\/\/(?:www\.)?linkedin\.com\/in\/[^\s]+/)||[""])[0];
+  paintAvatar();
+  fRole.querySelectorAll("button").forEach(b =>
+    b.setAttribute("aria-pressed", String(b.dataset.r === s.role && !!s.role)));
+  fRole.querySelectorAll("button[data-r]").forEach(b => {
+    b.style.color = (b.dataset.r === s.role && s.role) ? `var(${ROLE[b.dataset.r].v})` : "";
+  });
+  fConf.querySelectorAll("button").forEach(b =>
+    b.setAttribute("aria-pressed", String(+b.dataset.c === s.conf)));
+  drawer.classList.add("on"); drawer.setAttribute("aria-hidden", "false");
+  scrim.classList.add("on");
+  render();
+}
+function close(){
+  selected = null;
+  drawer.classList.remove("on"); drawer.setAttribute("aria-hidden", "true");
+  scrim.classList.remove("on");
+  render();
+}
+document.getElementById("dclose").onclick = close;
+scrim.onclick = close;
+document.addEventListener("keydown", e => { if(e.key === "Escape" && selected) close(); });
+
+let typeTimer = null;
+function onType(field, el){
+  el.addEventListener("input", () => {
+    if(!selected) return;
+    const id=selected;
+    state[id][field] = el.value;
+    persist(id);
+    clearTimeout(typeTimer);
+    typeTimer = setTimeout(() => { render(); }, 280);
+  });
+}
+onType("name", fName); onType("title", fTitle); onType("notes", fNotes);
+
+fRole.addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b || !selected) return;
+  state[selected].role = b.dataset.r;
+  persist(selected); open(selected);
+});
+fConf.addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b || !selected) return;
+  state[selected].conf = +b.dataset.c;
+  persist(selected); open(selected);
+});
+
+bigav.addEventListener("click", () => filein.click());
+document.getElementById("pickpic").addEventListener("click", () => filein.click());
+filein.addEventListener("change", () => {
+  if(selected && filein.files[0]) setPhoto(selected, filein.files[0]);
+  filein.value = "";
+});
+["dragenter","dragover"].forEach(t => bigav.addEventListener(t, e => {
+  e.preventDefault(); bigav.classList.add("drop");
+}));
+["dragleave","drop"].forEach(t => bigav.addEventListener(t, e => {
+  e.preventDefault(); bigav.classList.remove("drop");
+}));
+bigav.addEventListener("drop", e => {
+  if(selected && e.dataTransfer.files[0]) setPhoto(selected, e.dataTransfer.files[0]);
+});
+
+/* paste an image straight onto the open card — the fastest way to fill
+   a photo: copy it at the source, click the node, press Cmd/Ctrl+V.
+   Text pastes fall through untouched so the notes field keeps working. */
+document.addEventListener("paste", e => {
+  if(!selected || !e.clipboardData) return;
+  const items = e.clipboardData.items || [];
+  for(let i = 0; i < items.length; i++){
+    if(items[i].type && items[i].type.indexOf("image/") === 0){
+      const file = items[i].getAsFile();
+      if(file){ e.preventDefault(); setPhoto(selected, file); return; }
+    }
+  }
+});
+document.addEventListener("dragover", e => e.preventDefault());
+document.addEventListener("drop", e => e.preventDefault());
+
+/* Local editing tools: contact templates and named membership zones. */
+const extra = document.createElement('dialog');
+extra.id='editor'; document.body.appendChild(extra);
+function field(label,control){const wrap=document.createElement('label');wrap.className='edit-field';const text=document.createElement('span');text.textContent=label;wrap.append(text,control);return wrap;}
+function input(value='',type='text'){const el=document.createElement('input');el.type=type;el.value=value;return el;}
+function button(label,action){const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=action;return b;}
+function select(options,value){const el=document.createElement('select');options.forEach(([id,label])=>el.add(new Option(label,id)));if(value!==undefined)el.value=value;return el;}
+function allNodes(){return d3.hierarchy(ORG).descendants().map(d=>d.data).filter(n=>n.id!==MAP_ROOT);}
+function modal(title){extra.replaceChildren();const head=document.createElement('div');head.className='edit-head';const h=document.createElement('h2');h.textContent=title;head.append(h,button('Fermer',()=>extra.close()));extra.append(head);if(!extra.open)extra.showModal();}
+function help(text){const p=document.createElement('p');p.className='edit-help';p.textContent=text;return p;}
+function validLinkedIn(value){if(!value.trim())return '';try{const u=new URL(value.trim());if(u.protocol==='https:'&&/(^|\.)linkedin\.com$/.test(u.hostname)&&/^\/in\/[^/]+/.test(u.pathname))return u.origin+u.pathname;}catch(e){}return null;}
+function addContact(parentId,point){
+ modal('Ajouter un contact');
+ const form=document.createElement('form');form.className='edit-form';
+ const template=select([['','Fiche vierge'],...ROLES.map(r=>[r.k,r.label])]);
+ const name=input();name.required=true;name.placeholder='Prénom et nom';
+ const title=input();title.placeholder='Intitulé du poste';
+ const linkedin=input();linkedin.placeholder='https://www.linkedin.com/in/…';
+ const parent=select([[MAP_ROOT,'Sans rattachement — placer sur la carte'],...allNodes().map(n=>[n.id,(state[n.id].name||'À identifier')+' — '+state[n.id].title])],parentId||MAP_ROOT);
+ const photo=input('','file');photo.accept='image/*';
+ const note=document.createElement('textarea');note.placeholder='Contexte, prochaines étapes…';note.style.minHeight='90px';
+ form.append(field('Modèle / rôle d’achat',template),field('Profil LinkedIn',linkedin),help('Collez le lien pour le conserver dans la fiche. Renseignez le nom et le poste, puis ajoutez une photo.'),field('Nom',name),field('Poste',title),field('Rattachement dans la carte',parent),field('Photo',photo),field('Notes',note));
+ const error=help('');error.setAttribute('role','alert');form.append(error);
+ const submit=document.createElement('button');submit.type='submit';submit.className='primary';submit.textContent='Créer la fiche';form.append(submit);
+ form.onsubmit=e=>{e.preventDefault();const url=validLinkedIn(linkedin.value);if(url===null){error.textContent='Saisissez un lien de profil LinkedIn valide (https://…linkedin.com/in/…).';return;}
+ const id='contact-'+crypto.randomUUID();const n={id,name:name.value.trim(),title:title.value.trim(),role:template.value,notes:note.value,conf:0};
+ if(!n.name){error.textContent='Indiquez le nom du contact.';return;}
+ const target=parent.value===MAP_ROOT?ORG:allNodes().find(n=>n.id===parent.value);
+ const before=snapshotMap();(target.children ||= []).push(n);seed(n);state[id].linkedin=url;
+ if(target.id!==MAP_ROOT)state[target.id].collapsed=0;
+ const center=point||(()=>{const c=d3.zoomTransform(stage).invert([stage.clientWidth/2,stage.clientHeight/2]);return {x:c[0],y:c[1]-NH/2};})();
+ state[id].x=center.x;state[id].y=center.y;
+ if(!point&&target.id!==MAP_ROOT){state[id].x=state[target.id].x;state[id].y=state[target.id].y+NH+74;}
+ expandTo(id);render();const snap=point&&parent.value===MAP_ROOT?nearestSnap(id,state[id].x,state[id].y):null;
+ if(snap){state[id].x=snap.x;state[id].y=snap.y;attachContact(id,snap.target,snap.kind);}
+ undoSnapshot=before;undoButton.hidden=false;persist(id);extra.close();render();
+ if(!point)frame(boxOf([id]),true);moveStatus.textContent='Contact ajouté. Glissez la fiche près d’un contact pour les connecter.';
+ if(photo.files[0])setPhoto(id,photo.files[0]);};
+ extra.append(form);name.focus();
+}
+function zoneEditor(zone){
+ modal(zone?'Modifier la zone':'Nouvelle zone');
+ const form=document.createElement('form');form.className='edit-form';
+ const name=input(zone?.label||'');name.required=true;name.placeholder='Ex. Équipe commerciale';
+ const color=input(zone?.color||(zone?.k==='deal'?'#A81E86':'#0F7A44'),'color');
+ const search=input();search.placeholder='Rechercher une personne ou un poste';
+ const list=document.createElement('div');list.className='member-list';
+ const selectedIds=new Set(zone?.ids||[]);
+ const count=help('');function updateCount(){count.textContent=selectedIds.size+' contact(s) sélectionné(s)';}updateCount();
+ allNodes().forEach(n=>{const row=document.createElement('label');const check=input('','checkbox');check.checked=selectedIds.has(n.id);check.onchange=()=>{check.checked?selectedIds.add(n.id):selectedIds.delete(n.id);updateCount();};const text=document.createElement('span');text.textContent=(state[n.id].name||'À identifier')+' — '+state[n.id].title;row.append(check,text);list.append(row);});
+ search.oninput=()=>Array.from(list.children).forEach(row=>row.hidden=!row.textContent.toLowerCase().includes(search.value.toLowerCase()));
+ const error=help('');error.setAttribute('role','alert');const submit=document.createElement('button');submit.type='submit';submit.textContent='Enregistrer la zone';submit.className='primary';
+ form.append(field('Nom de la zone',name),field('Couleur',color),field('Contacts à entourer',search),count,list,help('Le cadre suit les contacts. Si le groupe traverse plusieurs branches, plusieurs cadres de même couleur évitent d’englober d’autres personnes.'),error,submit);
+ form.onsubmit=e=>{e.preventDefault();if(!name.value.trim()||!selectedIds.size){error.textContent='Donnez un nom à la zone et sélectionnez au moins un contact.';return;}const next={id:zone?.id||'zone-'+crypto.randomUUID(),k:zone?.k||'custom',label:name.value.trim(),color:color.value,ids:[...selectedIds]};if(zone)ZONES.splice(ZONES.indexOf(zone),1,next);else ZONES.push(next);saveLocal();next.ids.forEach(expandTo);render();extra.close();frame(boxOf(next.ids),true);};
+ extra.append(form);name.focus();
+}
+function manageZones(){modal('Zones de la carte');extra.append(help('Créez un périmètre ou modifiez les zones existantes.'));ZONES.forEach(z=>{const row=document.createElement('div');row.className='zone-row';const label=document.createElement('span');label.textContent=z.label+' · '+z.ids.length+' contacts';row.append(label,button('Modifier',()=>zoneEditor(z)),button('Voir',()=>{z.ids.forEach(expandTo);render();extra.close();frame(boxOf(z.ids),true);}),button('Supprimer',()=>{if(confirm('Supprimer la zone « '+z.label+' » ? Les contacts seront conservés.')){ZONES.splice(ZONES.indexOf(z),1);saveLocal();render();manageZones();}}));extra.append(row);});extra.append(button('+ Nouvelle zone',()=>zoneEditor()));}
+document.getElementById('add-contact').onclick=()=>addContact();
+document.getElementById('manage-zones').onclick=manageZones;
+const linkedinField=input();linkedinField.id='f-linkedin';linkedinField.placeholder='https://www.linkedin.com/in/…';
+const linkedinWrap=field('Profil LinkedIn',linkedinField);linkedinWrap.classList.add('fld');
+document.querySelector('#drawer .dbody').insertBefore(linkedinWrap,document.getElementById('f-name').parentElement);
+const linkStatus=help('');linkedinWrap.append(button('Ouvrir le profil',()=>{const url=validLinkedIn(linkedinField.value);if(url)window.open(url,'_blank','noopener,noreferrer');else linkStatus.textContent='Renseignez un lien de profil LinkedIn valide.';}),linkStatus);
+onType('linkedin',linkedinField);
+document.querySelector('#drawer .dbody').append(button('+ Ajouter un contact rattaché',()=>{const id=selected;close();addContact(id);}));
+const exportButton=button('Exporter',()=>{const blob=new Blob([JSON.stringify({org:ORG,zones:ZONES,state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='doordash-account-map.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);});
+document.getElementById('actions').append(exportButton);
+
+/* Free placement and reversible magnetic hierarchy editing. */
+const MAP_ROOT='__map_root__';
+let dragState=null, lastDragAt=0, blankClickTimer=null, undoSnapshot=null, surfaceGesture=null;
+const rootPeers=svg.append("g").attr("id","root-peers");
+const mapPopover=document.createElement('div');mapPopover.id='map-popover';mapPopover.hidden=true;document.body.append(mapPopover);
+const zonePopover=document.createElement('div');zonePopover.id='zone-popover';zonePopover.hidden=true;document.body.append(zonePopover);
+const snapHint=document.createElement('div');snapHint.id='snap-hint';snapHint.hidden=true;snapHint.setAttribute('role','status');document.body.append(snapHint);
+const snapGhost=document.createElement('div');snapGhost.id='snap-ghost';snapGhost.hidden=true;viewport.append(snapGhost);
+const zoneDraft=document.createElement('div');zoneDraft.id='zone-draft';zoneDraft.hidden=true;viewport.append(zoneDraft);
+const moveStatus=document.createElement('div');moveStatus.id='move-status';moveStatus.setAttribute('role','status');document.body.append(moveStatus);
+const undoButton=button('Annuler le déplacement',()=>{
+ if(!undoSnapshot)return;
+ restoreMap(undoSnapshot,true);undoSnapshot=null;undoButton.hidden=true;saveLocal();render();moveStatus.textContent='Dernière modification annulée.';
+});undoButton.hidden=true;document.getElementById('actions').append(undoButton);
+function snapshotMap(){return JSON.stringify({org:ORG,state});}
+function restoreMap(snapshot,keepEdits=false){const saved=JSON.parse(snapshot);if(keepEdits)for(const id in saved.state){if(state[id])saved.state[id]={...state[id],x:saved.state[id].x,y:saved.state[id].y,collapsed:saved.state[id].collapsed,peerOf:saved.state[id].peerOf};}Object.keys(ORG).forEach(k=>delete ORG[k]);Object.assign(ORG,saved.org);Object.keys(state).forEach(k=>delete state[k]);Object.assign(state,saved.state);}
+function normalizeMap(){
+ if(ORG.id!==MAP_ROOT){const old={...ORG};Object.keys(ORG).forEach(k=>delete ORG[k]);Object.assign(ORG,{id:MAP_ROOT,children:[old]});}
+ delete state[MAP_ROOT];
+}
+function mapNode(id){return d3.hierarchy(ORG).descendants().find(n=>n.data.id===id);}
+function subtreeIds(id){return mapNode(id).descendants().map(n=>n.data.id);}
+function worldPoint(e){const r=stage.getBoundingClientRect();return d3.zoomTransform(stage).invert([e.clientX-r.left,e.clientY-r.top]);}
+function placePopover(el,x,y){
+ el.style.left=Math.max(12,Math.min(x+12,innerWidth-332))+'px';
+ el.style.top=Math.max(64,Math.min(y+12,innerHeight-330))+'px';
+ el.hidden=false;
+}
+function closeMapEditors(){
+ clearTimeout(blankClickTimer);mapPopover.hidden=true;zonePopover.hidden=true;zoneDraft.hidden=true;
+}
+function quickContact(point,clientX,clientY){
+ closeMapEditors();mapPopover.replaceChildren();
+ const title=document.createElement('p');title.className='map-popover-title';title.textContent='Nouveau contact';
+ const form=document.createElement('form');form.className='map-popover-form';
+ const name=input();name.required=true;name.placeholder='Prénom et nom';
+ const job=input();job.placeholder='Intitulé du poste';
+ const linkedin=input();linkedin.placeholder='Lien LinkedIn (facultatif)';
+ const actions=document.createElement('div');actions.className='map-popover-actions';
+ actions.append(button('Annuler',closeMapEditors));
+ const submit=document.createElement('button');submit.type='submit';submit.className='primary';submit.textContent='Créer la bulle';actions.append(submit);
+ form.append(field('Nom',name),field('Poste',job),field('LinkedIn',linkedin),actions);
+ form.onsubmit=e=>{
+  e.preventDefault();const url=validLinkedIn(linkedin.value);
+  if(url===null){linkedin.setCustomValidity('Saisissez un lien LinkedIn valide.');linkedin.reportValidity();return;}
+  const id='contact-'+crypto.randomUUID();const node={id,name:name.value.trim()||'Nouveau contact',title:job.value.trim(),conf:0};
+  const before=snapshotMap();(ORG.children ||= []).push(node);seed(node);
+  state[id].linkedin=url;state[id].x=point[0];state[id].y=point[1]-NH/2;
+  undoSnapshot=before;undoButton.hidden=false;persist(id);closeMapEditors();render();open(id);
+ };
+ mapPopover.append(title,form);placePopover(mapPopover,clientX,clientY);name.focus();
+}
+function quickZone(rect,ids,clientX,clientY){
+ closeMapEditors();zonePopover.replaceChildren();
+ const title=document.createElement('p');title.className='map-popover-title';title.textContent='Nouvelle zone';
+ const form=document.createElement('form');form.className='map-popover-form';
+ const name=input('Nouvelle zone');name.required=true;
+ const color=input('#0F7A44','color');
+ const info=help(ids.length+' contact(s) dans la zone');
+ const actions=document.createElement('div');actions.className='map-popover-actions';
+ actions.append(button('Annuler',closeMapEditors));
+ const submit=document.createElement('button');submit.type='submit';submit.className='primary';submit.textContent='Créer la zone';actions.append(submit);
+ form.append(field('Nom',name),field('Couleur',color),info,actions);
+ form.onsubmit=e=>{
+  e.preventDefault();ZONES.push({id:'zone-'+crypto.randomUUID(),k:'custom',label:name.value.trim()||'Zone',color:color.value,ids,rect});
+  saveLocal();closeMapEditors();render();moveStatus.textContent='Zone créée.';
+ };
+ zonePopover.append(title,form);placePopover(zonePopover,clientX,clientY);name.select();
+}
+function paintZoneDraft(a,b){
+ const x0=Math.min(a[0],b[0]),x1=Math.max(a[0],b[0]),y0=Math.min(a[1],b[1]),y1=Math.max(a[1],b[1]);
+ zoneDraft.hidden=false;zoneDraft.style.left=x0+'px';zoneDraft.style.top=y0+'px';zoneDraft.style.width=(x1-x0)+'px';zoneDraft.style.height=(y1-y0)+'px';
+ return {x0,x1,y0,y1};
+}
+function contactsInRect(r){
+ return nodesArr.filter(d=>d.x+NW/2>=r.x0&&d.x-NW/2<=r.x1&&d.y+NH>=r.y0&&d.y<=r.y1).map(d=>d.data.id);
+}
+function attachContact(id,targetId,kind){
+ const moving=mapNode(id),target=mapNode(targetId);
+ if(!moving||!target||id===targetId||subtreeIds(id).includes(targetId))return false;
+ const node=moving.data, oldParent=moving.parent.data, targetParent=target.parent.data;
+ delete state[id].peerOf;
+ oldParent.children=oldParent.children.filter(n=>n.id!==id);
+ if(kind==='below'){
+  (target.data.children ||= []).push(node);state[targetId].collapsed=0;
+ }else if(kind==='above'){
+  targetParent.children=targetParent.children.map(n=>n.id===targetId?node:n);
+  (node.children ||= []).push(target.data);state[id].collapsed=0;
+ }else{
+  const i=targetParent.children.findIndex(n=>n.id===targetId);
+  targetParent.children.splice(i+(kind==='right'?1:0),0,node);
+  if(targetParent.id===MAP_ROOT)state[id].peerOf=targetId;
+ }
+ return true;
+}
+function nearestSnap(id,x,y){
+ const excluded=new Set(subtreeIds(id));let best=null;
+ nodesArr.forEach(d=>{
+  if(excluded.has(d.data.id))return;
+  const candidates=[{kind:'below',x:d.x,y:d.y+NH+74,label:'Subordonné de '},{kind:'above',x:d.x,y:d.y-NH-74,label:'N+1 de '},{kind:'left',x:d.x-NW-34,y:d.y,label:'Collègue de '},{kind:'right',x:d.x+NW+34,y:d.y,label:'Collègue de '}];
+  candidates.forEach(c=>{const distance=Math.hypot(x-c.x,y-c.y);if(distance<95&&(!best||distance<best.distance))best={...c,distance,target:d.data.id,name:state[d.data.id].name||'ce contact'};});
+ });return best;
+}
+function paintSnap(snap,e){
+ snapGhost.hidden=!snap;snapHint.hidden=!snap;
+ d3.select(viewport).selectAll('.node').classed('snap-target',d=>!!snap&&d.data.id===snap.target);
+ if(!snap)return;
+ snapGhost.style.left=(snap.x-NW/2)+'px';snapGhost.style.top=snap.y+'px';
+ snapHint.textContent=snap.label+snap.name+' — relâchez pour connecter';
+ snapHint.style.left=Math.max(12,Math.min(e.clientX+16,innerWidth-310))+'px';snapHint.style.top=Math.max(64,Math.min(e.clientY+20,innerHeight-80))+'px';
+}
+function cancelDrag(){
+ if(!dragState)return;restoreMap(dragState.before);dragState=null;lastDragAt=performance.now();paintSnap(null);render();
+}
+stage.addEventListener('pointerdown',e=>{
+ if(e.button!==0||!e.isPrimary)return;
+ const card=e.target.closest('.node');
+ if(!card){
+  closeMapEditors();surfaceGesture={pointer:e.pointerId,mode:e.altKey?'zone':'tap',startClient:[e.clientX,e.clientY],startWorld:worldPoint(e),currentWorld:worldPoint(e),moved:false};
+  if(surfaceGesture.mode==='zone')stage.setPointerCapture(e.pointerId);
+  return;
+ }
+ if(e.target.closest('button'))return;
+ closeMapEditors();
+ const id=d3.select(card).datum().data.id;
+ dragState={id,pointer:e.pointerId,start:worldPoint(e),screen:[e.clientX,e.clientY],before:snapshotMap(),positions:subtreeIds(id).map(id=>({id,x:state[id].x,y:state[id].y})),moved:false,snap:null};
+ stage.setPointerCapture(e.pointerId);
+});
+stage.addEventListener('pointermove',e=>{
+ if(surfaceGesture&&e.pointerId===surfaceGesture.pointer){
+  surfaceGesture.currentWorld=worldPoint(e);
+  if(!surfaceGesture.moved&&Math.hypot(e.clientX-surfaceGesture.startClient[0],e.clientY-surfaceGesture.startClient[1])>=8)surfaceGesture.moved=true;
+  if(surfaceGesture.mode==='zone'&&surfaceGesture.moved){e.preventDefault();paintZoneDraft(surfaceGesture.startWorld,surfaceGesture.currentWorld);}
+  return;
+ }
+ const d=dragState;if(!d||e.pointerId!==d.pointer)return;
+ if(!d.moved&&Math.hypot(e.clientX-d.screen[0],e.clientY-d.screen[1])<5)return;
+ d.moved=true;e.preventDefault();const point=worldPoint(e),dx=point[0]-d.start[0],dy=point[1]-d.start[1];
+ d.positions.forEach(p=>{state[p.id].x=p.x+dx;state[p.id].y=p.y+dy;});
+ render();d.snap=nearestSnap(d.id,state[d.id].x,state[d.id].y);paintSnap(d.snap,e);
+});
+stage.addEventListener('pointerup',e=>{
+ if(surfaceGesture&&e.pointerId===surfaceGesture.pointer){
+  const g=surfaceGesture;surfaceGesture=null;if(stage.hasPointerCapture(e.pointerId))stage.releasePointerCapture(e.pointerId);
+  if(g.mode==='zone'&&g.moved){const rect=paintZoneDraft(g.startWorld,g.currentWorld);zoneDraft.hidden=true;quickZone(rect,contactsInRect(rect),e.clientX,e.clientY);}
+  else if(!g.moved){const point=g.startWorld;clearTimeout(blankClickTimer);blankClickTimer=setTimeout(()=>quickContact(point,e.clientX,e.clientY),240);}
+  return;
+ }
+ const d=dragState;if(!d||e.pointerId!==d.pointer)return;
+ dragState=null;if(stage.hasPointerCapture(e.pointerId))stage.releasePointerCapture(e.pointerId);
+ if(!d.moved){open(d.id);return;}
+ lastDragAt=performance.now();
+ if(d.snap){const dx=d.snap.x-state[d.id].x,dy=d.snap.y-state[d.id].y;d.positions.forEach(p=>{state[p.id].x+=dx;state[p.id].y+=dy;});attachContact(d.id,d.snap.target,d.snap.kind);moveStatus.textContent=d.snap.label+d.snap.name+'.';}
+ else moveStatus.textContent='Position enregistrée. Le rattachement existant est conservé.';
+ undoSnapshot=d.before;undoButton.hidden=false;paintSnap(null);persist(d.id);render();
+});
+stage.addEventListener('pointercancel',cancelDrag);
+stage.addEventListener('pointercancel',()=>{surfaceGesture=null;zoneDraft.hidden=true;});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMapEditors();cancelDrag();}});
+stage.addEventListener('dblclick',e=>{
+ e.preventDefault();e.stopPropagation();surfaceGesture=null;closeMapEditors();
+ const r=stage.getBoundingClientRect(),point=[e.clientX-r.left,e.clientY-r.top];
+ d3.select(stage).transition().duration(220).call(zoomBehavior.scaleBy,e.shiftKey?1/1.8:1.8,point);
+});
+const gestureHelp=document.createElement('div');gestureHelp.id='gesture-help';gestureHelp.textContent='Clic : ajouter · Glisser le fond : déplacer · ⌥ + glisser : créer une zone · Glisser une fiche : connecter · Double-clic : zoomer';stage.append(gestureHelp);
+
+/* ============== boot ============== */
+loadLocal();
+normalizeMap();
+render();
+fit(false);
+window.addEventListener("resize", () => fit(false));
+
+(async function(){
+  try{
+    db = await (window.claude && window.claude.use ? window.claude.use("db") : Promise.resolve(null));
+  }catch(e){ db = null; }
+  if(!db) return;
+  db.collection("nodes").onSnapshot(snap => {
+    let touched = false;
+    snap.docs.forEach(doc => {
+      if(!state[doc.id]) return;
+      const data = doc.data() || {};
+      for(const k of ["name","title","role","notes","photo","conf","collapsed"]){
+        if(k in data && state[doc.id][k] !== data[k]){ state[doc.id][k] = data[k]; touched = true; }
+      }
+    });
+    if(touched){ saveLocal(); render(); }
+  }, () => {});
+})();
+
+})();
+</script>
+
+</body></html>
