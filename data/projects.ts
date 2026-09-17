@@ -157,7 +157,7 @@ export const projectsData = {
         "📋 Snapshot JSON embarqué pour pré-remplir la carte dès le premier chargement",
       ],
       links: {
-        demo: "/doordash/",
+        demo: "https://portfolio-q3l4oesqm-paul-antoine-sages-projects.vercel.app/doordash/",
       },
       icon: "🗺️",
     },
@@ -333,7 +333,7 @@ export const projectsData = {
         "📋 Embedded JSON snapshot to pre-fill the map on first load",
       ],
       links: {
-        demo: "/doordash/",
+        demo: "https://portfolio-q3l4oesqm-paul-antoine-sages-projects.vercel.app/doordash/",
       },
       icon: "🗺️",
     },
