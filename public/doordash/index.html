@@ -554,11 +554,11 @@ input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 
 </style>
 
 <div id="bar">
-  <button id="back-to-lib" title="Retour à la bibliothèque" aria-label="Retour à la bibliothèque">
+  <button id="back-to-lib" title="Back to library" aria-label="Back to library">
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M10 13L5 8l5-5"/>
     </svg>
-    Bibliothèque
+    Library
   </button>
   <div class="mark">DD</div>
   <div>
@@ -1631,7 +1631,7 @@ function renderLibrary(){
   if(!lib.length){
     const empty = document.createElement("div");
     empty.className = "lib-empty";
-    empty.textContent = "Aucune carte — créez votre première carte.";
+    empty.textContent = "No maps yet — create your first map.";
     grid.appendChild(empty);
     return;
   }
@@ -1651,18 +1651,18 @@ function renderLibrary(){
         </div>
       </div>
       <div class="map-card-footer">
-        <span class="map-card-meta">Modifié le ${modDate}</span>
-        <span class="map-card-open">Ouvrir →</span>
+        <span class="map-card-meta">Modified ${modDate}</span>
+        <span class="map-card-open">Open →</span>
       </div>
     `;
     // delete button
     const del = document.createElement("button");
     del.className = "map-card-del";
-    del.title = "Supprimer cette carte";
+    del.title = "Delete this map";
     del.innerHTML = "&#x2715;";
     del.onclick = e => {
       e.stopPropagation();
-      if(!confirm("Supprimer la carte « "+(entry.name||"Sans titre")+" » ? Cette action est irréversible.")) return;
+      if(!confirm("Delete \"" + (entry.name||"Untitled") + "\"? This cannot be undone.")) return;
       const lib2 = getLibrary();
       const i = lib2.findIndex(x=>x.id===entry.id);
       if(i>=0) lib2.splice(i,1);
@@ -1678,7 +1678,7 @@ function renderLibrary(){
 
 function promptAuth(mapId, mapName){
   pendingMapId = mapId;
-  document.getElementById("auth-desc").textContent = "Entrez le code d'accès pour ouvrir «\u00a0"+mapName+"\u00a0».";
+  document.getElementById("auth-desc").textContent = "Enter the access code to open \""+mapName+"\".";;
   document.getElementById("auth-code").value = "";
   document.getElementById("auth-error").textContent = "";
   document.getElementById("auth-box").classList.remove("shake");
@@ -1696,7 +1696,7 @@ document.getElementById("auth-form").onsubmit = e => {
   e.preventDefault();
   const code = document.getElementById("auth-code").value.trim();
   if(code !== ACCESS_CODE){
-    document.getElementById("auth-error").textContent = "Code incorrect.";
+    document.getElementById("auth-error").textContent = "Wrong code.";
     const box = document.getElementById("auth-box");
     box.classList.remove("shake");
     void box.offsetWidth;
@@ -1746,15 +1746,32 @@ function goToLibrary(){
 
 document.getElementById("back-to-lib").onclick = goToLibrary;
 
-document.getElementById("lib-new-btn").onclick = () => {
-  const name = prompt("Nom de la nouvelle carte :", "");
-  if(!name || !name.trim()) return;
+function showNewMapForm(){
+  const form = document.getElementById("lib-new-form");
+  form.style.display = "flex";
+  document.getElementById("lib-new-name").value = "";
+  setTimeout(()=>document.getElementById("lib-new-name").focus(), 30);
+}
+function hideNewMapForm(){
+  document.getElementById("lib-new-form").style.display = "none";
+}
+function createNewMap(){
+  const name = (document.getElementById("lib-new-name").value||"").trim();
+  if(!name) return;
+  hideNewMapForm();
   const id = "map-" + crypto.randomUUID();
   const lib = getLibrary();
-  lib.push({id, name:name.trim(), created:Date.now(), modified:Date.now()});
+  lib.push({id, name, created:Date.now(), modified:Date.now()});
   saveLibrary(lib);
-  promptAuth(id, name.trim());
-};
+  promptAuth(id, name);
+}
+document.getElementById("lib-new-btn").onclick = showNewMapForm;
+document.getElementById("lib-new-confirm").onclick = createNewMap;
+document.getElementById("lib-new-cancel-btn").onclick = hideNewMapForm;
+document.getElementById("lib-new-name").addEventListener("keydown", e => {
+  if(e.key === "Enter"){ e.preventDefault(); createNewMap(); }
+  if(e.key === "Escape"){ hideNewMapForm(); }
+});
 
 /* ===== saveLocal is patched via _saveLocalOrig below ===== */
 
@@ -1794,11 +1811,16 @@ bootLibrary();
 <div id="lib-overlay">
   <div class="lib-header">
     <div>
-      <div class="lib-logo">Account Maps · Bibliothèque</div>
-      <h1 class="lib-title">Vos cartes</h1>
-      <div class="lib-subtitle">Sélectionnez une carte pour l'ouvrir</div>
+      <div class="lib-logo">Account Maps · Library</div>
+      <h1 class="lib-title">Your maps</h1>
+      <div class="lib-subtitle">Select a map to open it</div>
     </div>
-    <button class="lib-new-btn" id="lib-new-btn">+ Nouvelle carte</button>
+    <button class="lib-new-btn" id="lib-new-btn">+ New map</button>
+  </div>
+  <div id="lib-new-form" style="display:none;align-items:center;gap:8px;padding:0 32px 20px">
+    <input id="lib-new-name" type="text" placeholder="Map name…" maxlength="60" style="flex:1;padding:8px 12px;border:1px solid var(--border,#444);border-radius:6px;font:inherit;background:var(--surface-2);color:var(--ink)">
+    <button id="lib-new-confirm" class="lib-new-btn" style="margin:0">Create</button>
+    <button id="lib-new-cancel-btn" style="padding:7px 14px;border:none;background:none;cursor:pointer;color:var(--muted,#888)">Cancel</button>
   </div>
   <div class="lib-grid" id="lib-grid"></div>
 </div>
@@ -1806,13 +1828,13 @@ bootLibrary();
 <!-- ===== AUTH MODAL ===== -->
 <div id="auth-overlay" class="hidden">
   <div id="auth-box">
-    <h2>🔒 Accès sécurisé</h2>
-    <p id="auth-desc">Entrez le code d'accès pour ouvrir cette carte.</p>
+    <h2>🔒 Secure access</h2>
+    <p id="auth-desc">Enter the access code to open this map.</p>
     <form id="auth-form">
       <input id="auth-code" type="password" placeholder="••••••" autocomplete="off" autofocus>
       <div id="auth-error"></div>
-      <button id="auth-submit" type="submit">Ouvrir la carte</button>
-      <button id="auth-cancel" type="button">Annuler</button>
+      <button id="auth-submit" type="submit">Open map</button>
+      <button id="auth-cancel" type="button">Cancel</button>
     </form>
   </div>
 </div>
