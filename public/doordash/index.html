@@ -647,6 +647,38 @@ input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 
 
 <input type="file" id="filein" accept="image/*" hidden>
 
+<!-- ===== LIBRARY OVERLAY ===== -->
+<div id="lib-overlay">
+  <div class="lib-header">
+    <div>
+      <div class="lib-logo">Account Maps · Library</div>
+      <h1 class="lib-title">Your maps</h1>
+      <div class="lib-subtitle">Select a map to open it</div>
+    </div>
+    <button class="lib-new-btn" id="lib-new-btn">+ New map</button>
+  </div>
+  <div id="lib-new-form" style="display:none;align-items:center;gap:8px;padding:0 32px 20px">
+    <input id="lib-new-name" type="text" placeholder="Map name…" maxlength="60" style="flex:1;padding:8px 12px;border:1px solid var(--border,#444);border-radius:6px;font:inherit;background:var(--surface-2);color:var(--ink)">
+    <button id="lib-new-confirm" class="lib-new-btn" style="margin:0">Create</button>
+    <button id="lib-new-cancel-btn" style="padding:7px 14px;border:none;background:none;cursor:pointer;color:var(--muted,#888)">Cancel</button>
+  </div>
+  <div class="lib-grid" id="lib-grid"></div>
+</div>
+
+<!-- ===== AUTH MODAL ===== -->
+<div id="auth-overlay" class="hidden">
+  <div id="auth-box">
+    <h2>🔒 Secure access</h2>
+    <p id="auth-desc">Enter the access code to open this map.</p>
+    <form id="auth-form">
+      <input id="auth-code" type="password" placeholder="••••••" autocomplete="off" autofocus>
+      <div id="auth-error"></div>
+      <button id="auth-submit" type="submit">Open map</button>
+      <button id="auth-cancel" type="button">Cancel</button>
+    </form>
+  </div>
+</div>
+
 <script>
 (function(){
 "use strict";
@@ -1806,36 +1838,4 @@ bootLibrary();
 })();
 </script>
 
-
-<!-- ===== LIBRARY OVERLAY ===== -->
-<div id="lib-overlay">
-  <div class="lib-header">
-    <div>
-      <div class="lib-logo">Account Maps · Library</div>
-      <h1 class="lib-title">Your maps</h1>
-      <div class="lib-subtitle">Select a map to open it</div>
-    </div>
-    <button class="lib-new-btn" id="lib-new-btn">+ New map</button>
-  </div>
-  <div id="lib-new-form" style="display:none;align-items:center;gap:8px;padding:0 32px 20px">
-    <input id="lib-new-name" type="text" placeholder="Map name…" maxlength="60" style="flex:1;padding:8px 12px;border:1px solid var(--border,#444);border-radius:6px;font:inherit;background:var(--surface-2);color:var(--ink)">
-    <button id="lib-new-confirm" class="lib-new-btn" style="margin:0">Create</button>
-    <button id="lib-new-cancel-btn" style="padding:7px 14px;border:none;background:none;cursor:pointer;color:var(--muted,#888)">Cancel</button>
-  </div>
-  <div class="lib-grid" id="lib-grid"></div>
-</div>
-
-<!-- ===== AUTH MODAL ===== -->
-<div id="auth-overlay" class="hidden">
-  <div id="auth-box">
-    <h2>🔒 Secure access</h2>
-    <p id="auth-desc">Enter the access code to open this map.</p>
-    <form id="auth-form">
-      <input id="auth-code" type="password" placeholder="••••••" autocomplete="off" autofocus>
-      <div id="auth-error"></div>
-      <button id="auth-submit" type="submit">Open map</button>
-      <button id="auth-cancel" type="button">Cancel</button>
-    </form>
-  </div>
-</div>
 </body></html>
