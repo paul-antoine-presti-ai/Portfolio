@@ -57,7 +57,7 @@ const cases: UseCase[] = [
     img: "",
     desc: "Stakeholder mapping tool for Enterprise accounts — visualise who decides, influences, and blocks. Infinite canvas, draggable cards, directional connections, native dark mode.",
     tags: ["JavaScript (Vanilla)", "D3.js v7", "localStorage", "Dark Mode"],
-    href: "/doordash/",
+    href: "/account-map/",
   },
 ];
 
