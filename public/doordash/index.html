@@ -427,9 +427,139 @@ input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 
 @media (prefers-reduced-motion:reduce){
   *{transition-duration:.01ms !important}
 }
+
+/* ===== LIBRARY OVERLAY ===== */
+#lib-overlay{
+  position:fixed;inset:0;z-index:2000;
+  background:var(--ground);
+  display:flex;flex-direction:column;
+  overflow-y:auto;
+}
+#lib-overlay.hidden{display:none}
+
+.lib-header{
+  padding:28px 32px 0;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.lib-logo{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.lib-title{
+  margin:0;font-size:26px;font-weight:700;letter-spacing:-.03em;color:var(--ink);
+}
+.lib-subtitle{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);margin-top:4px;
+}
+.lib-new-btn{
+  flex:none;background:var(--accent);color:#fff;border:none;
+  border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;
+  cursor:pointer;letter-spacing:-.01em;transition:opacity .15s;
+}
+.lib-new-btn:hover{opacity:.85}
+
+.lib-grid{
+  padding:28px 32px 40px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;
+}
+.lib-empty{
+  padding:60px 32px;text-align:center;
+  font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-3);
+  letter-spacing:.06em;
+}
+.map-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:20px;cursor:pointer;transition:box-shadow .18s,border-color .18s;
+  display:flex;flex-direction:column;gap:10px;
+}
+.map-card:hover{box-shadow:var(--shadow-lift);border-color:var(--accent)}
+.map-card-icon{
+  width:42px;height:42px;border-radius:10px;background:var(--accent);
+  display:grid;place-items:center;color:#fff;font-weight:700;font-size:17px;
+  flex:none;letter-spacing:-.02em;
+}
+.map-card-name{
+  font-size:15px;font-weight:600;letter-spacing:-.01em;color:var(--ink);
+}
+.map-card-meta{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.map-card-footer{
+  margin-top:auto;padding-top:10px;border-top:1px solid var(--line-2);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.map-card-open{
+  font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--accent);
+}
+.map-card-del{
+  background:none;border:none;cursor:pointer;padding:4px;
+  color:var(--ink-3);font-size:16px;line-height:1;transition:color .15s;
+}
+.map-card-del:hover{color:var(--r-bl)}
+
+/* ===== AUTH MODAL ===== */
+#auth-overlay{
+  position:fixed;inset:0;z-index:3000;
+  background:rgba(12,15,20,.55);
+  backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;
+}
+#auth-overlay.hidden{display:none}
+#auth-box{
+  background:var(--surface);border:1px solid var(--line);border-radius:16px;
+  padding:32px 28px;width:100%;max-width:360px;
+  box-shadow:0 8px 40px rgba(12,15,20,.22);
+}
+#auth-box h2{margin:0 0 6px;font-size:19px;font-weight:700;letter-spacing:-.02em}
+#auth-box p{margin:0 0 20px;font-size:13px;color:var(--ink-2)}
+#auth-form{display:flex;flex-direction:column;gap:10px}
+#auth-code{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:15px;letter-spacing:.12em;text-align:center;
+  padding:14px 16px;border:1px solid var(--line);border-radius:8px;
+  background:var(--surface-2);color:var(--ink);outline:none;
+  transition:border-color .15s;
+}
+#auth-code:focus{border-color:var(--accent)}
+#auth-submit{
+  background:var(--accent);color:#fff;border:none;border-radius:8px;
+  padding:13px;font-size:14px;font-weight:600;cursor:pointer;
+  letter-spacing:-.01em;transition:opacity .15s;
+}
+#auth-submit:hover{opacity:.88}
+#auth-cancel{
+  background:none;border:none;color:var(--ink-3);font-size:13px;
+  cursor:pointer;padding:6px;text-align:center;
+}
+#auth-error{
+  font-size:12px;color:var(--r-bl);text-align:center;min-height:18px;
+  font-family:"IBM Plex Mono",monospace;
+}
+#auth-box.shake{animation:shake .32s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* ===== BACK BUTTON ===== */
+#back-to-lib{
+  background:none;border:none;cursor:pointer;
+  display:flex;align-items:center;gap:6px;
+  color:var(--ink-2);font-size:12px;font-weight:500;letter-spacing:.02em;
+  padding:6px 10px 6px 6px;border-radius:7px;transition:background .15s,color .15s;
+  white-space:nowrap;flex:none;
+}
+#back-to-lib:hover{background:var(--surface-2);color:var(--ink)}
+#back-to-lib svg{flex:none}
 </style>
 
 <div id="bar">
+  <button id="back-to-lib" title="Retour à la bibliothèque" aria-label="Retour à la bibliothèque">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 13L5 8l5-5"/>
+    </svg>
+    Bibliothèque
+  </button>
   <div class="mark">DD</div>
   <div>
     <h1>DoorDash</h1>
@@ -684,7 +814,17 @@ function loadLocal(){
   }catch(e){}
 }
 function saveLocal(){
-  try{ localStorage.setItem("ddmap.v2", JSON.stringify({org:ORG,zones:ZONES,state})); }catch(e){ alert("Enregistrement impossible : stockage du navigateur plein. Exportez votre carte avant de quitter."); }
+  try{
+    // save to current map slot if one is open
+    if(currentMapId){
+      localStorage.setItem("maplib.map."+currentMapId, JSON.stringify({org:ORG,zones:ZONES,state}));
+      const _lib = getLibrary();
+      const _entry = _lib.find(function(e){return e.id===currentMapId;});
+      if(_entry){ _entry.modified = Date.now(); saveLibrary(_lib); }
+    }
+    // always keep ddmap.v2 as fallback
+    localStorage.setItem("ddmap.v2", JSON.stringify({org:ORG,zones:ZONES,state}));
+  }catch(e){ alert("Enregistrement impossible : stockage du navigateur plein. Exportez votre carte avant de quitter."); }
 }
 
 const pending = {};
@@ -1443,11 +1583,190 @@ stage.addEventListener('dblclick',e=>{
 const gestureHelp=document.createElement('div');gestureHelp.id='gesture-help';gestureHelp.textContent='Clic : ajouter · Glisser le fond : déplacer · ⌥ + glisser : créer une zone · Glisser une fiche : connecter · Double-clic : zoomer';stage.append(gestureHelp);
 
 /* ============== boot ============== */
-loadLocal();
+loadLocal();   // pre-load default state (DoorDash), used as fallback
 normalizeMap();
 render();
-fit(false);
+// Don't auto-fit — we'll fit when a map is opened
 window.addEventListener("resize", () => fit(false));
+
+/* ===== LIBRARY & AUTH ===== */
+const ACCESS_CODE = "admin";
+var currentMapId = null;
+var pendingMapId = null;
+
+function getLibrary(){
+  try{ return JSON.parse(localStorage.getItem("maplib.index")||"[]"); }catch(e){ return []; }
+}
+function saveLibrary(arr){
+  try{ localStorage.setItem("maplib.index", JSON.stringify(arr)); }catch(e){}
+}
+
+function migrateIfNeeded(){
+  const lib = getLibrary();
+  if(lib.length === 0){
+    // migrate existing DoorDash data if present
+    const existing = localStorage.getItem("ddmap.v2");
+    if(existing){
+      const id = "map-" + crypto.randomUUID();
+      const entry = {id, name:"DoorDash", created:Date.now(), modified:Date.now(), count: Object.keys(state).length};
+      lib.push(entry);
+      localStorage.setItem("maplib.map."+id, existing);
+      saveLibrary(lib);
+    }
+  }
+  return lib;
+}
+
+function getMapCount(mapData){
+  try{
+    const d = JSON.parse(mapData);
+    return d.state ? Object.keys(d.state).length : 0;
+  }catch(e){ return 0; }
+}
+
+function renderLibrary(){
+  const lib = getLibrary();
+  const grid = document.getElementById("lib-grid");
+  grid.innerHTML = "";
+  if(!lib.length){
+    const empty = document.createElement("div");
+    empty.className = "lib-empty";
+    empty.textContent = "Aucune carte — créez votre première carte.";
+    grid.appendChild(empty);
+    return;
+  }
+  lib.forEach(entry => {
+    const card = document.createElement("div");
+    card.className = "map-card";
+    const letter = (entry.name||"?")[0].toUpperCase();
+    const modDate = entry.modified ? new Date(entry.modified).toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"}) : "—";
+    const rawData = localStorage.getItem("maplib.map."+entry.id);
+    const count = rawData ? getMapCount(rawData) : 0;
+    card.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="map-card-icon">${letter}</div>
+        <div>
+          <div class="map-card-name">${entry.name||"Sans titre"}</div>
+          <div class="map-card-meta">${count} contact${count!==1?"s":""}</div>
+        </div>
+      </div>
+      <div class="map-card-footer">
+        <span class="map-card-meta">Modifié le ${modDate}</span>
+        <span class="map-card-open">Ouvrir →</span>
+      </div>
+    `;
+    // delete button
+    const del = document.createElement("button");
+    del.className = "map-card-del";
+    del.title = "Supprimer cette carte";
+    del.innerHTML = "&#x2715;";
+    del.onclick = e => {
+      e.stopPropagation();
+      if(!confirm("Supprimer la carte « "+(entry.name||"Sans titre")+" » ? Cette action est irréversible.")) return;
+      const lib2 = getLibrary();
+      const i = lib2.findIndex(x=>x.id===entry.id);
+      if(i>=0) lib2.splice(i,1);
+      saveLibrary(lib2);
+      try{ localStorage.removeItem("maplib.map."+entry.id); }catch(e){}
+      renderLibrary();
+    };
+    card.querySelector(".map-card-footer").prepend(del);
+    card.onclick = () => promptAuth(entry.id, entry.name);
+    grid.appendChild(card);
+  });
+}
+
+function promptAuth(mapId, mapName){
+  pendingMapId = mapId;
+  document.getElementById("auth-desc").textContent = "Entrez le code d'accès pour ouvrir «\u00a0"+mapName+"\u00a0».";
+  document.getElementById("auth-code").value = "";
+  document.getElementById("auth-error").textContent = "";
+  document.getElementById("auth-box").classList.remove("shake");
+  document.getElementById("auth-overlay").classList.remove("hidden");
+  setTimeout(()=>document.getElementById("auth-code").focus(), 80);
+}
+
+function closeAuth(){
+  document.getElementById("auth-overlay").classList.add("hidden");
+  pendingMapId = null;
+}
+
+document.getElementById("auth-cancel").onclick = closeAuth;
+document.getElementById("auth-form").onsubmit = e => {
+  e.preventDefault();
+  const code = document.getElementById("auth-code").value.trim();
+  if(code !== ACCESS_CODE){
+    document.getElementById("auth-error").textContent = "Code incorrect.";
+    const box = document.getElementById("auth-box");
+    box.classList.remove("shake");
+    void box.offsetWidth;
+    box.classList.add("shake");
+    document.getElementById("auth-code").value = "";
+    return;
+  }
+  const id = pendingMapId;
+  closeAuth();
+  loadAndOpenMap(id);
+};
+
+function loadAndOpenMap(id){
+  currentMapId = id;
+  const raw = localStorage.getItem("maplib.map."+id);
+  if(raw){
+    try{
+      const saved = JSON.parse(raw);
+      Object.keys(ORG).forEach(k=>delete ORG[k]);
+      Object.assign(ORG, saved.org);
+      Object.keys(state).forEach(k=>delete state[k]);
+      seed(ORG);
+      Object.assign(state, saved.state||{});
+      ZONES.splice(0, ZONES.length, ...(saved.zones||[]));
+    }catch(e){}
+  } else {
+    // New blank map: reset to empty
+    const blankOrg = {id:"company", name:"Compte", title:"", children:[]};
+    Object.keys(ORG).forEach(k=>delete ORG[k]);
+    Object.assign(ORG, blankOrg);
+    Object.keys(state).forEach(k=>delete state[k]);
+    seed(ORG);
+    ZONES.splice(0, ZONES.length);
+  }
+  normalizeMap();
+  render();
+  fit(false);
+  document.getElementById("lib-overlay").classList.add("hidden");
+}
+
+function goToLibrary(){
+  saveLocal();
+  currentMapId = null;
+  renderLibrary();
+  document.getElementById("lib-overlay").classList.remove("hidden");
+}
+
+document.getElementById("back-to-lib").onclick = goToLibrary;
+
+document.getElementById("lib-new-btn").onclick = () => {
+  const name = prompt("Nom de la nouvelle carte :", "");
+  if(!name || !name.trim()) return;
+  const id = "map-" + crypto.randomUUID();
+  const lib = getLibrary();
+  lib.push({id, name:name.trim(), created:Date.now(), modified:Date.now()});
+  saveLibrary(lib);
+  promptAuth(id, name.trim());
+};
+
+/* ===== saveLocal is patched via _saveLocalOrig below ===== */
+
+/* ===== BOOT: show library instead of auto-loading ===== */
+function bootLibrary(){
+  migrateIfNeeded();
+  renderLibrary();
+  // lib-overlay is already shown by default (no hidden class)
+}
+
+bootLibrary();
+
 
 (async function(){
   try{
@@ -1470,4 +1789,31 @@ window.addEventListener("resize", () => fit(false));
 })();
 </script>
 
+
+<!-- ===== LIBRARY OVERLAY ===== -->
+<div id="lib-overlay">
+  <div class="lib-header">
+    <div>
+      <div class="lib-logo">Account Maps · Bibliothèque</div>
+      <h1 class="lib-title">Vos cartes</h1>
+      <div class="lib-subtitle">Sélectionnez une carte pour l'ouvrir</div>
+    </div>
+    <button class="lib-new-btn" id="lib-new-btn">+ Nouvelle carte</button>
+  </div>
+  <div class="lib-grid" id="lib-grid"></div>
+</div>
+
+<!-- ===== AUTH MODAL ===== -->
+<div id="auth-overlay" class="hidden">
+  <div id="auth-box">
+    <h2>🔒 Accès sécurisé</h2>
+    <p id="auth-desc">Entrez le code d'accès pour ouvrir cette carte.</p>
+    <form id="auth-form">
+      <input id="auth-code" type="password" placeholder="••••••" autocomplete="off" autofocus>
+      <div id="auth-error"></div>
+      <button id="auth-submit" type="submit">Ouvrir la carte</button>
+      <button id="auth-cancel" type="button">Annuler</button>
+    </form>
+  </div>
+</div>
 </body></html>
