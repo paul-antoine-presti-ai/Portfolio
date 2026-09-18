@@ -317,6 +317,52 @@ marker#arw path{fill:var(--deal)}
 #ctl button.dealbtn{color:var(--deal);border-color:var(--deal-line)}
 #ctl button.dealbtn:hover{color:var(--deal);border-color:var(--deal)}
 
+
+/* ---------- OpenAI contacts panel ---------- */
+#oai-panel{
+  position:fixed;left:16px;top:68px;z-index:20;width:min(264px,calc(100vw - 32px));
+  background:color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter:blur(12px);
+  border:1px solid var(--line);border-radius:11px;box-shadow:var(--shadow);
+  overflow:hidden;display:none;
+}
+#oai-panel.visible{display:block}
+#oai-panel > button{
+  width:100%;display:flex;align-items:center;gap:8px;padding:9px 11px;
+  background:none;border:0;text-align:left;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:9.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#10A37F;
+}
+#oai-panel > button span{margin-left:auto;color:var(--ink-3);font-size:10px}
+#oai-panel-body{border-top:1px solid var(--line-2);padding:10px 11px;display:grid;gap:6px}
+#oai-panel[data-open="0"] #oai-panel-body{display:none}
+.oai-chip{
+  display:flex;align-items:flex-start;gap:9px;padding:8px 10px;border-radius:9px;
+  background:var(--surface-2);border:1.5px solid var(--line-2);
+  cursor:pointer;transition:border-color .14s, background .14s;
+}
+.oai-chip:hover{border-color:#10A37F;background:rgba(16,163,127,.06)}
+.oai-chip.active{border-color:#10A37F;background:rgba(16,163,127,.10)}
+.oai-chip-av{
+  width:28px;height:28px;border-radius:50%;flex:none;
+  background:#10A37F;display:grid;place-items:center;
+  font-weight:700;font-size:10px;color:#fff;letter-spacing:.03em;
+}
+.oai-chip.active .oai-chip-av{box-shadow:0 0 0 3px rgba(16,163,127,.35)}
+.oai-chip-info{min-width:0}
+.oai-chip-name{font-size:11.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.oai-chip-title{font-size:10px;color:var(--ink-3);line-height:1.35;margin-top:1px}
+#oai-ctx{
+  padding:9px 10px;border-radius:9px;font-size:11px;line-height:1.55;color:var(--ink-2);
+  background:rgba(16,163,127,.07);border:1px solid rgba(16,163,127,.18);
+  display:none;margin-top:2px;
+}
+#oai-ctx.visible{display:block}
+/* green glow on highlighted DoorDash nodes */
+.node.oai-lit{
+  box-shadow:0 0 0 3px rgba(16,163,127,.55), 0 0 18px rgba(16,163,127,.25) !important;
+  border-color:rgba(16,163,127,.7) !important;
+}
 #legend{
   position:fixed;left:16px;bottom:16px;z-index:20;max-width:min(272px,calc(100vw - 32px));
   background:color-mix(in srgb, var(--surface) 92%, transparent);
@@ -614,6 +660,14 @@ input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 
 <div id="legend" data-open="1">
   <button id="legtog" aria-expanded="true">Buying roles <span>&minus;</span></button>
   <ul id="leglist"></ul>
+</div>
+
+<div id="oai-panel" data-open="1">
+  <button id="oai-tog" aria-expanded="true">OpenAI contacts <span>&minus;</span></button>
+  <div id="oai-panel-body">
+    <!-- chips populated by JS -->
+    <div id="oai-ctx"></div>
+  </div>
 </div>
 
 <div id="scrim"></div>
@@ -1921,12 +1975,14 @@ function loadAndOpenMap(id){
   normalizeMap();
   render();
   fit(false);
+  renderOaiPanel();
   document.getElementById("lib-overlay").classList.add("hidden");
 }
 
 function goToLibrary(){
   saveLocal();
   currentMapId = null;
+  renderOaiPanel();
   renderWsTabs();
   renderLibrary();
   document.getElementById("lib-overlay").classList.remove("hidden");
@@ -2056,6 +2112,117 @@ function bootLibrary(){
   renderLibrary();
   // lib-overlay is already shown by default (no hidden class)
 }
+
+/* ============== OpenAI contacts panel ============== */
+var OAI_CONTACTS = [
+  {
+    id: "mahak-sharma",
+    name: "Mahak Sharma",
+    initials: "MS",
+    title: "Product Partnerships — Search & Agentic Commerce",
+    links: ["zack-bongiovanni", "fuad-hannon", "sudeep-das"],
+    context: "Warm intro path into New Verticals Product + AI. Mahak and Jeremy Fine both connect to Zack Bongiovanni — double-flanked entry into the DRI for AI technology partnerships."
+  },
+  {
+    id: "jeremy-fine",
+    name: "Jeremy Fine",
+    initials: "JF",
+    title: "Corporate Business Development",
+    links: ["zack-bongiovanni"],
+    context: "Corporate BD bridge. Can open the door to Zack Bongiovanni and validate the AI technology partnership angle from a business development side."
+  },
+  {
+    id: "oai-api-owner",
+    name: "OpenAI API owner",
+    initials: "?",
+    title: "API relationship owner (to identify)",
+    links: ["klasey-gage"],
+    context: "Existing relationship via current API deployment. Use to get context, warm intros, and support connecting to Klasey Gage’s CX & Integrity team."
+  },
+  {
+    id: "james-vessa",
+    name: "James Vessa",
+    initials: "JV",
+    title: "Account Director",
+    links: ["zack-bongiovanni"],
+    context: "Account intelligence source. Validate ownership, past deployments, internal champions, and deal history before any external outreach."
+  }
+];
+
+var _oaiActive = null; /* currently selected chip id */
+
+function renderOaiPanel(){
+  var panel = document.getElementById("oai-panel");
+  if(!panel) return;
+  var isDD = currentMapId === "map-doordash-openai-v1";
+  panel.classList.toggle("visible", isDD);
+  if(!isDD){ clearOaiHighlight(); return; }
+
+  var body = document.getElementById("oai-panel-body");
+  var ctx  = document.getElementById("oai-ctx");
+
+  /* build chips if not yet built */
+  if(!document.querySelector(".oai-chip")){
+    OAI_CONTACTS.forEach(function(c){
+      var chip = document.createElement("div");
+      chip.className = "oai-chip";
+      chip.dataset.cid = c.id;
+      chip.innerHTML =
+        '<div class="oai-chip-av">' + c.initials + '</div>' +
+        '<div class="oai-chip-info">' +
+          '<div class="oai-chip-name">' + c.name + '</div>' +
+          '<div class="oai-chip-title">' + c.title + '</div>' +
+        '</div>';
+      chip.addEventListener("click", function(){ oaiChipClick(c.id); });
+      /* insert before ctx */
+      body.insertBefore(chip, ctx);
+    });
+  }
+}
+
+function oaiChipClick(cid){
+  if(_oaiActive === cid){
+    /* deselect */
+    _oaiActive = null;
+    clearOaiHighlight();
+    document.querySelectorAll(".oai-chip").forEach(function(el){ el.classList.remove("active"); });
+    document.getElementById("oai-ctx").classList.remove("visible");
+    document.getElementById("oai-ctx").textContent = "";
+    return;
+  }
+  _oaiActive = cid;
+  var c = OAI_CONTACTS.find(function(x){ return x.id === cid; });
+  if(!c) return;
+
+  /* update chips */
+  document.querySelectorAll(".oai-chip").forEach(function(el){
+    el.classList.toggle("active", el.dataset.cid === cid);
+  });
+
+  /* highlight linked nodes */
+  clearOaiHighlight();
+  d3.select(viewport).selectAll(".node").classed("oai-lit", function(d){
+    return d && c.links.indexOf(d.data.id) > -1;
+  });
+
+  /* show context */
+  var ctx = document.getElementById("oai-ctx");
+  ctx.textContent = c.context;
+  ctx.classList.add("visible");
+}
+
+function clearOaiHighlight(){
+  d3.select(viewport).selectAll(".node").classed("oai-lit", false);
+}
+
+/* toggle open/close */
+document.getElementById("oai-tog").addEventListener("click", function(){
+  var panel = document.getElementById("oai-panel");
+  var open = panel.dataset.open === "1";
+  panel.dataset.open = open ? "0" : "1";
+  this.setAttribute("aria-expanded", String(!open));
+  this.querySelector("span").textContent = open ? "+" : "−";
+});
 
 bootLibrary();
 
