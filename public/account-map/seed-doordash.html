@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Seeding DoorDash map…</title>
+<style>
+  body{font-family:"IBM Plex Mono",monospace;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#0f0f0f;color:#e8e8e8;flex-direction:column;gap:12px}
+  .dot{width:8px;height:8px;border-radius:50%;background:#10A37F;display:inline-block;animation:pulse 1.2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
+  p{font-size:12px;letter-spacing:.08em;color:#666;margin:0}
+</style>
+</head>
+<body>
+<span class="dot"></span>
+<p>LOADING DOORDASH MAP INTO WORKSPACE…</p>
+<script>
+(function(){
+  var ORG = {
+    id:"tony-xu", name:"Tony Xu", title:"Co-Founder & CEO", conf:1, role:"eb",
+    children:[
+      {
+        id:"prabir-adarkar", name:"Prabir Adarkar",
+        title:"President & COO", conf:1, role:"eb",
+        children:[
+          {
+            id:"zack-bongiovanni", name:"Zack Bongiovanni",
+            title:"Director, Business & Corporate Development",
+            conf:1, role:"ch",
+            notes:"★ DRI for AI technology partnerships",
+            children:[]
+          },
+          {
+            id:"fuad-hannon", name:"Fuad Hannon",
+            title:"VP, New Verticals", conf:1, role:"dm",
+            notes:"Publicly connected to Ask DoorDash",
+            children:[
+              {id:"jimmy-liu", name:"Jimmy Liu", title:"Senior Director Product — Head of New Verticals", conf:1, role:"in", children:[]},
+              {id:"sudeep-das", name:"Sudeep Das", title:"Head of AI — New Business Verticals (NVAI)", conf:1, role:"dm", children:[]},
+              {id:"divya-agarwal", name:"Divya Agarwal", title:"Director, New Verticals — Retail", conf:1, role:"in", children:[]},
+              {id:"ask-dd-pm", name:"", title:"Ask DoorDash — Direct PM (to identify)", conf:0, children:[]}
+            ]
+          },
+          {
+            id:"klasey-gage", name:"Klasey Gage",
+            title:"VP, Global Customer Experience & Integrity", conf:1, role:"in",
+            children:[
+              {id:"jorge-villalobos", name:"Jorge Luis Villalobos Coronel", title:"Director, Support Operations", conf:1, role:"eu", children:[]},
+              {id:"support-owner", name:"", title:"Support Product / Technical Owner (to identify)", conf:0, children:[]}
+            ]
+          },
+          {
+            id:"sophia-vicent", name:"Sophia Vicent",
+            title:"VP Engineering — Engineering Operations", conf:1, role:"in",
+            children:[
+              {id:"glen-john", name:"Glen John", title:"TPM Leader", conf:1, role:"eu", children:[]}
+            ]
+          },
+          {
+            id:"danny-nightingale", name:"Danny Nightingale",
+            title:"Product Operations Manager", conf:1, role:"eu",
+            children:[]
+          }
+        ]
+      },
+      {id:"ravi-inukonda", name:"Ravi Inukonda", title:"CFO", conf:1, role:"eb", children:[]},
+      {id:"shanna-preve", name:"Shanna Prevé", title:"Chief Revenue Officer", conf:1, role:"eb", children:[]},
+      {id:"mariana-garavaglia", name:"Mariana Garavaglia", title:"Chief People Officer", conf:1, children:[]},
+      {
+        id:"tia-sherringham", name:"Tia Sherringham",
+        title:"General Counsel", conf:1,
+        children:[
+          {id:"james-field", name:"James Field", title:"Director, Legal", conf:1, role:"in", children:[]},
+          {id:"jonno-boyer", name:"Jonno Boyer", title:"Legal Director, Marketplace", conf:1, role:"in", children:[]}
+        ]
+      },
+      {
+        id:"liz-jarvis-shean", name:"Liz Jarvis-Shean",
+        title:"Chief Corporate Affairs Officer", conf:1,
+        children:[
+          {id:"mattie-goldman", name:"Mattie Goldman Magdovitz", title:"Head of Consumer & Product Communications", conf:1, role:"in", children:[]},
+          {id:"lan-nguyen", name:"Lan Nguyen", title:"Head of New Verticals & Advertising Comms", conf:1, role:"in", children:[]}
+        ]
+      },
+      {
+        id:"austin-haugen", name:"Austin Haugen",
+        title:"VP Product — Consumer", conf:1, role:"in",
+        children:[
+          {id:"sam-wang", name:"Sam Wang", title:"Director, Consumer Growth", conf:1, role:"eu", children:[]}
+        ]
+      },
+      {id:"charles-pollnow", name:"Charles Pollnow", title:"Senior Director, AI", conf:1, role:"in", children:[]}
+    ]
+  };
+
+  var MAP_ID = "map-doordash-openai-v1";
+  try{
+    var raw = localStorage.getItem("maplib.index");
+    var lib = raw ? JSON.parse(raw) : [];
+    lib = lib.filter(function(e){ return e.id !== MAP_ID; });
+    lib.push({id:MAP_ID, name:"DoorDash — Account Map", workspace:"openai", created:Date.now(), modified:Date.now()});
+    localStorage.setItem("maplib.index", JSON.stringify(lib));
+    localStorage.setItem("maplib.map." + MAP_ID, JSON.stringify({org:ORG, zones:[], state:{}}));
+    if(!localStorage.getItem("maplib.workspaces")){
+      localStorage.setItem("maplib.workspaces", JSON.stringify([
+        {id:"presti", name:"Presti", color:"#e5352d"},
+        {id:"openai", name:"OpenAI", color:"#10A37F"}
+      ]));
+    }
+    window.location.replace("/account-map/");
+  } catch(err){
+    document.body.innerHTML = '<p style="color:#f44;font-size:13px">localStorage error: ' + err.message + '</p>';
+  }
+})();
+</script>
+</body>
+</html>
