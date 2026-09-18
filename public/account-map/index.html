@@ -1968,8 +1968,89 @@ document.getElementById("lib-new-name").addEventListener("keydown", e => {
 /* ===== saveLocal is patched via _saveLocalOrig below ===== */
 
 /* ===== BOOT: show library instead of auto-loading ===== */
+
+function seedDefaultMaps(){
+  var lib = getLibrary();
+  var ids = lib.map(function(e){ return e.id; });
+
+  if(ids.indexOf('map-doordash-openai-v1') === -1){
+    var ddOrg = {
+      id:'tony-xu',name:'Tony Xu',title:'Co-Founder & CEO',conf:1,role:'eb',
+      children:[
+        {id:'prabir-adarkar',name:'Prabir Adarkar',title:'President & COO',conf:1,role:'eb',children:[
+          {id:'zack-bongiovanni',name:'Zack Bongiovanni',title:'Director, Business & Corporate Development',conf:1,role:'ch',notes:'★ DRI for AI technology partnerships',children:[]},
+          {id:'fuad-hannon',name:'Fuad Hannon',title:'VP, New Verticals',conf:1,role:'dm',notes:'Publicly connected to Ask DoorDash',children:[
+            {id:'jimmy-liu',name:'Jimmy Liu',title:'Senior Director Product — Head of New Verticals',conf:1,role:'in',children:[]},
+            {id:'sudeep-das',name:'Sudeep Das',title:'Head of AI — New Business Verticals (NVAI)',conf:1,role:'dm',children:[]},
+            {id:'divya-agarwal',name:'Divya Agarwal',title:'Director, New Verticals — Retail',conf:1,role:'in',children:[]},
+            {id:'ask-dd-pm',name:'',title:'Ask DoorDash — Direct PM (to identify)',conf:0,children:[]}
+          ]},
+          {id:'klasey-gage',name:'Klasey Gage',title:'VP, Global Customer Experience & Integrity',conf:1,role:'in',children:[
+            {id:'jorge-villalobos',name:'Jorge Luis Villalobos Coronel',title:'Director, Support Operations',conf:1,role:'eu',children:[]},
+            {id:'support-owner',name:'',title:'Support Product / Technical Owner (to identify)',conf:0,children:[]}
+          ]},
+          {id:'sophia-vicent',name:'Sophia Vicent',title:'VP Engineering — Engineering Operations',conf:1,role:'in',children:[
+            {id:'glen-john',name:'Glen John',title:'TPM Leader',conf:1,role:'eu',children:[]}
+          ]},
+          {id:'danny-nightingale',name:'Danny Nightingale',title:'Product Operations Manager',conf:1,role:'eu',children:[]}
+        ]},
+        {id:'ravi-inukonda',name:'Ravi Inukonda',title:'CFO',conf:1,role:'eb',children:[]},
+        {id:'shanna-preve',name:'Shanna Prevé',title:'Chief Revenue Officer',conf:1,role:'eb',children:[]},
+        {id:'mariana-garavaglia',name:'Mariana Garavaglia',title:'Chief People Officer',conf:1,children:[]},
+        {id:'tia-sherringham',name:'Tia Sherringham',title:'General Counsel',conf:1,children:[
+          {id:'james-field',name:'James Field',title:'Director, Legal',conf:1,role:'in',children:[]},
+          {id:'jonno-boyer',name:'Jonno Boyer',title:'Legal Director, Marketplace',conf:1,role:'in',children:[]}
+        ]},
+        {id:'liz-jarvis-shean',name:'Liz Jarvis-Shean',title:'Chief Corporate Affairs Officer',conf:1,children:[
+          {id:'mattie-goldman',name:'Mattie Goldman Magdovitz',title:'Head of Consumer & Product Communications',conf:1,role:'in',children:[]},
+          {id:'lan-nguyen',name:'Lan Nguyen',title:'Head of New Verticals & Advertising Comms',conf:1,role:'in',children:[]}
+        ]},
+        {id:'austin-haugen',name:'Austin Haugen',title:'VP Product — Consumer',conf:1,role:'in',children:[
+          {id:'sam-wang',name:'Sam Wang',title:'Director, Consumer Growth',conf:1,role:'eu',children:[]}
+        ]},
+        {id:'charles-pollnow',name:'Charles Pollnow',title:'Senior Director, AI',conf:1,role:'in',children:[]}
+      ]
+    };
+    lib.push({id:'map-doordash-openai-v1',name:'DoorDash — Account Map',workspace:'openai',created:1726500000000,modified:1726500000000});
+    saveLibrary(lib);
+    try{ localStorage.setItem('maplib.map.map-doordash-openai-v1', JSON.stringify({org:ddOrg,zones:[],state:{}})); }catch(e){}
+    lib = getLibrary();
+    ids = lib.map(function(e){ return e.id; });
+  }
+
+  if(ids.indexOf('map-openai-internal-v1') === -1){
+    var oaiOrg = {
+      id:'sam-altman',name:'Sam Altman',title:'CEO',conf:1,role:'eb',
+      children:[
+        {id:'greg-brockman',name:'Greg Brockman',title:'President',conf:1,role:'eb',children:[]},
+        {id:'brad-lightcap',name:'Brad Lightcap',title:'COO',conf:1,role:'eb',children:[]},
+        {id:'sarah-friar',name:'Sarah Friar',title:'CFO',conf:1,role:'eb',children:[]},
+        {id:'mark-chen',name:'Mark Chen',title:'Chief Research Officer',conf:1,children:[]},
+        {id:'arvind-kc',name:'Arvind KC',title:'Chief People Officer',conf:1,children:[]},
+        {id:'dali-rajic',name:'Dali Rajic',title:'Chief Revenue Officer',conf:1,role:'eb',notes:'Announced Aug. 2026',children:[
+          {id:'james-vesa',name:'James Vesa',title:'Account Director',conf:1,role:'dm',children:[]},
+          {id:'herve-cron',name:'Hervé Cron',title:'Retail GTM Lead, Large Enterprise',conf:1,role:'in',notes:'French Retail scope',children:[]}
+        ]},
+        {id:'fidji-simo',name:'Fidji Simo',title:'CEO of Applications',conf:1,role:'eb',notes:'Reports to Sam Altman (confirmed)',children:[
+          {id:'vijaye-raji',name:'Vijaye Raji',title:'CTO of Applications',conf:1,role:'dm',children:[]},
+          {id:'nick-turley',name:'Nick Turley',title:'VP, Head of ChatGPT',conf:1,role:'dm',children:[]},
+          {id:'mahak-sharma',name:'Mahak Sharma',title:'Product Partnerships — Search & Agentic Commerce',conf:1,role:'ch',children:[]},
+          {id:'jeremy-fine',name:'Jeremy Fine',title:'Corporate Business Development',conf:1,role:'ch',children:[]},
+          {id:'mik-kurian',name:'Mik Kurian',title:'Partnerships',conf:1,role:'in',children:[]},
+          {id:'guilbert-francois',name:'Guilbert François',title:'Product Marketing',conf:1,role:'in',children:[]},
+          {id:'evelina-yarmit',name:'Evelina Yarmit',title:'Commercial Lawyer',conf:1,role:'in',children:[]}
+        ]}
+      ]
+    };
+    lib.push({id:'map-openai-internal-v1',name:'OpenAI — Internal Org',workspace:'openai',created:1726500000000,modified:1726500000000});
+    saveLibrary(lib);
+    try{ localStorage.setItem('maplib.map.map-openai-internal-v1', JSON.stringify({org:oaiOrg,zones:[],state:{}})); }catch(e){}
+  }
+}
+
 function bootLibrary(){
   initWorkspaces();
+  seedDefaultMaps();
   migrateIfNeeded();
   renderWsTabs();
   renderLibrary();
