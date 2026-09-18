@@ -612,7 +612,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 
 </div>
 
 <div id="legend" data-open="1">
-  <button id="legtog" aria-expanded="true">Rôles d'achat <span>&minus;</span></button>
+  <button id="legtog" aria-expanded="true">Buying roles <span>&minus;</span></button>
   <ul id="leglist"></ul>
 </div>
 
@@ -1163,7 +1163,7 @@ document.getElementById("leglist").innerHTML =
      <i style="background:var(--poc)"></i><b>Périmètre POC</b> <span style="color:var(--ink-3)">— les utilisateurs</span></li>` +
   `<li><i style="background:var(--deal)"></i><b>Comité de décision</b> <span style="color:var(--ink-3)">— le besoin et le budget</span></li>` +
   `<li><i style="background:var(--deal-line)"></i><b>À embarquer</b> <span style="color:var(--ink-3)">— hébergent le POC</span></li>` +
-  `<li class="hint">La pastille dit <b style="color:var(--ink-2)">quel rôle</b> joue la personne ; le cadre dit <b style="color:var(--ink-2)">dans quel périmètre</b> elle est. Un cadre n'est tracé que s'il n'englobe personne d'extérieur au groupe — les zones personnalisées sont réparties en plusieurs cadres si nécessaire. Le pointillé traverse les branches : c'est une dépendance que l'organigramme ne montre pas.</li>`;
+  `<li class="hint">The badge shows the person's <b style="color:var(--ink-2)">role</b>; the frame shows their <b style="color:var(--ink-2)">scope</b>. A frame only appears if it doesn't include anyone outside the group — custom zones split into multiple frames when needed. The dotted line crosses branches: it marks a dependency the org chart doesn't show.</li>`;
 
 const legend = document.getElementById("legend");
 document.getElementById("legtog").addEventListener("click", function(){
