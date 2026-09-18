@@ -363,6 +363,71 @@ marker#arw path{fill:var(--deal)}
   box-shadow:0 0 0 3px rgba(16,163,127,.55), 0 0 18px rgba(16,163,127,.25) !important;
   border-color:rgba(16,163,127,.7) !important;
 }
+/* smooth transition on all nodes for dim effect */
+.node{ transition:opacity .22s, filter .22s, box-shadow .18s, border-color .18s; }
+
+/* map dimming when an OAI contact is selected */
+body.oai-active #links{ opacity:.15; transition:opacity .22s; }
+body.oai-active #zones{ opacity:.15; transition:opacity .22s; }
+body.oai-active .node:not(.oai-lit){ opacity:.12; filter:grayscale(.35); }
+
+/* OAI contact fiche drawer */
+#oai-drawer{
+  position:fixed;top:0;right:0;bottom:0;z-index:45;width:min(376px,100vw);
+  background:var(--surface);border-left:1px solid var(--line);
+  transform:translateX(101%);transition:transform .26s cubic-bezier(.22,.8,.3,1);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+#oai-drawer.open{ transform:translateX(0); }
+#oai-drawer .dhead{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 18px;border-bottom:1px solid var(--line);flex:none;
+}
+#oai-drawer .dhead .eyebrow{
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:600;
+  letter-spacing:.09em;text-transform:uppercase;color:#10A37F;margin-bottom:4px;
+}
+#oai-drawer .dhead h2{
+  margin:0;font-size:15px;font-weight:600;letter-spacing:-.01em;color:var(--ink);
+}
+#oai-dclose{
+  background:none;border:1px solid var(--line);border-radius:8px;
+  width:30px;height:30px;font-size:17px;cursor:pointer;color:var(--ink-2);
+  display:grid;place-items:center;flex:none;line-height:1;
+}
+#oai-dclose:hover{border-color:var(--ink-3);color:var(--ink)}
+#oai-dbody{
+  flex:1;overflow-y:auto;padding:20px 18px;display:grid;gap:18px;align-content:start;
+}
+.oai-fiche-av{
+  width:52px;height:52px;border-radius:50%;
+  background:#10A37F;display:grid;place-items:center;
+  font-weight:700;font-size:16px;color:#fff;letter-spacing:.03em;flex:none;
+}
+.oai-fiche-hero{display:flex;align-items:center;gap:14px;}
+.oai-fiche-name{font-size:17px;font-weight:700;color:var(--ink);letter-spacing:-.01em;}
+.oai-fiche-title{font-size:12px;color:var(--ink-3);margin-top:3px;line-height:1.4}
+.oai-fiche-section{display:grid;gap:7px;}
+.oai-fiche-section h3{
+  margin:0;font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+}
+.oai-fiche-section p{
+  margin:0;font-size:12.5px;line-height:1.6;color:var(--ink-2);
+}
+.oai-fiche-link{
+  display:inline-flex;align-items:center;gap:6px;padding:7px 12px;
+  border:1px solid var(--line);border-radius:8px;font-size:12px;font-weight:500;
+  color:var(--ink-2);text-decoration:none;background:var(--surface-2);
+}
+.oai-fiche-link:hover{border-color:#10A37F;color:#10A37F;}
+.oai-fiche-nodes{display:flex;flex-wrap:wrap;gap:6px}
+.oai-fiche-node-tag{
+  padding:4px 10px;border-radius:99px;font-size:11px;font-weight:600;
+  background:rgba(16,163,127,.1);border:1px solid rgba(16,163,127,.3);color:#10A37F;
+}
+.oai-fiche-divider{height:1px;background:var(--line-2);}
+
 #legend{
   position:fixed;left:16px;bottom:16px;z-index:20;max-width:min(272px,calc(100vw - 32px));
   background:color-mix(in srgb, var(--surface) 92%, transparent);
@@ -671,6 +736,17 @@ input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 
 </div>
 
 <div id="scrim"></div>
+<div id="oai-drawer" aria-hidden="true">
+  <div class="dhead">
+    <div>
+      <div class="eyebrow">OpenAI contact</div>
+      <h2 id="oai-dfiche-name"></h2>
+    </div>
+    <button id="oai-dclose" aria-label="Close">&times;</button>
+  </div>
+  <div id="oai-dbody"></div>
+</div>
+
 
 <aside id="drawer" aria-hidden="true">
   <div class="dhead">
@@ -2119,9 +2195,12 @@ var OAI_CONTACTS = [
     id: "mahak-sharma",
     name: "Mahak Sharma",
     initials: "MS",
-    title: "Product Partnerships — Search & Agentic Commerce",
+    title: "Product Partnerships — Search & Agentic Commerce",
     links: ["zack-bongiovanni", "fuad-hannon", "sudeep-das"],
-    context: "Warm intro path into New Verticals Product + AI. Mahak and Jeremy Fine both connect to Zack Bongiovanni — double-flanked entry into the DRI for AI technology partnerships."
+    context: "Warm intro path into New Verticals Product + AI. Mahak and Jeremy Fine both connect to Zack Bongiovanni — double-flanked entry into the DRI for AI technology partnerships.",
+    linkedin: "https://www.linkedin.com/search/results/people/?keywords=Mahak+Sharma+OpenAI",
+    notes: "Leads product partnerships for OpenAI’s search and agentic commerce initiatives. Key contact for embedding AI agents into commerce workflows. Has direct working relationships with DoorDash’s New Verticals and AI teams.",
+    dealContext: "Relationship A — AI / Commerce. Works alongside Jeremy Fine on the DoorDash account. Validate scope of existing engagement before external outreach."
   },
   {
     id: "jeremy-fine",
@@ -2129,7 +2208,10 @@ var OAI_CONTACTS = [
     initials: "JF",
     title: "Corporate Business Development",
     links: ["zack-bongiovanni"],
-    context: "Corporate BD bridge. Can open the door to Zack Bongiovanni and validate the AI technology partnership angle from a business development side."
+    context: "Corporate BD bridge. Can open the door to Zack Bongiovanni and validate the AI technology partnership angle from a business development side.",
+    linkedin: "https://www.linkedin.com/search/results/people/?keywords=Jeremy+Fine+OpenAI",
+    notes: "Corporate BD at OpenAI, focused on strategic partnerships with large platforms. Works in tandem with Mahak Sharma on commerce-adjacent accounts.",
+    dealContext: "Relationship A — AI / Commerce (co-pilot with Mahak). Use to validate BD angle and get a warm intro to Zack Bongiovanni."
   },
   {
     id: "oai-api-owner",
@@ -2137,16 +2219,23 @@ var OAI_CONTACTS = [
     initials: "?",
     title: "API relationship owner (to identify)",
     links: ["klasey-gage"],
-    context: "Existing relationship via current API deployment. Use to get context, warm intros, and support connecting to Klasey Gage’s CX & Integrity team."
+    context: "Existing relationship via current API deployment. Use to get context, warm intros, and support connecting to Klasey Gage’s CX & Integrity team.",
+    linkedin: "https://www.linkedin.com/search/results/people/?keywords=OpenAI+account+DoorDash",
+    notes: "Person managing the existing OpenAI API relationship with DoorDash. Identity TBD — ask James Vesa or check OpenAI’s AE/CSM directory. Entry point to Klasey Gage’s support & integrity org.",
+    dealContext: "Relationship B — API / Support. DoorDash already uses OpenAI APIs. This person holds the context, existing champions, and can broker warm intros into the CX & Integrity team."
   },
   {
     id: "james-vessa",
-    name: "James Vessa",
+    name: "James Vesa",
     initials: "JV",
     title: "Account Director",
     links: ["zack-bongiovanni"],
-    context: "Account intelligence source. Validate ownership, past deployments, internal champions, and deal history before any external outreach."
+    context: "Account intelligence source. Validate ownership, past deployments, internal champions, and deal history before any external outreach.",
+    linkedin: "https://www.linkedin.com/search/results/people/?keywords=James+Vesa+OpenAI",
+    notes: "Account Director at OpenAI, covering the DoorDash account. Best first call: gather intel on what’s deployed, who the champions are, and what past conversations looked like.",
+    dealContext: "Pre-outreach intelligence step. Talk to James Vesa before reaching out to DoorDash contacts — validate ownership, deal history, and internal champion mapping."
   }
+];
 ];
 
 var _oaiActive = null; /* currently selected chip id */
@@ -2188,6 +2277,8 @@ function oaiChipClick(cid){
     document.querySelectorAll(".oai-chip").forEach(function(el){ el.classList.remove("active"); });
     document.getElementById("oai-ctx").classList.remove("visible");
     document.getElementById("oai-ctx").textContent = "";
+    document.body.classList.remove("oai-active");
+    closeOaiFiche();
     return;
   }
   _oaiActive = cid;
@@ -2199,20 +2290,73 @@ function oaiChipClick(cid){
     el.classList.toggle("active", el.dataset.cid === cid);
   });
 
-  /* highlight linked nodes */
+  /* dim map + highlight linked nodes */
   clearOaiHighlight();
+  document.body.classList.add("oai-active");
   d3.select(viewport).selectAll(".node").classed("oai-lit", function(d){
     return d && c.links.indexOf(d.data.id) > -1;
   });
 
-  /* show context */
+  /* show small context blurb */
   var ctx = document.getElementById("oai-ctx");
   ctx.textContent = c.context;
   ctx.classList.add("visible");
+
+  /* open fiche drawer */
+  openOaiFiche(c);
+}
+
+function openOaiFiche(c){
+  var drawer = document.getElementById("oai-drawer");
+  var body   = document.getElementById("oai-dbody");
+  document.getElementById("oai-dfiche-name").textContent = c.name;
+
+  /* build linked node name list */
+  var nodeNames = c.links.map(function(lid){
+    return state[lid] ? (state[lid].name || lid) : lid;
+  });
+
+  body.innerHTML =
+    '<div class="oai-fiche-hero">' +
+      '<div class="oai-fiche-av">' + c.initials + '</div>' +
+      '<div>' +
+        '<div class="oai-fiche-name">' + c.name + '</div>' +
+        '<div class="oai-fiche-title">' + c.title + '</div>' +
+      '</div>' +
+    '</div>' +
+    (c.linkedin ? '<a class="oai-fiche-link" href="' + c.linkedin + '" target="_blank" rel="noopener">' +
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>' +
+      ' LinkedIn</a>' : '') +
+    '<div class="oai-fiche-divider"></div>' +
+    '<div class="oai-fiche-section">' +
+      '<h3>Context</h3>' +
+      '<p>' + (c.notes || c.context) + '</p>' +
+    '</div>' +
+    '<div class="oai-fiche-section">' +
+      '<h3>Deal angle</h3>' +
+      '<p>' + c.dealContext + '</p>' +
+    '</div>' +
+    '<div class="oai-fiche-section">' +
+      '<h3>DoorDash connections</h3>' +
+      '<div class="oai-fiche-nodes">' +
+        nodeNames.map(function(n){ return '<span class="oai-fiche-node-tag">' + n + '</span>'; }).join("") +
+      '</div>' +
+    '</div>';
+
+  drawer.setAttribute("aria-hidden", "false");
+  drawer.classList.add("open");
+}
+
+function closeOaiFiche(){
+  var drawer = document.getElementById("oai-drawer");
+  drawer.classList.remove("open");
+  drawer.setAttribute("aria-hidden", "true");
 }
 
 function clearOaiHighlight(){
   d3.select(viewport).selectAll(".node").classed("oai-lit", false);
+  document.body.classList.remove("oai-active");
+  closeOaiFiche();
 }
 
 /* toggle open/close */
@@ -2222,6 +2366,11 @@ document.getElementById("oai-tog").addEventListener("click", function(){
   panel.dataset.open = open ? "0" : "1";
   this.setAttribute("aria-expanded", String(!open));
   this.querySelector("span").textContent = open ? "+" : "−";
+});
+
+document.getElementById("oai-dclose").addEventListener("click", function(){
+  /* close the fiche drawer but keep chip active + dim + lit nodes */
+  closeOaiFiche();
 });
 
 bootLibrary();
