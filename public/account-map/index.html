@@ -504,6 +504,22 @@ input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 
   color:var(--ink-3);font-size:16px;line-height:1;transition:color .15s;
 }
 .map-card-del:hover{color:var(--r-bl)}
+.map-card-ws{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-bottom:6px;
+  align-self:flex-start;
+}
+.ws-tab{
+  padding:5px 14px;border-radius:20px;
+  border:1px solid var(--line);
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.09em;
+  text-transform:uppercase;font-weight:700;cursor:pointer;
+  background:transparent;color:var(--ink-3);
+  transition:all .15s;white-space:nowrap;
+}
+.ws-tab:hover{border-color:var(--ink);color:var(--ink)}
+.ws-tab.active{background:var(--ink);color:var(--ground);border-color:var(--ink)}
 
 /* ===== AUTH MODAL ===== */
 #auth-overlay{
@@ -658,12 +674,13 @@ input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 
     <div>
       <div class="lib-logo">Account Maps · Library</div>
       <h1 class="lib-title">Your maps</h1>
-      <div class="lib-subtitle">Select a map to open it</div>
     </div>
     <button class="lib-new-btn" id="lib-new-btn">+ New map</button>
   </div>
-  <div id="lib-new-form" style="display:none;align-items:center;gap:8px;padding:0 32px 20px">
+  <div id="lib-ws-tabs" style="display:flex;gap:6px;padding:16px 32px 0;overflow-x:auto;flex-wrap:wrap"></div>
+  <div id="lib-new-form" style="display:none;align-items:center;gap:8px;padding:12px 32px 0">
     <input id="lib-new-name" type="text" placeholder="Map name…" maxlength="60" style="flex:1;padding:8px 12px;border:1px solid var(--border,#444);border-radius:6px;font:inherit;background:var(--surface-2);color:var(--ink)">
+    <select id="lib-new-ws" style="padding:8px 10px;border:1px solid var(--border,#444);border-radius:6px;font:inherit;background:var(--surface-2);color:var(--ink);cursor:pointer;flex-shrink:0"></select>
     <button id="lib-new-confirm" class="lib-new-btn" style="margin:0">Create</button>
     <button id="lib-new-cancel-btn" style="padding:7px 14px;border:none;background:none;cursor:pointer;color:var(--muted,#888)">Cancel</button>
   </div>
@@ -1638,6 +1655,58 @@ function saveLibrary(arr){
   try{ localStorage.setItem("maplib.index", JSON.stringify(arr)); }catch(e){}
 }
 
+/* ===== WORKSPACES ===== */
+var activeWorkspace = null;
+
+function defaultWorkspaces(){
+  return [
+    {id:"presti", name:"Presti",  color:"#e5352d"},
+    {id:"openai", name:"OpenAI",  color:"#10A37F"}
+  ];
+}
+function getWorkspaces(){
+  try{
+    var stored = localStorage.getItem("maplib.workspaces");
+    return stored ? JSON.parse(stored) : defaultWorkspaces();
+  }catch(e){ return defaultWorkspaces(); }
+}
+function saveWorkspaces(arr){
+  try{ localStorage.setItem("maplib.workspaces", JSON.stringify(arr)); }catch(e){}
+}
+function initWorkspaces(){
+  if(!localStorage.getItem("maplib.workspaces")) saveWorkspaces(defaultWorkspaces());
+}
+
+function renderWsTabs(){
+  var tabs = document.getElementById("lib-ws-tabs");
+  var wss  = getWorkspaces();
+  var wsel = document.getElementById("lib-new-ws");
+  tabs.innerHTML = "";
+  wsel.innerHTML = '<option value="">No workspace</option>';
+  var allTab = document.createElement("button");
+  allTab.className = "ws-tab" + (activeWorkspace === null ? " active" : "");
+  allTab.textContent = "All";
+  allTab.onclick = function(){ activeWorkspace = null; renderWsTabs(); renderLibrary(); };
+  tabs.appendChild(allTab);
+  wss.forEach(function(ws){
+    var t = document.createElement("button");
+    t.className = "ws-tab" + (activeWorkspace === ws.id ? " active" : "");
+    if(activeWorkspace === ws.id){
+      t.style.background = ws.color;
+      t.style.borderColor = ws.color;
+      t.style.color = "#fff";
+    }
+    t.textContent = ws.name;
+    t.onclick = function(){ activeWorkspace = ws.id; renderWsTabs(); renderLibrary(); };
+    tabs.appendChild(t);
+    var opt = document.createElement("option");
+    opt.value = ws.id;
+    opt.textContent = ws.name;
+    wsel.appendChild(opt);
+  });
+  if(activeWorkspace) wsel.value = activeWorkspace;
+}
+
 function migrateIfNeeded(){
   const lib = getLibrary();
   if(lib.length === 0){
@@ -1663,25 +1732,33 @@ function getMapCount(mapData){
 
 function renderLibrary(){
   const lib = getLibrary();
+  const filtered = activeWorkspace ? lib.filter(e => e.workspace === activeWorkspace) : lib;
+  const wss = getWorkspaces();
   const grid = document.getElementById("lib-grid");
   grid.innerHTML = "";
-  if(!lib.length){
+  if(!filtered.length){
     const empty = document.createElement("div");
     empty.className = "lib-empty";
-    empty.textContent = "No maps yet — create your first map.";
+    empty.textContent = activeWorkspace ? "No maps in this workspace yet." : "No maps yet — create your first map.";
     grid.appendChild(empty);
     return;
   }
-  lib.forEach(entry => {
+  filtered.forEach(entry => {
     const card = document.createElement("div");
     card.className = "map-card";
     const letter = (entry.name||"?")[0].toUpperCase();
     const modDate = entry.modified ? new Date(entry.modified).toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"}) : "—";
     const rawData = localStorage.getItem("maplib.map."+entry.id);
     const count = rawData ? getMapCount(rawData) : 0;
+    const ws = entry.workspace ? wss.find(w => w.id === entry.workspace) : null;
+    const wsBadge = ws
+      ? `<div class="map-card-ws" style="background:${ws.color}22;color:${ws.color}"><span style="width:5px;height:5px;border-radius:50%;background:${ws.color};display:inline-block;flex-shrink:0"></span>${ws.name}</div>`
+      : "";
+    const iconStyle = ws ? ` style="background:${ws.color}"` : "";
     card.innerHTML = `
+      ${wsBadge}
       <div style="display:flex;align-items:center;gap:12px">
-        <div class="map-card-icon">${letter}</div>
+        <div class="map-card-icon"${iconStyle}>${letter}</div>
         <div>
           <div class="map-card-name">${entry.name||"Untitled"}</div>
           <div class="map-card-meta">${count} contact${count!==1?"s":""}</div>
@@ -1850,6 +1927,7 @@ function loadAndOpenMap(id){
 function goToLibrary(){
   saveLocal();
   currentMapId = null;
+  renderWsTabs();
   renderLibrary();
   document.getElementById("lib-overlay").classList.remove("hidden");
 }
@@ -1860,6 +1938,7 @@ function showNewMapForm(){
   const form = document.getElementById("lib-new-form");
   form.style.display = "flex";
   document.getElementById("lib-new-name").value = "";
+  if(activeWorkspace) document.getElementById("lib-new-ws").value = activeWorkspace;
   setTimeout(()=>document.getElementById("lib-new-name").focus(), 30);
 }
 function hideNewMapForm(){
@@ -1868,10 +1947,13 @@ function hideNewMapForm(){
 function createNewMap(){
   const name = (document.getElementById("lib-new-name").value||"").trim();
   if(!name) return;
+  const wsId = document.getElementById("lib-new-ws").value || null;
   hideNewMapForm();
   const id = "map-" + crypto.randomUUID();
   const lib = getLibrary();
-  lib.push({id, name, created:Date.now(), modified:Date.now()});
+  const entry = {id, name, created:Date.now(), modified:Date.now()};
+  if(wsId) entry.workspace = wsId;
+  lib.push(entry);
   saveLibrary(lib);
   promptAuth(id, name);
 }
@@ -1887,7 +1969,9 @@ document.getElementById("lib-new-name").addEventListener("keydown", e => {
 
 /* ===== BOOT: show library instead of auto-loading ===== */
 function bootLibrary(){
+  initWorkspaces();
   migrateIfNeeded();
+  renderWsTabs();
   renderLibrary();
   // lib-overlay is already shown by default (no hidden class)
 }
