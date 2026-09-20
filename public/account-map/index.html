@@ -4,13 +4,15 @@
 .map-card-rename { background:none; border:none; cursor:pointer; opacity:.45; font-size:13px; padding:2px 4px; line-height:1; color:var(--ink); }
 .map-card-rename:hover { opacity:1; }
 </style></head><body>
-<script>/* snapshot local des donnees enregistrees en ligne */try{if(!localStorage.getItem("ddmap.v1"))localStorage.setItem("ddmap.v1","{\"ads-mgr\": {\"name\": \"\", \"title\": \"Senior Industry Manager, Enterprise Ad Sales\", \"role\": \"in\", \"notes\": \"Chez DoorDash Ads le manager de première ligne s'appelle « Industry Manager », pas « Sales Manager ». L'offre d'Enterprise AE le confirme : les AE reportent à « an Industry Manager within CPG Ad Sales ». Déclinaisons publiées : CPG, Mid Market, Restaurants, Franchise.\\n\\nSponsor opérationnel du POC : c'est lui qui voit le gain de productivité de son équipe avant tout le monde, et qui peut le chiffrer devant le Director.\", \"photo\": \"\", \"conf\": 0, \"collapsed\": 0}}");}catch(e){}</script>
+<script>/* local snapshot of the data saved in this browser (localStorage) */try{if(!localStorage.getItem("ddmap.v1"))localStorage.setItem("ddmap.v1","{\"ads-mgr\": {\"name\": \"\", \"title\": \"Senior Industry Manager, Enterprise Ad Sales\", \"role\": \"in\", \"notes\": \"At DoorDash Ads the front-line manager is called « Industry Manager », not « Sales Manager ». The Enterprise AE posting confirms it: AEs report to « an Industry Manager within CPG Ad Sales ». Published variants: CPG, Mid Market, Restaurants, Franchise.\\n\\nOperational sponsor of the POC: he's the one who sees his team's productivity gain before anyone else, and who can quantify it in front of the Director.\", \"photo\": \"\", \"conf\": 0, \"collapsed\": 0}}");}catch(e){}</script>
 
 <title>DoorDash Account Map</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.13/html-to-image.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 :root{
@@ -117,6 +119,9 @@ button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
 
 #actions{display:flex;gap:6px;margin-left:auto;flex:none}
+#bar>div{min-width:0}
+.bar-title{overflow:hidden}
+#map-title,.bar-title .sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 #actions button,#editor button,.edit-field button,#drawer .dbody>button{border:1px solid var(--line);border-radius:8px;background:var(--surface-2);padding:9px 12px;font-size:12px}
 #actions button:first-child,#editor .primary{background:var(--accent);color:white;border-color:var(--accent)}
 #editor{width:min(600px,calc(100vw - 24px));max-height:88vh;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);padding:22px;box-shadow:var(--shadow-lift)}
@@ -126,7 +131,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .edit-help{font-size:12px;line-height:1.5;color:var(--ink-2);margin:0}.edit-help[role=alert]{color:var(--accent)}
 .member-list{max-height:230px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:8px}.member-list label{display:flex;gap:9px;align-items:flex-start;padding:8px;font-size:12px;line-height:1.4}.member-list input{flex:none}
 .zone-row{display:flex;align-items:center;gap:6px;padding:14px 0;border-bottom:1px solid var(--line);margin-bottom:12px}.zone-row span{flex:1;font-size:12px;overflow-wrap:anywhere}
-@media(max-width:1000px){#tally{display:none}}@media(max-width:640px){#bar{gap:8px;padding-inline:10px}#actions button{padding:8px}#bar .mark{display:none}.zone-row{flex-wrap:wrap}.zone-row span{flex-basis:100%}}
+@media(max-width:1000px){#tally{display:none}}@media(max-width:640px){#bar{gap:8px;padding-inline:10px}#actions button{padding:8px}#bar .mark{display:none}.zone-row{flex-wrap:wrap}.zone-row span{flex-basis:100%}}@media(max-width:560px){#node-search{display:none}}
 
 .node{touch-action:none;cursor:grab;min-height:104px;user-select:none}
 .node.dragging{cursor:grabbing;z-index:5;transition:none;box-shadow:var(--shadow-lift)}
@@ -143,7 +148,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .map-popover-actions button{border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:8px 11px}
 .map-popover-actions .primary{background:var(--accent);border-color:var(--accent);color:#fff}
 #zone-draft{position:absolute;border:2px dashed var(--poc);background:var(--poc-fill);border-radius:16px;pointer-events:none;z-index:3}
-#zone-draft::before{content:'Nouvelle zone';position:absolute;top:8px;left:12px;font:600 10px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--poc)}
+#zone-draft::before{content:'New zone';position:absolute;top:8px;left:12px;font:600 10px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--poc)}
 #gesture-help{position:absolute;top:12px;left:50%;transform:translateX(-50%);padding:8px 14px;border-radius:20px;background:var(--surface);color:var(--ink-2);font-size:11px;pointer-events:none;white-space:nowrap}
 #move-status{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);max-width:45vw;padding:8px 12px;background:var(--surface);border-radius:8px;font-size:12px;color:var(--ink-2);pointer-events:none}
 #move-status:empty{display:none}
@@ -176,6 +181,9 @@ button{font:inherit;color:inherit;cursor:pointer}
   overflow-x:auto; scrollbar-width:none;
 }
 #tally::-webkit-scrollbar{display:none}
+/* la barre est trop chargee sous 1000px : on masque le recap des roles
+   (regle placee apres #tally pour battre la definition de base) */
+@media(max-width:1000px){#tally{display:none}}
 .tly{
   display:flex;align-items:center;gap:5px;flex:none;
   font-family:"IBM Plex Mono",ui-monospace,monospace;
@@ -693,7 +701,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 
     Library
   </button>
   <div class="mark">DD</div>
-  <div>
+  <div class="bar-title">
     <h1 id="map-title" title="Click to rename" style="cursor:pointer">DoorDash</h1>
     <div class="sub">Account map &middot; People &amp; Revenue</div>
   </div>
@@ -715,11 +723,11 @@ input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 
 </div>
 
 <div id="ctl">
-  <button id="zin" title="Zoom avant" aria-label="Zoom avant">+</button>
-  <button id="zout" title="Zoom arrière" aria-label="Zoom arrière">&minus;</button>
-  <button id="zfit" class="wide" title="Voir toute la carte" aria-label="Voir toute la carte">FIT</button>
-  <button id="zpoc" class="wide poc" title="Cadrer le périmètre POC" aria-label="Cadrer le périmètre POC">POC</button>
-  <button id="zdeal" class="wide dealbtn" title="Cadrer le circuit de décision" aria-label="Cadrer le circuit de décision">DEAL</button>
+  <button id="zin" title="Zoom in" aria-label="Zoom in">+</button>
+  <button id="zout" title="Zoom out" aria-label="Zoom out">&minus;</button>
+  <button id="zfit" class="wide" title="Fit to screen" aria-label="Fit to screen">FIT</button>
+  <button id="zpoc" class="wide poc" title="Frame the POC scope" aria-label="Frame the POC scope">POC</button>
+  <button id="zdeal" class="wide dealbtn" title="Frame the decision circuit" aria-label="Frame the decision circuit">DEAL</button>
 </div>
 
 <div id="legend" data-open="1">
@@ -751,47 +759,47 @@ input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 
 <aside id="drawer" aria-hidden="true">
   <div class="dhead">
     <div>
-      <div class="eyebrow">Fiche contact</div>
-      <div id="saved">Enregistré</div>
+      <div class="eyebrow">Contact card</div>
+      <div id="saved">Saved</div>
     </div>
-    <button id="dclose" aria-label="Fermer">&times;</button>
+    <button id="dclose" aria-label="Close">&times;</button>
   </div>
   <div class="dbody">
     <div class="idrow">
-      <div class="bigav" id="bigav" title="Glissez une photo ici"></div>
+      <div class="bigav" id="bigav" title="Drag a photo here"></div>
       <div class="avnote">
-        Glissez une photo sur le cercle, <button id="pickpic" type="button">parcourir</button>,
-        ou copiez une image et collez-la ici (<kbd>⌘V</kbd>).<br>
-        Recadrée en carré et stockée avec la carte.
+        Drag a photo onto the circle, <button id="pickpic" type="button">browse</button>,
+        or copy an image and paste it here (<kbd>⌘V</kbd>).<br>
+        Cropped to a square and stored with the map.
       </div>
     </div>
 
     <div class="fld">
-      <label for="f-name">Nom</label>
-      <input type="text" id="f-name" placeholder="À identifier" autocomplete="off">
+      <label for="f-name">Name</label>
+      <input type="text" id="f-name" placeholder="To identify" autocomplete="off">
     </div>
 
     <div class="fld">
-      <label for="f-title">Intitulé de poste</label>
+      <label for="f-title">Job title</label>
       <input type="text" id="f-title" autocomplete="off">
     </div>
 
     <div class="fld">
-      <label>Fiabilité de la donnée</label>
+      <label>Data reliability</label>
       <div class="seg" id="f-conf">
-        <button type="button" data-c="1" aria-pressed="false">Confirmé</button>
-        <button type="button" data-c="0" aria-pressed="false">À confirmer</button>
+        <button type="button" data-c="1" aria-pressed="false">Confirmed</button>
+        <button type="button" data-c="0" aria-pressed="false">To confirm</button>
       </div>
     </div>
 
     <div class="fld">
-      <label>Rôle dans la décision</label>
+      <label>Role in the decision</label>
       <div class="roles" id="f-role"></div>
     </div>
 
     <div class="fld">
-      <label for="f-notes">Contexte</label>
-      <textarea id="f-notes" placeholder="Ce que vous savez : historique, priorités, signaux, points d'entrée, ce qui a été dit en call, liens utiles…"></textarea>
+      <label for="f-notes">Context</label>
+      <textarea id="f-notes" placeholder="What you know: history, priorities, signals, entry points, what was said on the call, useful links…"></textarea>
     </div>
   </div>
 </aside>
@@ -856,76 +864,76 @@ const ORG = {
     {id:"ravi-inukonda", name:"Ravi Inukonda", title:"Chief Financial Officer", conf:1},
     {id:"stanley-tang", name:"Stanley Tang", title:"Co-Founder & Chief Product Officer", conf:1},
     {id:"andy-fang", name:"Andy Fang", title:"Co-Founder, Head of LaunchPad", conf:1,
-      notes:"Ex-CTO. DoorDash n'a plus de CTO en poste — Crunchbase, Comparably et Clay le listent encore comme CTO, c'est périmé. Ne pas l'approcher comme le patron tech."},
+      notes:"Ex-CTO. DoorDash no longer has a sitting CTO — Crunchbase, Comparably and Clay still list him as CTO, that's outdated. Don't approach him as the tech boss."},
 
     {id:"mariana-garavaglia", name:"Mariana Garavaglia",
       title:"Chief People Officer (People & Enterprise Tech)", conf:1, role:"eb",
-      notes:"Scope élargi : People ET Enterprise Tech (l'IT lui remonte) — donc budget outillage interne.\n\nA fait l'objet d'un cas client OpenAI sur le déploiement de l'IA auprès des employés DoorDash. Angle d'entrée évident si le sujet est l'adoption de l'IA dans les équipes.\n\nAncienne enseignante — parcours atypique, souvent raconté en interview (HR Brew, 2024).\n\nCENTRE DE DÉCISION. C'est ici que se décident le besoin et le budget, pas côté Sales. Son périmètre couvre People ET Enterprise Tech, donc elle tient à la fois la lecture du besoin et la validation de l'outil. Le POC tourne chez les commerciaux parce que c'est là que l'usage a du sens — mais le oui vient d'ici.\n\nLinkedIn : https://www.linkedin.com/in/marianagaravaglia/",
+      notes:"Broadened scope: People AND Enterprise Tech (IT reports up to her) — so she owns the internal-tooling budget.\n\nWas the subject of an OpenAI customer case on rolling out AI to DoorDash employees. Obvious entry angle if the topic is AI adoption across teams.\n\nFormer teacher — atypical background, often told in interviews (HR Brew, 2024).\n\nDECISION CENTER. This is where the need and the budget are decided, not on the Sales side. Her scope covers People AND Enterprise Tech, so she holds both the read on the need and the sign-off on the tool. The POC runs with the sales reps because that's where the usage makes sense — but the yes comes from here.\n\nLinkedIn: https://www.linkedin.com/in/marianagaravaglia/",
       children:[
         {id:"ppl-ta", name:"", title:"VP, Global Talent Acquisition", conf:0,
-          notes:"COMITÉ DE DÉCISION — dernier siège sans nom. Piste non vérifiée : Matt Valentino apparaît comme VP Global Talent Acquisition dans un podcast (Talk Talent To Me) de plusieurs années, et sur des scrapers. Un Matt Valentino figure aussi comme CPO chez Shape Therapeutics sur Crunchbase — peut-être la même personne, peut-être pas.\n\nÀ confirmer sur LinkedIn avant tout contact."},
+          notes:"DECISION COMMITTEE — last unnamed seat. Unverified lead: Matt Valentino shows up as VP Global Talent Acquisition in a years-old podcast (Talk Talent To Me) and on scrapers. A Matt Valentino also appears as CPO at Shape Therapeutics on Crunchbase — maybe the same person, maybe not.\n\nTo confirm on LinkedIn before any contact."},
         {id:"nevena-m", name:"Nevena M.", title:"VP, Global HR", conf:0, role:"dm",
-          notes:"COMITÉ DE DÉCISION. Titre donné par SignalHire (VP, Global HR at DoorDash). Nom de famille masqué sur LinkedIn — SignalHire l'indexe sous Nevena Milanovic, non recoupé.\n\nC'est le siège VP au-dessus de toute la ligne HR Business Partners : si le besoin remonte du terrain, il passe par elle avant d'arriver chez Mariana.\n\nLinkedIn : https://www.linkedin.com/in/nevena-m-62a07b14/",
+          notes:"DECISION COMMITTEE. Title from SignalHire (VP, Global HR at DoorDash). Last name hidden on LinkedIn — SignalHire indexes her as Nevena Milanovic, not cross-checked.\n\nThis is the VP seat above the whole HR Business Partners line: if the need comes up from the field, it goes through her before reaching Mariana.\n\nLinkedIn: https://www.linkedin.com/in/nevena-m-62a07b14/",
           children:[
             {id:"liane-hajduch", name:"Liane Hajduch", title:"Head of People — Engineering & New Business Verticals", conf:0, role:"in",
-              notes:"COMITÉ DE DÉCISION. Les sources divergent sur le libellé exact : ZoomInfo dit « Engineering Head of People », RocketReach « Head of HR BPs, New Business Verticals », ContactOut « Tech HR and Employee Experience ». Toutes la placent à la tête du People pour les orgs techniques.\n\nIntervenante à la Women's Leadership Week DoorDash — profil visible en interne, utile comme relais.\n\nElle couvre les populations tech : c'est elle qui saura si un outil IA passe culturellement.\n\nLinkedIn : https://www.linkedin.com/in/lianehajduch/"},
+              notes:"DECISION COMMITTEE. Sources differ on the exact wording: ZoomInfo says « Engineering Head of People », RocketReach « Head of HR BPs, New Business Verticals », ContactOut « Tech HR and Employee Experience ». All put her at the head of People for the technical orgs.\n\nSpeaker at DoorDash's Women's Leadership Week — internally visible profile, useful as a relay.\n\nShe covers the tech populations: she's the one who'll know whether an AI tool passes culturally.\n\nLinkedIn: https://www.linkedin.com/in/lianehajduch/"},
             {id:"kathleen-barlett", name:"Kathleen Walton Barlett", title:"Senior Director, HR Business Partner", conf:1, role:"dm",
-              notes:"COMITÉ DE DÉCISION. Titre recoupé par theorg et ZoomInfo, qui l'intitule « Senior Director, Human Resources & Business Partner ». Basée à Richmond, Virginie. Certifiée SHRM-SCP.\n\nElle poste régulièrement sur le recrutement ET sur le Total Rewards — signe d'une vue transverse sur les besoins RH, pas seulement sur son périmètre. C'est le profil qui sait dire si un besoin est réel ou si c'est une lubie de comité.\n\nLe rattachement est déduit de la séniorité, pas confirmé.\n\nLinkedIn : https://www.linkedin.com/in/kathleen-walton-barlett-shrm-scp-62635b2/",
+              notes:"DECISION COMMITTEE. Title cross-checked by theorg and ZoomInfo, which calls her « Senior Director, Human Resources & Business Partner ». Based in Richmond, Virginia. SHRM-SCP certified.\n\nShe posts regularly about recruiting AND Total Rewards — a sign of a cross-cutting view of HR needs, not just her own scope. She's the profile who can tell whether a need is real or a committee whim.\n\nThe reporting line is inferred from seniority, not confirmed.\n\nLinkedIn: https://www.linkedin.com/in/kathleen-walton-barlett-shrm-scp-62635b2/",
               children:[
                 {id:"casi-shimizu", name:"Casi Shimizu", title:"HR Director, People Business Partners & Employee Relations", conf:1,
-                  notes:"COMITÉ DE DÉCISION. En poste depuis juillet 2025 — elle l'a annoncé elle-même sur LinkedIn. Titre confirmé par theorg.\n\nArrivée récente : c'est souvent la personne la plus ouverte à un nouvel outil, parce qu'elle n'a pas encore d'attachement aux process en place. Candidate la plus crédible au rôle de Coach — à valider en échange avant de lui coller la pastille.\n\nLe rattachement à Kathleen Walton Barlett est déduit de la séniorité (Director sous Senior Director), pas confirmé.\n\nLinkedIn : https://www.linkedin.com/in/casi-shimizu-b275b165/"}
+                  notes:"DECISION COMMITTEE. In role since July 2025 — she announced it herself on LinkedIn. Title confirmed by theorg.\n\nRecent arrival: often the person most open to a new tool, because she isn't yet attached to the processes in place. Most credible candidate for the Coach role — to validate in a conversation before pinning the badge on her.\n\nThe reporting line to Kathleen Walton Barlett is inferred from seniority (Director under Senior Director), not confirmed.\n\nLinkedIn: https://www.linkedin.com/in/casi-shimizu-b275b165/"}
               ]}
           ]},
         {id:"aaron-king", name:"Aaron King", title:"VP, People — Platforms", conf:0,
-          notes:"COMITÉ DE DÉCISION. ZoomInfo l'intitule « Platforms Vice President, People ». Région de Seattle.\n\nLecture la plus probable : VP People rattaché à l'org Platform (ingénierie), donc un pair de Liane Hajduch sur un autre périmètre métier — pas un rôle technique. À confirmer, le libellé ZoomInfo est ambigu.\n\nLinkedIn : https://www.linkedin.com/in/aaronkingprofile/"},
+          notes:"DECISION COMMITTEE. ZoomInfo calls him « Platforms Vice President, People ». Seattle area.\n\nMost likely reading: VP People attached to the Platform org (engineering), so a peer of Liane Hajduch on another business scope — not a technical role. To confirm, the ZoomInfo wording is ambiguous.\n\nLinkedIn: https://www.linkedin.com/in/aaronkingprofile/"},
         {id:"lillian-bleiman", name:"Lillian Bleiman", title:"VP, Talent Management & Global Total Rewards", conf:1, role:"in",
-          notes:"COMITÉ DE DÉCISION. Trois sources concordent sur le périmètre : ZoomInfo « Global VP, Rewards, Operations & Expansion », Wiza « VP, Talent Management and Total Rewards », Comparably « VP of Talent Management ». Basée à Seattle, chez DoorDash depuis 2021.\n\nTalent Management + Total Rewards dans le même périmètre = elle tient le développement des compétences ET la rémunération. Pour un outil de montée en compétences, c'est le budget le plus naturel de tout le comité.\n\nRecrute activement sur son équipe compensation (post LinkedIn) — équipe en croissance, donc en demande d'outillage.\n\nLinkedIn : https://www.linkedin.com/in/lillian-bleiman-7595233/"},
+          notes:"DECISION COMMITTEE. Three sources agree on the scope: ZoomInfo « Global VP, Rewards, Operations & Expansion », Wiza « VP, Talent Management and Total Rewards », Comparably « VP of Talent Management ». Based in Seattle, at DoorDash since 2021.\n\nTalent Management + Total Rewards in the same scope = she holds both skills development AND compensation. For an upskilling tool, that's the most natural budget in the whole committee.\n\nActively hiring on her compensation team (LinkedIn post) — a growing team, so in need of tooling.\n\nLinkedIn: https://www.linkedin.com/in/lillian-bleiman-7595233/"},
         {id:"matti-esko-seppa", name:"Matti-Esko Seppä", title:"VP, Global People Insights, Technology & IT", conf:1, role:"dm",
-          notes:"COMITÉ DE DÉCISION — L'ACHETEUR TECHNIQUE. Titre donné par ContactOut. C'est le siège que j'avais identifié comme critique avant d'avoir un nom : il porte People Insights, People Technology ET l'IT, soit exactement la partie « Enterprise Tech » du périmètre élargi de Mariana.\n\nRien ne se déploie à des employés DoorDash sans passer par lui : sécurité, intégration SIRH, conformité. S'il n'est pas embarqué tôt, il devient le frein tard.\n\nEt « People Insights » dans son titre veut dire qu'il tient la donnée RH — donc la mesure du POC passe aussi par lui.\n\nLinkedIn : https://www.linkedin.com/in/meseppa/"}
+          notes:"DECISION COMMITTEE — THE TECHNICAL BUYER. Title from ContactOut. This is the seat I'd flagged as critical before having a name: he owns People Insights, People Technology AND IT — exactly the « Enterprise Tech » part of Mariana's broadened scope.\n\nNothing gets deployed to DoorDash employees without going through him: security, HRIS integration, compliance. If he isn't brought in early, he becomes the blocker late.\n\nAnd « People Insights » in his title means he holds the HR data — so measuring the POC also goes through him.\n\nLinkedIn: https://www.linkedin.com/in/meseppa/"}
       ]},
 
     {id:"shanna-preve", name:"Shanna Prevé", title:"Chief Revenue Officer", conf:1, role:"eb",
-      notes:"Promue CRO en janvier 2026, en interne, après avoir été VP Enterprise Sales & Business Development. Longue ancienneté chez DoorDash.\n\nElle remplace Lee Brown (ex-Spotify), parti en janvier 2026 après moins de six mois. Beaucoup de sources en ligne sont encore sur Lee Brown — ne pas se tromper de nom dans un email.\n\nProfil interne promu = connaît le produit, sensible aux arguments business plutôt qu'aux promesses marketing.\n\nÀ EMBARQUER, PAS À CONVAINCRE. Elle ne finance pas le POC — elle accepte qu'il tourne dans son org. Se travaille via Espinosa, avec les chiffres du pilote, pas en direct depuis trois utilisateurs.",
+      notes:"Promoted to CRO in January 2026, internally, after being VP Enterprise Sales & Business Development. Long tenure at DoorDash.\n\nShe replaces Lee Brown (ex-Spotify), who left in January 2026 after less than six months. Many sources online are still on Lee Brown — don't get the name wrong in an email.\n\nInternally promoted profile = knows the product, receptive to business arguments rather than marketing promises.\n\nTO BRING IN, NOT TO CONVINCE. She doesn't fund the POC — she agrees to let it run in her org. Work her through Espinosa, with the pilot's numbers, not directly off three users.",
       children:[
         {id:"toby-espinosa", name:"A. Toby Espinosa", title:"Vice President, DoorDash Ads", conf:1, role:"dm",
-          notes:"Pilote le business publicitaire, qui est le vrai moteur de croissance de la ligne revenue. Ad Age 40 Under 40. Très présent publiquement : interviews AdExchanger, prises de parole CES janvier 2026, The Drum.\n\nThèse qu'il défend : la croissance se joue « au moment de la décision d'achat ». Bon angle pour toute conversation sur le contenu visuel.\n\nÀ EMBARQUER. C'est lui qui autorise le pilote à tourner dans son équipe, sans remonter. Point d'entrée opérationnel le plus rapide — mais l'arbitrage budgétaire ne lui appartient pas.",
+          notes:"Runs the advertising business, the real growth engine of the revenue line. Ad Age 40 Under 40. Very publicly present: AdExchanger interviews, CES January 2026 talks, The Drum.\n\nHis thesis: growth happens « at the moment of the purchase decision ». Good angle for any conversation about visual content.\n\nTO BRING IN. He's the one who authorizes the pilot to run in his team, without escalating. The fastest operational entry point — but the budget call isn't his.",
           children:[
             {id:"ads-srdir", name:"", title:"Senior Director, Enterprise Advertising Sales", conf:0,
-              notes:"Rung confirmé par l'offre publique « Director, Enterprise Restaurant Ads & Promos » : le Director lui reporte en direct. Le poste est rattaché à Enterprise Sales & Business Development.\n\nTitulaire non public — c'est le premier nom à aller chercher sur Sales Navigator.",
+              notes:"Rung confirmed by the public posting « Director, Enterprise Restaurant Ads & Promos »: the Director reports directly to him. The role sits under Enterprise Sales & Business Development.\n\nIncumbent not public — the first name to go find on Sales Navigator.",
               children:[
-                {id:"priscila-fernandez", name:"Priscila Fernandez", title:"Enterprise Sales Leader — rung à confirmer", conf:0,
-                  notes:"À EMBARQUER. Intitulé LinkedIn auto-déclaré : « Enterprise Sales Leader @ DoorDash ». Aucune source publique ne donne son rung exact, d'où le point d'interrogation sur sa carte.\n\nDeux hypothèses : soit Director, Enterprise Ad Sales — le poste dont l'offre publique dit qu'il encadre des Senior Industry Managers et des IC — soit une Industry Manager paire de Colin Mason. À trancher sur son profil avant de l'approcher : se tromper de niveau se voit immédiatement.\n\nLinkedIn : https://www.linkedin.com/in/priscilagfernandez/",
+                {id:"priscila-fernandez", name:"Priscila Fernandez", title:"Enterprise Sales Leader — rung to confirm", conf:0,
+                  notes:"TO BRING IN. Self-declared LinkedIn title: « Enterprise Sales Leader @ DoorDash ». No public source gives her exact rung, hence the question mark on her card.\n\nTwo hypotheses: either Director, Enterprise Ad Sales — the role the public posting says oversees Senior Industry Managers and ICs — or an Industry Manager peer of Colin Mason. To settle from her profile before approaching her: getting the level wrong shows immediately.\n\nLinkedIn: https://www.linkedin.com/in/priscilagfernandez/",
                   children:[
                     {id:"colin-mason", name:"Colin Mason", title:"Senior Industry Manager, Ads & Promos", conf:1, role:"ch",
-                      notes:"SPONSOR DU POC. Titre donné par theorg ; RocketReach l'intitule « Senior Team Lead, Ad Sales ». Les deux le placent au niveau manager dans l'org Ads, et il a publié lui-même une offre « Enterprise Associate - Ad Sales » — ce que fait un hiring manager, pas un IC.\n\nC'est exactement le rung « Industry Manager » que les offres DoorDash décrivent comme le manager de première ligne des Account Executives.\n\nIl voit le gain de productivité de son équipe avant tout le monde, et il peut le chiffrer pour le comité.\n\nLinkedIn : https://www.linkedin.com/in/colin-mason-72203212/",
+                      notes:"POC SPONSOR. Title from theorg; RocketReach calls him « Senior Team Lead, Ad Sales ». Both place him at manager level in the Ads org, and he himself posted an « Enterprise Associate - Ad Sales » opening — what a hiring manager does, not an IC.\n\nThis is exactly the « Industry Manager » rung that DoorDash postings describe as the front-line manager of Account Executives.\n\nHe sees his team's productivity gain before anyone else, and he can quantify it for the committee.\n\nLinkedIn: https://www.linkedin.com/in/colin-mason-72203212/",
                       children:[
                         {id:"jared-berman", name:"Jared Berman", title:"Enterprise Associate, Ad Sales", conf:1, role:"eu",
-                          notes:"UTILISATEUR PILOTE. Titre recoupé par ZoomInfo et RocketReach. Basé à New York.\n\nNiveau Associate = la charge de préparation de comptes, de propositions et de reporting la plus lourde de l'équipe. C'est le profil sur lequel un gain de temps se mesure le plus vite et le plus proprement — et le plus facile à faire raconter en fin de pilote.\n\nRattachement à Colin Mason déduit du rung, à confirmer.\n\nLinkedIn : https://www.linkedin.com/in/jared-berman-665187180/"},
+                          notes:"PILOT USER. Title cross-checked by ZoomInfo and RocketReach. Based in New York.\n\nAssociate level = the heaviest load of account prep, proposals and reporting on the team. The profile where time savings are measured fastest and cleanest — and the easiest to have tell the story at the end of the pilot.\n\nReporting line to Colin Mason inferred from the rung, to confirm.\n\nLinkedIn: https://www.linkedin.com/in/jared-berman-665187180/"},
                         {id:"ads-am", name:"", title:"Account Manager, Enterprise Ad Sales", conf:0, role:"eu",
-                          notes:"DEUXIÈME SIÈGE PILOTE, à pourvoir. Piste post-vente, en parallèle des AE sous le même manager. Déclinaisons publiées : Account Manager Restaurants, Account Manager CPG.\n\nPrendre un AM plutôt qu'un second AE est délibéré : deux métiers différents sous une seule ligne hiérarchique, donc deux preuves d'usage pour un seul oui à obtenir."}
+                          notes:"SECOND PILOT SEAT, to be filled. Post-sale lead, alongside the AEs under the same manager. Published variants: Account Manager Restaurants, Account Manager CPG.\n\nTaking an AM rather than a second AE is deliberate: two different jobs under one reporting line, so two proofs of usage for a single yes to obtain."}
                       ]}
                   ]}
               ]},
             {id:"katie-daleo", name:"Katie Daleo", title:"General Manager, CPG Ads", conf:0,
-              notes:"Citée dans la couverture CES de janvier 2026 aux côtés de Toby Espinosa — rattachement implicite, à confirmer.\n\nCPG = les marques de grande conso qui achètent de la pub sur DoorDash. Volume de contenu produit très élevé.",
+              notes:"Cited in the January 2026 CES coverage alongside Toby Espinosa — implicit reporting line, to confirm.\n\nCPG = the consumer-goods brands that buy ads on DoorDash. Very high volume of produced content.",
               children:[
                 {id:"lindsay-farrell", name:"Lindsay Farrell", title:"Director, CPG Ads & Promos GTM", conf:0,
-                  notes:"Trouvée sur LinkedIn, corroborée par ses propres publications et RocketReach. Le rattachement à Katie Daleo est déduit du périmètre CPG, pas confirmé."},
+                  notes:"Found on LinkedIn, corroborated by her own posts and RocketReach. The reporting line to Katie Daleo is inferred from the CPG scope, not confirmed."},
                 {id:"brandon-lau", name:"Brandon Lau", title:"Head of Mid Market CPG Ads", conf:0,
-                  notes:"Source unique, intitulé LinkedIn auto-déclaré. Correspond probablement au rung formel « Senior Industry Manager, Enterprise Ad Sales – Mid Market ». À revérifier avant tout contact."}
+                  notes:"Single source, self-declared LinkedIn title. Probably matches the formal rung « Senior Industry Manager, Enterprise Ad Sales – Mid Market ». To re-check before any contact."}
               ]},
             {id:"ads-spec", name:"", title:"Offsite Ads Sales Lead / Agency Development Lead", conf:0,
-              notes:"Rôles spécialistes publiés sur le board DoorDash, hors ligne managériale classique. Utiles à connaître : ce sont eux qui parlent aux agences média."}
+              notes:"Specialist roles published on the DoorDash board, outside the classic management line. Useful to know: they're the ones who talk to the media agencies."}
           ]},
         {id:"david-ross", name:"David Ross", title:"Senior Director, DoorDash for Business", conf:0,
-          notes:"Trouvé uniquement via un extrait de recherche LinkedIn, aucune couverture qui corrobore. Titre et présence à revérifier."},
+          notes:"Found only via a LinkedIn search snippet, no coverage corroborating. Title and presence to re-check."},
         {id:"rev-ent", name:"", title:"VP, Enterprise Sales & Business Development", conf:0,
-          notes:"C'est le poste que Shanna Prevé occupait avant sa promotion. Probablement rebouché depuis janvier 2026 — trouver qui l'a repris : c'est l'interlocuteur opérationnel le plus utile de toute la branche."}
+          notes:"This is the role Shanna Prevé held before her promotion. Probably backfilled since January 2026 — find who took it over: the most useful operational contact in the whole branch."}
       ]},
 
     {id:"keith-yandell", name:"Keith Yandell", title:"Chief Business Officer", conf:1},
     {id:"tim-castree", name:"Tim Castree", title:"Chief Marketing Officer", conf:1,
-      notes:"Arrivé d'Amazon (VP, EU Prime & Marketing). Remplace Kofi Amoo-Gottfried — theorg.com affiche encore l'ancien nom."},
+      notes:"Came from Amazon (VP, EU Prime & Marketing). Replaces Kofi Amoo-Gottfried — theorg.com still shows the old name."},
     {id:"jessica-lachs", name:"Jessica Lachs", title:"Chief Analytics Officer", conf:1},
     {id:"tia-sherringham", name:"Tia Sherringham", title:"General Counsel & Secretary", conf:1},
     {id:"elizabeth-js", name:"Elizabeth Jarvis-Shean", title:"Chief Corporate Affairs Officer", conf:1}
@@ -935,7 +943,8 @@ const ORG = {
 /* ============== state ============== */
 const NW = 214, NH = 104, PAD = 90;
 const state = {};      // id -> {name,title,role,notes,photo,conf,collapsed}
-let db = null, selected = null, zoomBehavior = null, currentK = 1;
+let oaiContacts = [];  // contacts « côté OpenAI » de la carte ouverte, relies aux noeuds DoorDash (links: [id,…])
+let selected = null, zoomBehavior = null, currentK = 1;
 const stage = document.getElementById("stage");
 const viewport = document.getElementById("viewport");
 const svg = d3.select("#links");
@@ -945,7 +954,7 @@ const cross = d3.select("#cross");
 
 /* the pilot pod: one front-line manager + two of his individual contributors */
 const POC = ["colin-mason", "jared-berman", "ads-am"];
-const POC_LABEL = "PÉRIMÈTRE POC — 3 UTILISATEURS PILOTES";
+const POC_LABEL = "POC SCOPE — 3 PILOT USERS";
 
 /* the decision circuit: everyone who has to say yes for the pilot to exist,
    then to scale. Scattered across two branches on purpose — so it is drawn
@@ -965,15 +974,15 @@ const INVOLVED = DEAL.concat(POC);
    would also swallow Katie Daleo's branch, David Ross and Ads Spec. */
 const ZONES = [
   {id:"poc",       k:"poc",  ids:POC,
-   label:"PÉRIMÈTRE POC — 3 UTILISATEURS PILOTES"},
+   label:"POC SCOPE — 3 PILOT USERS"},
   {id:"committee", k:"deal", ids:COMMITTEE,
-   label:"COMITÉ DE DÉCISION — DÉFINITION DU BESOIN & BUDGET"}
+   label:"DECISION COMMITTEE — NEED & BUDGET DEFINITION"}
 ];
 
 /* relationships the org chart cannot express: a dotted line across branches */
 const CROSS = [
   {from:"mariana-garavaglia", to:"toby-espinosa",
-   label:"LE BESOIN SE DÉCIDE ICI → LE POC TOURNE LÀ"}
+   label:"THE NEED IS DECIDED HERE → THE POC RUNS THERE"}
 ];
 
 function seed(n){
@@ -1001,32 +1010,22 @@ function saveLocal(){
   try{
     // save to current map slot if one is open
     if(currentMapId){
-      localStorage.setItem("maplib.map."+currentMapId, JSON.stringify({org:ORG,zones:ZONES,state}));
+      localStorage.setItem("maplib.map."+currentMapId, JSON.stringify({org:ORG,zones:ZONES,state,oai:oaiContacts}));
       const _lib = getLibrary();
       const _entry = _lib.find(function(e){return e.id===currentMapId;});
       if(_entry){ _entry.modified = Date.now(); saveLibrary(_lib); }
     }
     // always keep ddmap.v2 as fallback
-    localStorage.setItem("ddmap.v2", JSON.stringify({org:ORG,zones:ZONES,state}));
+    localStorage.setItem("ddmap.v2", JSON.stringify({org:ORG,zones:ZONES,state,oai:oaiContacts}));
   }catch(e){ alert("Enregistrement impossible : stockage du navigateur plein. Exportez votre carte avant de quitter."); }
 }
 
-const pending = {};
-let flushTimer = null;
+/* Persistance : 100% locale (localStorage). Pas de backend.
+   L'ancien hook de sync distante (Firebase) n'a jamais ete branche
+   et a ete retire pour ne pas laisser croire a une sauvegarde en ligne. */
 function persist(id){
-  pending[id] = 1;
   saveLocal();
   flash();
-  clearTimeout(flushTimer);
-  flushTimer = setTimeout(flush, 550);
-}
-function flush(){
-  const ids = Object.keys(pending);
-  ids.forEach(id => delete pending[id]);
-  if(!db) return;
-  ids.forEach(id => {
-    db.doc("nodes/" + id).set(Object.assign({}, state[id])).catch(()=>{});
-  });
 }
 const savedEl = document.getElementById("saved");
 let flashTimer = null;
@@ -1229,10 +1228,10 @@ function render(){
       av.classList.toggle("unk", !s.conf);
       av.innerHTML = s.photo ? `<img alt="">` : initials(s.name);
       if(s.photo) av.querySelector("img").src = s.photo;
-      av.title = s.name || "À identifier";
+      av.title = s.name || "To identify";
 
       const nm = el.querySelector(".nname");
-      nm.textContent = s.name || "À identifier";
+      nm.textContent = s.name || "To identify";
       nm.classList.toggle("todo", !s.name);
       el.querySelector(".ntitle").textContent = s.title;
 
@@ -1246,13 +1245,13 @@ function render(){
       }else{
         pill.className = "pill empty";
         pill.style.color = ""; pill.style.background = "";
-        pill.textContent = "Non qualifié";
+        pill.textContent = "No role";
       }
 
       const chip = el.querySelector(".chip");
       chip.classList.toggle("on", !!s.notes.trim());
       chip.innerHTML = ICON_NOTE;
-      chip.title = s.notes.trim() ? "Fiche contexte remplie" : "Ajouter du contexte";
+      chip.title = s.notes.trim() ? "Context filled in" : "Add context";
 
       let tog = el.querySelector(".tog");
       if(hasKids(d.data)){
@@ -1262,7 +1261,7 @@ function render(){
           el.appendChild(tog);
         }
         tog.textContent = s.collapsed ? "+" : "−";
-        tog.title = s.collapsed ? "Déplier" : "Replier";
+        tog.title = s.collapsed ? "Expand" : "Collapse";
       }else if(tog){ tog.remove(); }
     });
 
@@ -1281,18 +1280,18 @@ function tally(){
   const bits = ROLES.filter(r => counts[r.k]).map(r =>
     `<span class="tly"><i style="background:var(${r.v})"></i>${r.label} <b>${counts[r.k]}</b></span>`);
   bits.push(`<span class="tly" style="border-color:var(--poc-line)"><i style="background:var(--poc)"></i>POC <b>${POC.length}</b></span>`);
-  bits.push(`<span class="tly" style="border-color:var(--deal-line)"><i style="background:var(--deal)"></i>Comité <b>${COMMITTEE.length}</b></span>`);
-  bits.push(`<span class="tly" style="border-color:var(--deal-line)">À embarquer <b>${HOSTS.length}</b></span>`);
-  bits.push(`<span class="tly">Identifiés <b>${named}/${total}</b></span>`);
+  bits.push(`<span class="tly" style="border-color:var(--deal-line)"><i style="background:var(--deal)"></i>Committee <b>${COMMITTEE.length}</b></span>`);
+  bits.push(`<span class="tly" style="border-color:var(--deal-line)">To onboard <b>${HOSTS.length}</b></span>`);
+  bits.push(`<span class="tly">Identified <b>${named}/${total}</b></span>`);
   document.getElementById("tally").innerHTML = bits.join("");
 }
 
 document.getElementById("leglist").innerHTML =
   ROLES.map(r => `<li><i style="background:var(${r.v})"></i><b>${r.label}</b></li>`).join("") +
   `<li style="border-top:1px solid var(--line-2);padding-top:9px;margin-top:3px">
-     <i style="background:var(--poc)"></i><b>Périmètre POC</b> <span style="color:var(--ink-3)">— les utilisateurs</span></li>` +
-  `<li><i style="background:var(--deal)"></i><b>Comité de décision</b> <span style="color:var(--ink-3)">— le besoin et le budget</span></li>` +
-  `<li><i style="background:var(--deal-line)"></i><b>À embarquer</b> <span style="color:var(--ink-3)">— hébergent le POC</span></li>` +
+     <i style="background:var(--poc)"></i><b>POC scope</b> <span style="color:var(--ink-3)">— the users</span></li>` +
+  `<li><i style="background:var(--deal)"></i><b>Decision committee</b> <span style="color:var(--ink-3)">— the need and the budget</span></li>` +
+  `<li><i style="background:var(--deal-line)"></i><b>To onboard</b> <span style="color:var(--ink-3)">— host the POC</span></li>` +
   `<li class="hint">The badge shows the person's <b style="color:var(--ink-2)">role</b>; the frame shows their <b style="color:var(--ink-2)">scope</b>. A frame only appears if it doesn't include anyone outside the group — custom zones split into multiple frames when needed. The dotted line crosses branches: it marks a dependency the org chart doesn't show.</li>`;
 
 const legend = document.getElementById("legend");
@@ -1438,7 +1437,7 @@ const filein = document.getElementById("filein");
 fRole.innerHTML =
   ROLES.map(r => `<button type="button" data-r="${r.k}" aria-pressed="false" style="--c:var(${r.v})">
     <i style="background:var(${r.v})"></i>${r.label}</button>`).join("") +
-  `<button type="button" class="none" data-r="" aria-pressed="false">Retirer le rôle</button>`;
+  `<button type="button" class="none" data-r="" aria-pressed="false">Remove role</button>`;
 
 function paintAvatar(){
   const s = state[selected];
@@ -1448,6 +1447,9 @@ function paintAvatar(){
 }
 
 function open(id){
+  /* capture l'etat avant edition seulement a la 1re ouverture
+     (les reclics role/conf appellent open() drawer deja ouvert) */
+  if(!drawer.classList.contains("on")) editSnapshot = snapshotMap();
   selected = id;
   const s = state[id];
   fName.value = s.name;
@@ -1467,6 +1469,7 @@ function open(id){
   render();
 }
 function close(){
+  commitPendingEdit();
   selected = null;
   drawer.classList.remove("on"); drawer.setAttribute("aria-hidden", "true");
   scrim.classList.remove("on");
@@ -1540,25 +1543,25 @@ function input(value='',type='text'){const el=document.createElement('input');el
 function button(label,action){const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=action;return b;}
 function select(options,value){const el=document.createElement('select');options.forEach(([id,label])=>el.add(new Option(label,id)));if(value!==undefined)el.value=value;return el;}
 function allNodes(){return d3.hierarchy(ORG).descendants().map(d=>d.data).filter(n=>n.id!==MAP_ROOT);}
-function modal(title){extra.replaceChildren();const head=document.createElement('div');head.className='edit-head';const h=document.createElement('h2');h.textContent=title;head.append(h,button('Fermer',()=>extra.close()));extra.append(head);if(!extra.open)extra.showModal();}
+function modal(title){extra.replaceChildren();const head=document.createElement('div');head.className='edit-head';const h=document.createElement('h2');h.textContent=title;head.append(h,button('Close',()=>extra.close()));extra.append(head);if(!extra.open)extra.showModal();}
 function help(text){const p=document.createElement('p');p.className='edit-help';p.textContent=text;return p;}
 function validLinkedIn(value){if(!value.trim())return '';try{const u=new URL(value.trim());if(u.protocol==='https:'&&/(^|\.)linkedin\.com$/.test(u.hostname)&&/^\/in\/[^/]+/.test(u.pathname))return u.origin+u.pathname;}catch(e){}return null;}
 function addContact(parentId,point){
- modal('Ajouter un contact');
+ modal('Add a contact');
  const form=document.createElement('form');form.className='edit-form';
  const template=select([['','Fiche vierge'],...ROLES.map(r=>[r.k,r.label])]);
- const name=input();name.required=true;name.placeholder='Prénom et nom';
- const title=input();title.placeholder='Intitulé du poste';
+ const name=input();name.required=true;name.placeholder='First and last name';
+ const title=input();title.placeholder='Job title';
  const linkedin=input();linkedin.placeholder='https://www.linkedin.com/in/…';
- const parent=select([[MAP_ROOT,'Sans rattachement — placer sur la carte'],...allNodes().map(n=>[n.id,(state[n.id].name||'À identifier')+' — '+state[n.id].title])],parentId||MAP_ROOT);
+ const parent=select([[MAP_ROOT,'Sans rattachement — placer sur la carte'],...allNodes().map(n=>[n.id,(state[n.id].name||'To identify')+' — '+state[n.id].title])],parentId||MAP_ROOT);
  const photo=input('','file');photo.accept='image/*';
- const note=document.createElement('textarea');note.placeholder='Contexte, prochaines étapes…';note.style.minHeight='90px';
- form.append(field('Modèle / rôle d’achat',template),field('Profil LinkedIn',linkedin),help('Collez le lien pour le conserver dans la fiche. Renseignez le nom et le poste, puis ajoutez une photo.'),field('Nom',name),field('Poste',title),field('Rattachement dans la carte',parent),field('Photo',photo),field('Notes',note));
+ const note=document.createElement('textarea');note.placeholder='Context, next steps…';note.style.minHeight='90px';
+ form.append(field('Buying model / role',template),field('Profil LinkedIn',linkedin),help('Collez le lien pour le conserver dans la fiche. Renseignez le nom et le poste, puis ajoutez une photo.'),field('Name',name),field('Poste',title),field('Rattachement dans la carte',parent),field('Photo',photo),field('Notes',note));
  const error=help('');error.setAttribute('role','alert');form.append(error);
- const submit=document.createElement('button');submit.type='submit';submit.className='primary';submit.textContent='Créer la fiche';form.append(submit);
+ const submit=document.createElement('button');submit.type='submit';submit.className='primary';submit.textContent='Create card';form.append(submit);
  form.onsubmit=e=>{e.preventDefault();const url=validLinkedIn(linkedin.value);if(url===null){error.textContent='Saisissez un lien de profil LinkedIn valide (https://…linkedin.com/in/…).';return;}
  const id='contact-'+crypto.randomUUID();const n={id,name:name.value.trim(),title:title.value.trim(),role:template.value,notes:note.value,conf:0};
- if(!n.name){error.textContent='Indiquez le nom du contact.';return;}
+ if(!n.name){error.textContent='Enter the contact’s name.';return;}
  const target=parent.value===MAP_ROOT?ORG:allNodes().find(n=>n.id===parent.value);
  const before=snapshotMap();(target.children ||= []).push(n);seed(n);state[id].linkedin=url;
  if(target.id!==MAP_ROOT)state[target.id].collapsed=0;
@@ -1567,28 +1570,28 @@ function addContact(parentId,point){
  if(!point&&target.id!==MAP_ROOT){state[id].x=state[target.id].x;state[id].y=state[target.id].y+NH+74;}
  expandTo(id);render();const snap=point&&parent.value===MAP_ROOT?nearestSnap(id,state[id].x,state[id].y):null;
  if(snap){state[id].x=snap.x;state[id].y=snap.y;attachContact(id,snap.target,snap.kind);}
- undoSnapshot=before;undoButton.hidden=false;persist(id);extra.close();render();
- if(!point)frame(boxOf([id]),true);moveStatus.textContent='Contact ajouté. Glissez la fiche près d’un contact pour les connecter.';
+ pushHistory(before);persist(id);extra.close();render();
+ if(!point)frame(boxOf([id]),true);moveStatus.textContent='Contact added. Drag the card near another contact to connect them.';
  if(photo.files[0])setPhoto(id,photo.files[0]);};
  extra.append(form);name.focus();
 }
 function zoneEditor(zone){
- modal(zone?'Modifier la zone':'Nouvelle zone');
+ modal(zone?'Edit zone':'New zone');
  const form=document.createElement('form');form.className='edit-form';
- const name=input(zone?.label||'');name.required=true;name.placeholder='Ex. Équipe commerciale';
+ const name=input(zone?.label||'');name.required=true;name.placeholder='e.g. Sales team';
  const color=input(zone?.color||(zone?.k==='deal'?'#A81E86':'#0F7A44'),'color');
- const search=input();search.placeholder='Rechercher une personne ou un poste';
+ const search=input();search.placeholder='Search a person or a title';
  const list=document.createElement('div');list.className='member-list';
  const selectedIds=new Set(zone?.ids||[]);
- const count=help('');function updateCount(){count.textContent=selectedIds.size+' contact(s) sélectionné(s)';}updateCount();
- allNodes().forEach(n=>{const row=document.createElement('label');const check=input('','checkbox');check.checked=selectedIds.has(n.id);check.onchange=()=>{check.checked?selectedIds.add(n.id):selectedIds.delete(n.id);updateCount();};const text=document.createElement('span');text.textContent=(state[n.id].name||'À identifier')+' — '+state[n.id].title;row.append(check,text);list.append(row);});
+ const count=help('');function updateCount(){count.textContent=selectedIds.size+' contact(s) selected';}updateCount();
+ allNodes().forEach(n=>{const row=document.createElement('label');const check=input('','checkbox');check.checked=selectedIds.has(n.id);check.onchange=()=>{check.checked?selectedIds.add(n.id):selectedIds.delete(n.id);updateCount();};const text=document.createElement('span');text.textContent=(state[n.id].name||'To identify')+' — '+state[n.id].title;row.append(check,text);list.append(row);});
  search.oninput=()=>Array.from(list.children).forEach(row=>row.hidden=!row.textContent.toLowerCase().includes(search.value.toLowerCase()));
- const error=help('');error.setAttribute('role','alert');const submit=document.createElement('button');submit.type='submit';submit.textContent='Enregistrer la zone';submit.className='primary';
- form.append(field('Nom de la zone',name),field('Couleur',color),field('Contacts à entourer',search),count,list,help('Le cadre suit les contacts. Si le groupe traverse plusieurs branches, plusieurs cadres de même couleur évitent d’englober d’autres personnes.'),error,submit);
- form.onsubmit=e=>{e.preventDefault();if(!name.value.trim()||!selectedIds.size){error.textContent='Donnez un nom à la zone et sélectionnez au moins un contact.';return;}const next={id:zone?.id||'zone-'+crypto.randomUUID(),k:zone?.k||'custom',label:name.value.trim(),color:color.value,ids:[...selectedIds]};if(zone)ZONES.splice(ZONES.indexOf(zone),1,next);else ZONES.push(next);saveLocal();next.ids.forEach(expandTo);render();extra.close();frame(boxOf(next.ids),true);};
+ const error=help('');error.setAttribute('role','alert');const submit=document.createElement('button');submit.type='submit';submit.textContent='Save zone';submit.className='primary';
+ form.append(field('Zone name',name),field('Couleur',color),field('Contacts to enclose',search),count,list,help('The frame follows the contacts. If the group spans several branches, several frames of the same color avoid enclosing other people.'),error,submit);
+ form.onsubmit=e=>{e.preventDefault();if(!name.value.trim()||!selectedIds.size){error.textContent='Give the zone a name and select at least one contact.';return;}const before=snapshotMap();const next={id:zone?.id||'zone-'+crypto.randomUUID(),k:zone?.k||'custom',label:name.value.trim(),color:color.value,ids:[...selectedIds]};if(zone)ZONES.splice(ZONES.indexOf(zone),1,next);else ZONES.push(next);pushHistory(before);saveLocal();next.ids.forEach(expandTo);render();extra.close();frame(boxOf(next.ids),true);};
  extra.append(form);name.focus();
 }
-function manageZones(){modal('Zones de la carte');extra.append(help('Créez un périmètre ou modifiez les zones existantes.'));ZONES.forEach(z=>{const row=document.createElement('div');row.className='zone-row';const label=document.createElement('span');label.textContent=z.label+' · '+z.ids.length+' contacts';row.append(label,button('Modifier',()=>zoneEditor(z)),button('Voir',()=>{z.ids.forEach(expandTo);render();extra.close();frame(boxOf(z.ids),true);}),button('Supprimer',()=>{if(confirm('Supprimer la zone « '+z.label+' » ? Les contacts seront conservés.')){ZONES.splice(ZONES.indexOf(z),1);saveLocal();render();manageZones();}}));extra.append(row);});extra.append(button('+ Nouvelle zone',()=>zoneEditor()));}
+function manageZones(){modal('Map zones');extra.append(help('Create a scope or edit existing zones.'));ZONES.forEach(z=>{const row=document.createElement('div');row.className='zone-row';const label=document.createElement('span');label.textContent=z.label+' · '+z.ids.length+' contacts';row.append(label,button('Edit',()=>zoneEditor(z)),button('View',()=>{z.ids.forEach(expandTo);render();extra.close();frame(boxOf(z.ids),true);}),button('Delete',()=>{if(confirm('Delete zone « '+z.label+' » ? The contacts will be kept.')){const before=snapshotMap();ZONES.splice(ZONES.indexOf(z),1);pushHistory(before);saveLocal();render();manageZones();}}));extra.append(row);});extra.append(button('+ New zone',()=>zoneEditor()));}
 document.getElementById('add-contact').onclick=()=>addContact();
 document.getElementById('manage-zones').onclick=manageZones;
 const linkedinField=input();linkedinField.id='f-linkedin';linkedinField.placeholder='https://www.linkedin.com/in/…';
@@ -1596,13 +1599,147 @@ const linkedinWrap=field('Profil LinkedIn',linkedinField);linkedinWrap.classList
 document.querySelector('#drawer .dbody').insertBefore(linkedinWrap,document.getElementById('f-name').parentElement);
 const linkStatus=help('');linkedinWrap.append(button('Ouvrir le profil',()=>{const url=validLinkedIn(linkedinField.value);if(url)window.open(url,'_blank','noopener,noreferrer');else linkStatus.textContent='Renseignez un lien de profil LinkedIn valide.';}),linkStatus);
 onType('linkedin',linkedinField);
-document.querySelector('#drawer .dbody').append(button('+ Ajouter un contact rattaché',()=>{const id=selected;close();addContact(id);}));
-const exportButton=button('Exporter',()=>{const blob=new Blob([JSON.stringify({org:ORG,zones:ZONES,state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='doordash-account-map.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);});
-document.getElementById('actions').append(exportButton);
+document.querySelector('#drawer .dbody').append(button('+ Add a linked contact',()=>{const id=selected;close();addContact(id);}));
+function currentMapSlug(){return (document.getElementById('map-title').textContent||'account-map').trim().replace(/[^\w\s-]/g,'').replace(/\s+/g,'-').toLowerCase()||'account-map';}
+function doExportJson(){const blob=new Blob([JSON.stringify({org:ORG,zones:ZONES,state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=currentMapSlug()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
+
+/* ---- Import d'une carte exportee (JSON) ---- */
+const importInput=document.createElement('input');importInput.type='file';importInput.accept='application/json,.json';importInput.style.display='none';document.body.append(importInput);
+importInput.addEventListener('change',()=>{
+ const file=importInput.files&&importInput.files[0];importInput.value='';
+ if(!file)return;
+ const r=new FileReader();
+ r.onload=()=>{
+  let data;
+  try{ data=JSON.parse(r.result); }catch(err){ alert('Fichier JSON invalide.'); return; }
+  if(!data||typeof data!=='object'||!data.org||!data.state){ alert("Ce fichier ne ressemble pas a une carte exportee (cle « org » ou « state » manquante)."); return; }
+  if(!confirm('Import this map? The content of the currently open map will be replaced.')) return;
+  const before=snapshotMap();
+  try{
+   Object.keys(ORG).forEach(k=>delete ORG[k]);Object.assign(ORG,data.org);
+   Object.keys(state).forEach(k=>delete state[k]);seed(ORG);Object.assign(state,data.state);
+   ZONES.splice(0,ZONES.length,...(data.zones||[]));
+   normalizeMap();
+   pushHistory(before);
+   saveLocal();render();fit(true);
+   moveStatus.textContent='Map imported.';
+  }catch(err){ alert('Import impossible : '+err.message); restoreMap(before,false); render(); }
+ };
+ r.readAsText(file);
+});
+
+/* ---- Export image (PNG) : capture #viewport sans le pan/zoom (clone) ----
+   html-to-image n'embarque pas la feuille de style pour le SVG, donc on
+   inline les styles calcules des elements SVG (fill/stroke/…) le temps
+   de la capture — sinon les connecteurs sortent en aplats noirs. */
+const SVG_STYLE_PROPS=['fill','stroke','strokeWidth','strokeDasharray','strokeLinecap','strokeLinejoin','opacity'];
+function inlineSvgStyles(){
+ const saved=[];
+ viewport.querySelectorAll('svg, svg *').forEach(el=>{
+  saved.push([el, el.getAttribute('style')]);
+  const cs=getComputedStyle(el);
+  SVG_STYLE_PROPS.forEach(p=>{ try{ el.style[p]=cs[p]; }catch(e){} });
+ });
+ return ()=>saved.forEach(([el,s])=>{ if(s===null)el.removeAttribute('style'); else el.setAttribute('style',s); });
+}
+/* Capture la carte entiere (hors pan/zoom) en PNG haute resolution.
+   Retourne {url, w, h} ou w/h sont les dimensions CSS de la carte. */
+async function captureMapPng(){
+ const restore=inlineSvgStyles();
+ try{
+  const bg=(getComputedStyle(document.body).getPropertyValue('--ground')||'#EDF0F4').trim();
+  const w=viewport.offsetWidth,h=viewport.offsetHeight;
+  const url=await htmlToImage.toPng(viewport,{style:{transform:'none',transformOrigin:'top left'},width:w,height:h,backgroundColor:bg,pixelRatio:2,cacheBust:true,skipFonts:true});
+  return {url,w,h};
+ } finally { restore(); }
+}
+let exportBusy=false;
+async function doExportPng(){
+ if(typeof htmlToImage==='undefined'){ alert("Librairie d'export image indisponible (verifiez la connexion)."); return; }
+ if(exportBusy)return; exportBusy=true; moveStatus.textContent='Generating image…';
+ try{
+  const {url}=await captureMapPng();
+  const a=document.createElement('a');a.href=url;a.download=currentMapSlug()+'.png';a.click();
+  moveStatus.textContent='Image exported.';
+ }catch(err){ alert('Export image impossible : '+err.message); }
+ finally{ exportBusy=false; }
+}
+async function doExportPdf(){
+ if(typeof htmlToImage==='undefined'||!(window.jspdf&&window.jspdf.jsPDF)){ alert("Librairie d'export PDF indisponible (verifiez la connexion)."); return; }
+ if(exportBusy)return; exportBusy=true; moveStatus.textContent='Generating PDF…';
+ try{
+  const {url,w,h}=await captureMapPng();
+  const {jsPDF}=window.jspdf;
+  /* page a l'exact ratio de la carte -> aucune deformation, une seule page */
+  const pdf=new jsPDF({unit:'pt',format:[w,h],orientation:w>=h?'landscape':'portrait'});
+  const pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight();
+  pdf.addImage(url,'PNG',0,0,pw,ph,undefined,'FAST');
+  pdf.save(currentMapSlug()+'.pdf');
+  moveStatus.textContent='PDF exported.';
+ }catch(err){ alert('Export PDF impossible : '+err.message); }
+ finally{ exportBusy=false; }
+}
+
+/* ---- Menu « Exporter » : regroupe Export JSON / Import JSON / Export PNG ----
+   Un seul bouton dans la barre pour ne pas la faire deborder sur petits ecrans. */
+const fileMenu=document.createElement('div');fileMenu.id='file-menu';fileMenu.style.cssText='position:relative;flex:none';
+const fileTrigger=button('Export ▾',()=>{const isOpen=filePop.style.display==='block';filePop.style.display=isOpen?'none':'block';});
+fileTrigger.style.background='var(--surface-2)';fileTrigger.style.color='var(--ink)';
+const filePop=document.createElement('div');
+filePop.style.cssText='position:absolute;top:calc(100% + 6px);right:0;min-width:230px;background:var(--surface);border:1px solid var(--line);border-radius:11px;box-shadow:var(--shadow-lift);z-index:60;display:none;padding:5px';
+function fileMenuItem(label,fn){const b=button(label,()=>{filePop.style.display='none';fn();});b.style.cssText='display:block;width:100%;text-align:left;border:0;background:none;padding:9px 11px;border-radius:8px;font-size:13px;color:var(--ink);font-weight:500';b.onmouseenter=()=>b.style.background='var(--surface-2)';b.onmouseleave=()=>b.style.background='none';return b;}
+filePop.append(
+ fileMenuItem('Export as PDF',doExportPdf),
+ fileMenuItem('Export as image (PNG)',doExportPng),
+ fileMenuItem('Export as JSON',doExportJson),
+ fileMenuItem('Import a JSON…',()=>importInput.click())
+);
+fileMenu.append(fileTrigger,filePop);
+document.getElementById('actions').append(fileMenu);
+document.addEventListener('click',e=>{ if(!fileMenu.contains(e.target)) filePop.style.display='none'; });
+
+/* ---- Recherche globale : trouver une personne/poste et cadrer dessus ---- */
+const searchWrap=document.createElement('div');searchWrap.id='node-search';searchWrap.style.cssText='position:relative;flex:1 1 160px;min-width:96px;max-width:300px;margin-left:14px';
+const searchInput=document.createElement('input');searchInput.type='search';searchInput.placeholder='Search…';searchInput.setAttribute('aria-label','Search a person or a title');
+searchInput.style.cssText='width:100%;font:inherit;font-size:13px;padding:7px 11px;border:1px solid var(--line);border-radius:9px;background:var(--surface-2);color:var(--ink)';
+const searchList=document.createElement('div');searchList.id='node-search-results';
+searchList.style.cssText='position:absolute;top:calc(100% + 6px);right:0;width:290px;max-height:330px;overflow-y:auto;background:var(--surface);border:1px solid var(--line);border-radius:11px;box-shadow:var(--shadow-lift);z-index:60;display:none';
+searchWrap.append(searchInput,searchList);
+const barActions=document.getElementById('actions');barActions.style.marginLeft='0';barActions.parentElement.insertBefore(searchWrap,barActions);
+function jumpTo(id){
+ expandTo(id);render();
+ const b=boxOf([id]);if(b)frame(b,true);
+ setTimeout(()=>{viewport.querySelectorAll('.node').forEach(el=>{const d=d3.select(el).datum();if(d&&d.data.id===id){el.classList.add('oai-lit');setTimeout(()=>el.classList.remove('oai-lit'),1800);}});},560);
+}
+function runNodeSearch(){
+ const q=searchInput.value.trim().toLowerCase();
+ searchList.replaceChildren();
+ if(!q){searchList.style.display='none';return;}
+ const hits=allNodes().filter(n=>{const s=state[n.id]||{};return (s.name||'').toLowerCase().includes(q)||(s.title||'').toLowerCase().includes(q);}).slice(0,12);
+ if(!hits.length){const e=document.createElement('div');e.textContent='No results';e.style.cssText='padding:11px 13px;color:var(--ink-3);font-size:12px';searchList.append(e);searchList.style.display='block';return;}
+ hits.forEach(n=>{
+  const s=state[n.id]||{};
+  const row=document.createElement('button');row.type='button';
+  row.style.cssText='display:block;width:100%;text-align:left;padding:9px 13px;border:0;border-bottom:1px solid var(--line-2);background:none;cursor:pointer';
+  const nm=document.createElement('div');nm.textContent=s.name||'To identify';nm.style.cssText='font-size:13px;font-weight:600;color:var(--ink);'+(s.name?'':'font-style:italic');
+  const tt=document.createElement('div');tt.textContent=s.title||'';tt.style.cssText='font-size:11px;color:var(--ink-3);margin-top:1px';
+  row.append(nm,tt);
+  row.onmouseenter=()=>row.style.background='var(--surface-2)';row.onmouseleave=()=>row.style.background='none';
+  row.onclick=()=>{searchInput.value='';searchList.style.display='none';jumpTo(n.id);};
+  searchList.append(row);
+ });
+ searchList.style.display='block';
+}
+searchInput.addEventListener('input',runNodeSearch);
+searchInput.addEventListener('keydown',e=>{
+ if(e.key==='Enter'){e.preventDefault();const first=searchList.querySelector('button');if(first)first.click();}
+ else if(e.key==='Escape'){searchInput.value='';searchList.style.display='none';searchInput.blur();}
+});
+document.addEventListener('click',e=>{if(!searchWrap.contains(e.target))searchList.style.display='none';});
 
 /* Free placement and reversible magnetic hierarchy editing. */
 const MAP_ROOT='__map_root__';
-let dragState=null, lastDragAt=0, blankClickTimer=null, undoSnapshot=null, surfaceGesture=null;
+let dragState=null, lastDragAt=0, blankClickTimer=null, surfaceGesture=null;
 const rootPeers=svg.append("g").attr("id","root-peers");
 const mapPopover=document.createElement('div');mapPopover.id='map-popover';mapPopover.hidden=true;document.body.append(mapPopover);
 const zonePopover=document.createElement('div');zonePopover.id='zone-popover';zonePopover.hidden=true;document.body.append(zonePopover);
@@ -1610,12 +1747,58 @@ const snapHint=document.createElement('div');snapHint.id='snap-hint';snapHint.hi
 const snapGhost=document.createElement('div');snapGhost.id='snap-ghost';snapGhost.hidden=true;viewport.append(snapGhost);
 const zoneDraft=document.createElement('div');zoneDraft.id='zone-draft';zoneDraft.hidden=true;viewport.append(zoneDraft);
 const moveStatus=document.createElement('div');moveStatus.id='move-status';moveStatus.setAttribute('role','status');document.body.append(moveStatus);
-const undoButton=button('Annuler le déplacement',()=>{
- if(!undoSnapshot)return;
- restoreMap(undoSnapshot,true);undoSnapshot=null;undoButton.hidden=true;saveLocal();render();moveStatus.textContent='Dernière modification annulée.';
-});undoButton.hidden=true;document.getElementById('actions').append(undoButton);
-function snapshotMap(){return JSON.stringify({org:ORG,state});}
-function restoreMap(snapshot,keepEdits=false){const saved=JSON.parse(snapshot);if(keepEdits)for(const id in saved.state){if(state[id])saved.state[id]={...state[id],x:saved.state[id].x,y:saved.state[id].y,collapsed:saved.state[id].collapsed,peerOf:saved.state[id].peerOf};}Object.keys(ORG).forEach(k=>delete ORG[k]);Object.assign(ORG,saved.org);Object.keys(state).forEach(k=>delete state[k]);Object.assign(state,saved.state);}
+/* ---- historique d'annulation multi-niveaux (undo / redo) ----
+   Chaque action mutante enregistre l'etat AVANT via pushHistory(before).
+   Couvre : ajout de contact, deplacement/rattachement, zones, edition de fiche. */
+const HIST_MAX=40;
+let undoStack=[], redoStack=[], editSnapshot=null;
+function refreshHistUI(){ undoButton.hidden=undoStack.length===0; redoButton.hidden=redoStack.length===0; }
+function pushHistory(before){
+ if(before==null)return;
+ undoStack.push(before);
+ if(undoStack.length>HIST_MAX)undoStack.shift();
+ redoStack.length=0;
+ refreshHistUI();
+}
+function clearHistory(){ undoStack.length=0; redoStack.length=0; editSnapshot=null; refreshHistUI(); }
+function commitPendingEdit(){
+ if(editSnapshot && editSnapshot!==snapshotMap()){ pushHistory(editSnapshot); }
+ editSnapshot=null;
+}
+function doUndo(){
+ commitPendingEdit();
+ if(!undoStack.length)return;
+ const before=undoStack.pop();
+ redoStack.push(snapshotMap());
+ editSnapshot=null; if(selected)close();
+ restoreMap(before,false);
+ _oaiActive=null;
+ saveLocal();render();renderOaiPanel();refreshHistUI();
+ moveStatus.textContent='Change undone.';
+}
+function doRedo(){
+ if(!redoStack.length)return;
+ const after=redoStack.pop();
+ undoStack.push(snapshotMap());
+ editSnapshot=null; if(selected)close();
+ restoreMap(after,false);
+ _oaiActive=null;
+ saveLocal();render();renderOaiPanel();refreshHistUI();
+ moveStatus.textContent='Change redone.';
+}
+const undoButton=button('↶',doUndo);undoButton.hidden=true;undoButton.title='Undo (⌘Z / Ctrl+Z)';undoButton.setAttribute('aria-label','Undo');undoButton.style.cssText='padding:9px 0;width:36px;text-align:center;font-size:15px;line-height:1';
+const redoButton=button('↷',doRedo);redoButton.hidden=true;redoButton.title='Redo (⇧⌘Z / Ctrl+Y)';redoButton.setAttribute('aria-label','Redo');redoButton.style.cssText='padding:9px 0;width:36px;text-align:center;font-size:15px;line-height:1';
+document.getElementById('actions').append(undoButton,redoButton);
+document.addEventListener('keydown',e=>{
+ if(!(e.metaKey||e.ctrlKey))return;
+ const k=e.key.toLowerCase();
+ const ae=document.activeElement;
+ if(ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName))return;
+ if(k==='z'&&!e.shiftKey){ e.preventDefault(); doUndo(); }
+ else if((k==='z'&&e.shiftKey)||k==='y'){ e.preventDefault(); doRedo(); }
+});
+function snapshotMap(){return JSON.stringify({org:ORG,state,zones:ZONES,oai:oaiContacts});}
+function restoreMap(snapshot,keepEdits=false){const saved=JSON.parse(snapshot);if(keepEdits)for(const id in saved.state){if(state[id])saved.state[id]={...state[id],x:saved.state[id].x,y:saved.state[id].y,collapsed:saved.state[id].collapsed,peerOf:saved.state[id].peerOf};}Object.keys(ORG).forEach(k=>delete ORG[k]);Object.assign(ORG,saved.org);Object.keys(state).forEach(k=>delete state[k]);Object.assign(state,saved.state);if(saved.zones)ZONES.splice(0,ZONES.length,...saved.zones);if(saved.oai)oaiContacts=saved.oai;}
 function normalizeMap(){
  if(ORG.id!==MAP_ROOT){const old={...ORG};Object.keys(ORG).forEach(k=>delete ORG[k]);Object.assign(ORG,{id:MAP_ROOT,children:[old]});}
  delete state[MAP_ROOT];
@@ -1633,39 +1816,39 @@ function closeMapEditors(){
 }
 function quickContact(point,clientX,clientY){
  closeMapEditors();mapPopover.replaceChildren();
- const title=document.createElement('p');title.className='map-popover-title';title.textContent='Nouveau contact';
+ const title=document.createElement('p');title.className='map-popover-title';title.textContent='New contact';
  const form=document.createElement('form');form.className='map-popover-form';
- const name=input();name.required=true;name.placeholder='Prénom et nom';
- const job=input();job.placeholder='Intitulé du poste';
+ const name=input();name.required=true;name.placeholder='First and last name';
+ const job=input();job.placeholder='Job title';
  const linkedin=input();linkedin.placeholder='Lien LinkedIn (facultatif)';
  const actions=document.createElement('div');actions.className='map-popover-actions';
- actions.append(button('Annuler',closeMapEditors));
- const submit=document.createElement('button');submit.type='submit';submit.className='primary';submit.textContent='Créer la bulle';actions.append(submit);
- form.append(field('Nom',name),field('Poste',job),field('LinkedIn',linkedin),actions);
+ actions.append(button('Cancel',closeMapEditors));
+ const submit=document.createElement('button');submit.type='submit';submit.className='primary';submit.textContent='Create bubble';actions.append(submit);
+ form.append(field('Name',name),field('Job title',job),field('LinkedIn',linkedin),actions);
  form.onsubmit=e=>{
   e.preventDefault();const url=validLinkedIn(linkedin.value);
   if(url===null){linkedin.setCustomValidity('Saisissez un lien LinkedIn valide.');linkedin.reportValidity();return;}
-  const id='contact-'+crypto.randomUUID();const node={id,name:name.value.trim()||'Nouveau contact',title:job.value.trim(),conf:0};
+  const id='contact-'+crypto.randomUUID();const node={id,name:name.value.trim()||'New contact',title:job.value.trim(),conf:0};
   const before=snapshotMap();(ORG.children ||= []).push(node);seed(node);
   state[id].linkedin=url;state[id].x=point[0];state[id].y=point[1]-NH/2;
-  undoSnapshot=before;undoButton.hidden=false;persist(id);closeMapEditors();render();open(id);
+  pushHistory(before);persist(id);closeMapEditors();render();open(id);
  };
  mapPopover.append(title,form);placePopover(mapPopover,clientX,clientY);name.focus();
 }
 function quickZone(rect,ids,clientX,clientY){
  closeMapEditors();zonePopover.replaceChildren();
- const title=document.createElement('p');title.className='map-popover-title';title.textContent='Nouvelle zone';
+ const title=document.createElement('p');title.className='map-popover-title';title.textContent='New zone';
  const form=document.createElement('form');form.className='map-popover-form';
- const name=input('Nouvelle zone');name.required=true;
+ const name=input('New zone');name.required=true;
  const color=input('#0F7A44','color');
- const info=help(ids.length+' contact(s) dans la zone');
+ const info=help(ids.length+' contact(s) in the zone');
  const actions=document.createElement('div');actions.className='map-popover-actions';
- actions.append(button('Annuler',closeMapEditors));
- const submit=document.createElement('button');submit.type='submit';submit.className='primary';submit.textContent='Créer la zone';actions.append(submit);
- form.append(field('Nom',name),field('Couleur',color),info,actions);
+ actions.append(button('Cancel',closeMapEditors));
+ const submit=document.createElement('button');submit.type='submit';submit.className='primary';submit.textContent='Create zone';actions.append(submit);
+ form.append(field('Name',name),field('Couleur',color),info,actions);
  form.onsubmit=e=>{
-  e.preventDefault();ZONES.push({id:'zone-'+crypto.randomUUID(),k:'custom',label:name.value.trim()||'Zone',color:color.value,ids,rect});
-  saveLocal();closeMapEditors();render();moveStatus.textContent='Zone créée.';
+  e.preventDefault();const before=snapshotMap();ZONES.push({id:'zone-'+crypto.randomUUID(),k:'custom',label:name.value.trim()||'Zone',color:color.value,ids,rect});
+  pushHistory(before);saveLocal();closeMapEditors();render();moveStatus.textContent='Zone created.';
  };
  zonePopover.append(title,form);placePopover(zonePopover,clientX,clientY);name.select();
 }
@@ -1699,7 +1882,7 @@ function nearestSnap(id,x,y){
  const excluded=new Set(subtreeIds(id));let best=null;
  nodesArr.forEach(d=>{
   if(excluded.has(d.data.id))return;
-  const candidates=[{kind:'below',x:d.x,y:d.y+NH+74,label:'Subordonné de '},{kind:'above',x:d.x,y:d.y-NH-74,label:'N+1 de '},{kind:'left',x:d.x-NW-34,y:d.y,label:'Collègue de '},{kind:'right',x:d.x+NW+34,y:d.y,label:'Collègue de '}];
+  const candidates=[{kind:'below',x:d.x,y:d.y+NH+74,label:'Reports to '},{kind:'above',x:d.x,y:d.y-NH-74,label:'N+1 de '},{kind:'left',x:d.x-NW-34,y:d.y,label:'Peer of '},{kind:'right',x:d.x+NW+34,y:d.y,label:'Peer of '}];
   candidates.forEach(c=>{const distance=Math.hypot(x-c.x,y-c.y);if(distance<95&&(!best||distance<best.distance))best={...c,distance,target:d.data.id,name:state[d.data.id].name||'ce contact'};});
  });return best;
 }
@@ -1708,7 +1891,7 @@ function paintSnap(snap,e){
  d3.select(viewport).selectAll('.node').classed('snap-target',d=>!!snap&&d.data.id===snap.target);
  if(!snap)return;
  snapGhost.style.left=(snap.x-NW/2)+'px';snapGhost.style.top=snap.y+'px';
- snapHint.textContent=snap.label+snap.name+' — relâchez pour connecter';
+ snapHint.textContent=snap.label+snap.name+' — release to connect';
  snapHint.style.left=Math.max(12,Math.min(e.clientX+16,innerWidth-310))+'px';snapHint.style.top=Math.max(64,Math.min(e.clientY+20,innerHeight-80))+'px';
 }
 function cancelDrag(){
@@ -1753,8 +1936,8 @@ stage.addEventListener('pointerup',e=>{
  if(!d.moved){open(d.id);return;}
  lastDragAt=performance.now();
  if(d.snap){const dx=d.snap.x-state[d.id].x,dy=d.snap.y-state[d.id].y;d.positions.forEach(p=>{state[p.id].x+=dx;state[p.id].y+=dy;});attachContact(d.id,d.snap.target,d.snap.kind);moveStatus.textContent=d.snap.label+d.snap.name+'.';}
- else moveStatus.textContent='Position enregistrée. Le rattachement existant est conservé.';
- undoSnapshot=d.before;undoButton.hidden=false;paintSnap(null);persist(d.id);render();
+ else moveStatus.textContent='Position saved. The existing link is kept.';
+ pushHistory(d.before);paintSnap(null);persist(d.id);render();
 });
 stage.addEventListener('pointercancel',cancelDrag);
 stage.addEventListener('pointercancel',()=>{surfaceGesture=null;zoneDraft.hidden=true;});
@@ -1764,7 +1947,7 @@ stage.addEventListener('dblclick',e=>{
  const r=stage.getBoundingClientRect(),point=[e.clientX-r.left,e.clientY-r.top];
  d3.select(stage).transition().duration(220).call(zoomBehavior.scaleBy,e.shiftKey?1/1.8:1.8,point);
 });
-const gestureHelp=document.createElement('div');gestureHelp.id='gesture-help';gestureHelp.textContent='Clic : ajouter · Glisser le fond : déplacer · ⌥ + glisser : créer une zone · Glisser une fiche : connecter · Double-clic : zoomer';stage.append(gestureHelp);
+const gestureHelp=document.createElement('div');gestureHelp.id='gesture-help';gestureHelp.textContent='Click: add · Drag background: pan · ⌥ + drag: create a zone · Drag a card: connect · Double-click: zoom';stage.append(gestureHelp);
 
 /* ============== boot ============== */
 loadLocal();   // pre-load default state (DoorDash), used as fallback
@@ -2038,7 +2221,8 @@ function loadAndOpenMap(id){
       seed(ORG);
       Object.assign(state, saved.state||{});
       ZONES.splice(0, ZONES.length, ...(saved.zones||[]));
-    }catch(e){}
+      oaiContacts = saved.oai ? saved.oai : (id==="map-doordash-openai-v1" ? defaultOaiContacts() : []);
+    }catch(e){ oaiContacts = []; }
   } else {
     // New blank map: reset to empty
     const blankOrg = {id:"company", name:"Compte", title:"", children:[]};
@@ -2047,8 +2231,10 @@ function loadAndOpenMap(id){
     Object.keys(state).forEach(k=>delete state[k]);
     seed(ORG);
     ZONES.splice(0, ZONES.length);
+    oaiContacts = [];
   }
   normalizeMap();
+  clearHistory();
   render();
   fit(false);
   renderOaiPanel();
@@ -2237,6 +2423,11 @@ var OAI_CONTACTS = [
   }
 ];
 
+/* copie profonde du seed OpenAI (etat de depart de la carte DoorDash) */
+function defaultOaiContacts(){ return JSON.parse(JSON.stringify(OAI_CONTACTS)); }
+/* echappement HTML pour injecter en toute securite des champs saisis par l'utilisateur */
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
+
 var _oaiActive = null; /* currently selected chip id */
 
 function renderOaiPanel(){
@@ -2249,23 +2440,24 @@ function renderOaiPanel(){
   var body = document.getElementById("oai-panel-body");
   var ctx  = document.getElementById("oai-ctx");
 
-  /* build chips if not yet built */
-  if(!document.querySelector(".oai-chip")){
-    OAI_CONTACTS.forEach(function(c){
-      var chip = document.createElement("div");
-      chip.className = "oai-chip";
-      chip.dataset.cid = c.id;
-      chip.innerHTML =
-        '<div class="oai-chip-av">' + c.initials + '</div>' +
-        '<div class="oai-chip-info">' +
-          '<div class="oai-chip-name">' + c.name + '</div>' +
-          '<div class="oai-chip-title">' + c.title + '</div>' +
-        '</div>';
-      chip.addEventListener("click", function(){ oaiChipClick(c.id); });
-      /* insert before ctx */
-      body.insertBefore(chip, ctx);
-    });
-  }
+  /* reconstruit la liste a chaque appel (contacts editables/persistes) */
+  body.querySelectorAll(".oai-chip, .oai-add-btn").forEach(function(el){ el.remove(); });
+  oaiContacts.forEach(function(c){
+    var chip = document.createElement("div");
+    chip.className = "oai-chip" + (_oaiActive === c.id ? " active" : "");
+    chip.dataset.cid = c.id;
+    var av = document.createElement("div"); av.className = "oai-chip-av"; av.textContent = c.initials || initials(c.name);
+    var info = document.createElement("div"); info.className = "oai-chip-info";
+    var nm = document.createElement("div"); nm.className = "oai-chip-name"; nm.textContent = c.name;
+    var tt = document.createElement("div"); tt.className = "oai-chip-title"; tt.textContent = c.title || "";
+    info.append(nm, tt); chip.append(av, info);
+    chip.addEventListener("click", function(){ oaiChipClick(c.id); });
+    body.insertBefore(chip, ctx);
+  });
+  var add = button("+ OpenAI contact", function(){ oaiEditor(null); });
+  add.className = "oai-add-btn";
+  add.style.cssText = "width:100%;padding:9px;border:1px dashed var(--line);border-radius:9px;background:transparent;color:#10A37F;font-size:11.5px;font-weight:600;letter-spacing:.02em;margin-top:2px";
+  body.insertBefore(add, ctx);
 }
 
 function oaiChipClick(cid){
@@ -2281,7 +2473,7 @@ function oaiChipClick(cid){
     return;
   }
   _oaiActive = cid;
-  var c = OAI_CONTACTS.find(function(x){ return x.id === cid; });
+  var c = oaiContacts.find(function(x){ return x.id === cid; });
   if(!c) return;
 
   /* update chips */
@@ -2292,8 +2484,9 @@ function oaiChipClick(cid){
   /* dim map + highlight linked nodes */
   clearOaiHighlight();
   document.body.classList.add("oai-active");
+  var links = c.links || [];
   d3.select(viewport).selectAll(".node").classed("oai-lit", function(d){
-    return d && c.links.indexOf(d.data.id) > -1;
+    return d && links.indexOf(d.data.id) > -1;
   });
 
   /* show small context blurb */
@@ -2311,39 +2504,121 @@ function openOaiFiche(c){
   document.getElementById("oai-dfiche-name").textContent = c.name;
 
   /* build linked node name list */
-  var nodeNames = c.links.map(function(lid){
-    return state[lid] ? (state[lid].name || lid) : lid;
+  var links = c.links || [];
+  var nodeNames = links.map(function(lid){
+    return state[lid] ? (state[lid].name || "To identify") : lid;
   });
+  var okLink = c.linkedin && /^https?:\/\//.test(c.linkedin);
 
   body.innerHTML =
     '<div class="oai-fiche-hero">' +
-      '<div class="oai-fiche-av">' + c.initials + '</div>' +
+      '<div class="oai-fiche-av">' + esc(c.initials || initials(c.name)) + '</div>' +
       '<div>' +
-        '<div class="oai-fiche-name">' + c.name + '</div>' +
-        '<div class="oai-fiche-title">' + c.title + '</div>' +
+        '<div class="oai-fiche-name">' + esc(c.name) + '</div>' +
+        '<div class="oai-fiche-title">' + esc(c.title || "") + '</div>' +
       '</div>' +
     '</div>' +
-    (c.linkedin ? '<a class="oai-fiche-link" href="' + c.linkedin + '" target="_blank" rel="noopener">' +
+    (okLink ? '<a class="oai-fiche-link" href="' + esc(c.linkedin) + '" target="_blank" rel="noopener">' +
       '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>' +
       ' LinkedIn</a>' : '') +
     '<div class="oai-fiche-divider"></div>' +
-    '<div class="oai-fiche-section">' +
+    ((c.notes || c.context) ? '<div class="oai-fiche-section">' +
       '<h3>Context</h3>' +
-      '<p>' + (c.notes || c.context) + '</p>' +
-    '</div>' +
+      '<p>' + esc(c.notes || c.context) + '</p>' +
+    '</div>' : '') +
+    (c.dealContext ? '<div class="oai-fiche-section">' +
+      '<h3>Commercial angle</h3>' +
+      '<p>' + esc(c.dealContext) + '</p>' +
+    '</div>' : '') +
     '<div class="oai-fiche-section">' +
-      '<h3>Deal angle</h3>' +
-      '<p>' + c.dealContext + '</p>' +
-    '</div>' +
-    '<div class="oai-fiche-section">' +
-      '<h3>DoorDash connections</h3>' +
+      '<h3>Linked DoorDash contacts</h3>' +
       '<div class="oai-fiche-nodes">' +
-        nodeNames.map(function(n){ return '<span class="oai-fiche-node-tag">' + n + '</span>'; }).join("") +
+        (nodeNames.length ? nodeNames.map(function(n){ return '<span class="oai-fiche-node-tag">' + esc(n) + '</span>'; }).join("") : '<span style="font-size:11.5px;color:var(--ink-3)">No links yet</span>') +
       '</div>' +
     '</div>';
 
+  var editBtn = button("Edit / link contacts", function(){ oaiEditor(c); });
+  editBtn.style.cssText = "width:100%;margin-top:6px;padding:10px;border:1px solid #10A37F;border-radius:9px;background:rgba(16,163,127,.08);color:#10A37F;font-size:12.5px;font-weight:600";
+  body.append(editBtn);
+
   drawer.setAttribute("aria-hidden", "false");
   drawer.classList.add("open");
+}
+
+/* ---- Éditeur de contact OpenAI : creation / edition / liens vers la carte ---- */
+function oaiEditor(contact){
+  var isNew = !contact;
+  var c = contact || {id:"oai-"+crypto.randomUUID(), name:"", title:"", linkedin:"", context:"", notes:"", dealContext:"", links:[]};
+  modal(isNew ? "New OpenAI contact" : "Edit OpenAI contact");
+
+  var name = input(c.name); name.placeholder = "First and last name"; name.required = true;
+  var title = input(c.title || ""); title.placeholder = "Job title";
+  var linkedin = input(c.linkedin || ""); linkedin.placeholder = "https://www.linkedin.com/in/…";
+  var context = document.createElement("textarea"); context.value = c.context || c.notes || ""; context.placeholder = "Context, intro path, relationship…"; context.style.minHeight = "70px";
+  var deal = document.createElement("textarea"); deal.value = c.dealContext || ""; deal.placeholder = "Commercial angle (optional)"; deal.style.minHeight = "52px";
+
+  /* multi-selection des contacts DoorDash a lier */
+  var selectedIds = new Set(c.links || []);
+  var searchF = input(); searchF.placeholder = "Search a DoorDash person";
+  var listEl = document.createElement("div"); listEl.className = "member-list";
+  var count = help("");
+  function updateCount(){ count.textContent = selectedIds.size + " DoorDash contact(s) linked"; }
+  allNodes().forEach(function(n){
+    var row = document.createElement("label");
+    var chk = input("", "checkbox"); chk.checked = selectedIds.has(n.id);
+    chk.onchange = function(){ chk.checked ? selectedIds.add(n.id) : selectedIds.delete(n.id); updateCount(); };
+    var t = document.createElement("span");
+    t.textContent = ((state[n.id] && state[n.id].name) || "To identify") + (state[n.id] && state[n.id].title ? " — " + state[n.id].title : "");
+    row.append(chk, t); listEl.append(row);
+  });
+  updateCount();
+  searchF.oninput = function(){ Array.from(listEl.children).forEach(function(row){ row.hidden = !row.textContent.toLowerCase().includes(searchF.value.toLowerCase()); }); };
+
+  var err = help(""); err.setAttribute("role", "alert");
+  var submit = document.createElement("button"); submit.type = "submit"; submit.className = "primary"; submit.textContent = isNew ? "Create contact" : "Save";
+
+  var form = document.createElement("form"); form.className = "edit-form";
+  form.append(
+    field("Name", name), field("Job title", title), field("LinkedIn", linkedin),
+    field("Context", context), field("Commercial angle", deal),
+    field("Linked DoorDash contacts", searchF), count, listEl, err, submit
+  );
+  extra.append(form);
+
+  if(!isNew){
+    var del = button("Delete this contact", function(){
+      if(!confirm("Delete « " + (c.name || "this contact") + " » ?")) return;
+      var before = snapshotMap();
+      var i = oaiContacts.findIndex(function(x){ return x.id === c.id; });
+      if(i >= 0) oaiContacts.splice(i, 1);
+      pushHistory(before);
+      if(_oaiActive === c.id){ _oaiActive = null; clearOaiHighlight(); document.getElementById("oai-ctx").classList.remove("visible"); document.body.classList.remove("oai-active"); }
+      saveLocal(); renderOaiPanel(); extra.close();
+      moveStatus.textContent = "OpenAI contact deleted.";
+    });
+    del.style.color = "var(--accent)"; del.style.borderColor = "var(--accent)";
+    form.append(del);
+  }
+
+  form.onsubmit = function(e){
+    e.preventDefault();
+    if(!name.value.trim()){ err.textContent = "Name is required."; return; }
+    var url = validLinkedIn(linkedin.value);
+    if(url === null){ err.textContent = "Enter a valid LinkedIn link (or leave empty)."; return; }
+    var before = snapshotMap();
+    var data = {
+      id: c.id, name: name.value.trim(), title: title.value.trim(),
+      initials: initials(name.value.trim()), linkedin: url || "",
+      context: context.value.trim(), notes: context.value.trim(),
+      dealContext: deal.value.trim(), links: Array.from(selectedIds)
+    };
+    if(isNew) oaiContacts.push(data);
+    else { var i = oaiContacts.findIndex(function(x){ return x.id === c.id; }); if(i >= 0) oaiContacts[i] = data; }
+    pushHistory(before); saveLocal();
+    _oaiActive = null; clearOaiHighlight(); document.getElementById("oai-ctx").classList.remove("visible"); document.body.classList.remove("oai-active");
+    renderOaiPanel(); extra.close();
+    moveStatus.textContent = isNew ? "OpenAI contact added." : "OpenAI contact updated.";
+  };
 }
 
 function closeOaiFiche(){
@@ -2373,25 +2648,6 @@ document.getElementById("oai-dclose").addEventListener("click", function(){
 });
 
 bootLibrary();
-
-
-(async function(){
-  try{
-    db = await (window.claude && window.claude.use ? window.claude.use("db") : Promise.resolve(null));
-  }catch(e){ db = null; }
-  if(!db) return;
-  db.collection("nodes").onSnapshot(snap => {
-    let touched = false;
-    snap.docs.forEach(doc => {
-      if(!state[doc.id]) return;
-      const data = doc.data() || {};
-      for(const k of ["name","title","role","notes","photo","conf","collapsed"]){
-        if(k in data && state[doc.id][k] !== data[k]){ state[doc.id][k] = data[k]; touched = true; }
-      }
-    });
-    if(touched){ saveLocal(); render(); }
-  }, () => {});
-})();
 
 })();
 </script>
